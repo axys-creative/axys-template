@@ -2,7 +2,8 @@
 	"load_config_file": false,
 	"backend": {
 		"name": "git-gateway",
-		"branch": "main"
+		"branch": "main",
+		"repo": "https://github.com/axys-creative/svelte-template.git"
 	},
 	"local_backend": true,
 	"media_folder": "static/uploads",
