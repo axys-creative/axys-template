@@ -2,13 +2,21 @@
 	import { onMount } from 'svelte';
 	import config from './config.json';
 
-	onMount(async () => {
-		// The widget already initialized from app.html; Decap's fallback re-init would duplicate it.
-		const identity = (window as { netlifyIdentity?: { init: () => void } }).netlifyIdentity;
+	type Identity = { init: () => void };
+	type Cms = { init: (options: { config: unknown }) => void };
+
+	onMount(() => {
+		const identity = (window as { netlifyIdentity?: Identity }).netlifyIdentity;
+		// Decap's fallback re-init would create a second widget iframe.
 		if (identity) identity.init = () => {};
 
-		const { default: CMS } = await import('decap-cms-app');
-		CMS.init({ config: config as never });
+		const script = document.createElement('script');
+		script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+		script.onload = () => (window as { CMS?: Cms }).CMS?.init({ config });
+		(window as { CMS_MANUAL_INIT?: boolean }).CMS_MANUAL_INIT = true;
+		document.head.append(script);
+
+		return () => script.remove();
 	});
 </script>
 

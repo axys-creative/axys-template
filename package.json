@@ -1,20 +1,6 @@
 {
 	"name": "svelte-template",
-	"private": true,
 	"version": "0.0.1",
-	"type": "module",
-	"scripts": {
-		"dev": "bun run styles && BROWSER='Google Chrome' vite dev --open",
-		"watch": "sass --watch --no-source-map src/styles/styles.scss:src/styles/styles.css",
-		"styles": "sass --no-source-map src/styles/styles.scss:src/styles/styles.css",
-		"build": "bun run styles && vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
-	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-netlify": "^6.0.4",
@@ -34,8 +20,18 @@
 		"typescript-eslint": "^8.60.1",
 		"vite": "^8.0.16"
 	},
-	"dependencies": {
-		"ajv": "^8.17.1",
-		"decap-cms-app": "^3.16.3"
-	}
+	"private": true,
+	"scripts": {
+		"dev": "bun run styles && BROWSER='Google Chrome' vite dev --open",
+		"watch": "sass --watch --no-source-map src/styles/styles.scss:src/styles/styles.css",
+		"styles": "sass --no-source-map src/styles/styles.scss:src/styles/styles.css",
+		"build": "bun run styles && vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"type": "module"
 }
