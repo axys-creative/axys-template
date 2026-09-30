@@ -1,0 +1,22 @@
+@use 'mixins';
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.body {
+	@include mixins.body;
+}
+
+.body-large {
+	@include mixins.body-large;
+}
+
+.body-small {
+	@include mixins.body-small;
+}

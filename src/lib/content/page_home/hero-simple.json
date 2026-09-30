@@ -1,0 +1,19 @@
+{
+	"eyebrowText": "Axys Creative",
+	"title": "Welcome to SvelteKit",
+	"description": "Visit svelte.dev/docs/kit to read the documentation.",
+	"cta": {
+		"primary": {
+			"text": "Get started",
+			"textDescription": "",
+			"url": "/",
+			"newTab": false
+		},
+		"secondary": {
+			"text": "Learn more",
+			"textDescription": "",
+			"url": "https://svelte.dev/docs/kit",
+			"newTab": true
+		}
+	}
+}

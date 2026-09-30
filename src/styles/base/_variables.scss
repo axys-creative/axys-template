@@ -1,0 +1,28 @@
+$font-heading: 'Funnel Display', system-ui, sans-serif;
+$font-body: 'Funnel Display', system-ui, sans-serif;
+$font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+
+:root {
+	color-scheme: dark;
+
+	--color-bg: #0f1115;
+	--color-surface: #181b21;
+	--color-on-surface: #e6e8eb;
+	--color-text: #e6e8eb;
+	--color-text-muted: #9aa1ab;
+	--color-border: #2a2f38;
+	--color-accent: #6ea8fe;
+
+	--font-heading: #{$font-heading};
+	--font-body: #{$font-body};
+	--font-mono: #{$font-mono};
+
+	--content-width: 1152px;
+
+	--body-padding: 64px;
+	--body-padding-double: calc(var(--body-padding) * 2);
+
+	--cta-group-gap: 16px;
+
+	--radius: 8px;
+}
