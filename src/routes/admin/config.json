@@ -118,23 +118,90 @@
 			]
 		},
 		{
-			"name": "settings",
-			"label": "Settings",
+			"name": "meta",
+			"label": "Meta Data",
+			"editor": {
+				"preview": false
+			},
 			"files": [
 				{
 					"name": "site",
-					"label": "Site",
-					"file": "src/lib/content/site.json",
+					"label": "Site Defaults",
+					"file": "src/lib/content/meta/site.json",
 					"fields": [
 						{
-							"name": "title",
-							"label": "Title",
+							"name": "siteName",
+							"label": "Site name",
 							"widget": "string"
 						},
 						{
+							"name": "titleTemplate",
+							"label": "Title template",
+							"widget": "string",
+							"hint": "%s is replaced by each page's meta title, e.g. %s | Client Name"
+						},
+						{
 							"name": "description",
-							"label": "Description",
-							"widget": "text"
+							"label": "Default meta description",
+							"widget": "text",
+							"required": false,
+							"hint": "Used when a page has no description of its own."
+						},
+						{
+							"name": "ogImage",
+							"label": "Default social share image",
+							"widget": "image",
+							"required": false
+						}
+					]
+				},
+				{
+					"name": "pages",
+					"label": "Pages",
+					"file": "src/lib/content/meta/pages.json",
+					"fields": [
+						{
+							"name": "pages",
+							"label": "Pages",
+							"label_singular": "Page",
+							"widget": "list",
+							"allow_add": false,
+							"summary": "{{fields.title}}",
+							"fields": [
+								{
+									"name": "path",
+									"label": "Path",
+									"widget": "hidden"
+								},
+								{
+									"name": "title",
+									"label": "Meta title",
+									"widget": "string",
+									"hint": "Shown in browser tabs and search results. Aim for under 60 characters."
+								},
+								{
+									"name": "description",
+									"label": "Meta description",
+									"widget": "text",
+									"required": false,
+									"hint": "Shown in search results. Aim for 120-160 characters."
+								},
+								{
+									"name": "ogImage",
+									"label": "Social share image",
+									"widget": "image",
+									"required": false,
+									"hint": "Shown when the page is shared. 1200x630 recommended. Falls back to the site default."
+								},
+								{
+									"name": "crawlPage",
+									"label": "Crawl page (default)",
+									"widget": "boolean",
+									"default": true,
+									"required": false,
+									"hint": "Uncheck to add a 'noindex, nofollow' meta tag"
+								}
+							]
 						}
 					]
 				}

@@ -1,0 +1,11 @@
+{
+	"pages": [
+		{
+			"path": "/",
+			"title": "Home",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": true
+		}
+	]
+}
