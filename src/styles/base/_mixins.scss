@@ -119,8 +119,9 @@ $breakpoints: (
 @mixin heading($size, $line-height) {
 	font-family: var(--font-heading);
 	font-size: $size;
-	font-weight: 700;
+	font-weight: 300;
 	line-height: $line-height;
+	letter-spacing: -1px;
 }
 
 @mixin h1 {
@@ -166,27 +167,16 @@ $breakpoints: (
 	line-height: 1.45;
 }
 
-@mixin btn-type-solid {
-	border: 2px solid var(--color-accent);
-	background: var(--color-accent);
-	color: var(--color-bg);
-
-	@include mq-mouse {
-		&:hover {
-			opacity: 0.85;
+@mixin desktop-hover {
+	@media (hover: hover) and (pointer: fine) {
+		&:hover,
+		&:focus-visible {
+			@content;
 		}
 	}
 }
 
-@mixin btn-type-outline {
-	border: 2px solid var(--color-accent);
-	background: transparent;
-	color: var(--color-accent);
-
-	@include mq-mouse {
-		&:hover {
-			background: var(--color-accent);
-			color: var(--color-bg);
-		}
-	}
+@mixin glass {
+	background: var(--color-glass);
+	backdrop-filter: blur(8px);
 }

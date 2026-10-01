@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import Icon from './icon.svelte';
 
 	type Props = {
 		text?: string;
-		icon?: Snippet;
+		/** Icon name from `static/icons`. */
+		icon?: string;
 		direction?: 'row' | 'column';
 	};
 
@@ -13,7 +14,7 @@
 {#if icon || text}
 	<div class="eyebrow" class:column={direction === 'column'}>
 		{#if icon}
-			<span class="eyebrow-icon">{@render icon()}</span>
+			<span class="eyebrow-icon"><Icon name={icon} /></span>
 		{/if}
 		{#if text}
 			<span class="eyebrow-text">{text}</span>
@@ -27,7 +28,7 @@
 		flex-direction: row;
 		align-items: center;
 		gap: 8px;
-		color: var(--color-accent);
+		color: var(--color-accent-text);
 	}
 
 	.eyebrow.column {

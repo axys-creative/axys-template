@@ -22,10 +22,8 @@
 	},
 	"private": true,
 	"scripts": {
-		"dev": "bun run styles && BROWSER='Google Chrome' vite dev --open",
-		"watch": "sass --watch --no-source-map src/styles/styles.scss:src/styles/styles.css",
-		"styles": "sass --no-source-map src/styles/styles.scss:src/styles/styles.css",
-		"build": "bun run styles && vite build",
+		"dev": "BROWSER='Google Chrome' vite dev --open",
+		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -33,5 +31,9 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"gsap": "^3.15.0",
+		"lenis": "^1.3.26"
+	}
 }

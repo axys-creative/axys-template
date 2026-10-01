@@ -2,20 +2,47 @@ $font-heading: 'Funnel Display', system-ui, sans-serif;
 $font-body: 'Funnel Display', system-ui, sans-serif;
 $font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
 
+$black: #0a0a0a;
+$grey-darker: #1a1a1a;
+$grey-dark: #292929;
+$grey-light: #ececec;
+$grey-lighter: #f1f1f1;
+$white: #fafafa;
+$coral: #e48c66;
+$blue: #ada4e3;
+$green: #a4d1a2;
+
+@mixin light-tokens {
+	color-scheme: light;
+
+	--color-bg: #{$white};
+	--color-surface: #{$grey-lighter};
+	--color-text: #{$black};
+	--color-text-muted: #{$grey-dark};
+	--color-border: #{$grey-light};
+	--color-accent-text: #b3501f;
+	--color-error: #dc143c;
+	--color-glass: rgb(255 255 255 / 0.25);
+}
+
 :root {
 	color-scheme: dark;
-
-	--color-bg: #0f1115;
-	--color-surface: #181b21;
-	--color-on-surface: #e6e8eb;
-	--color-text: #e6e8eb;
-	--color-text-muted: #9aa1ab;
-	--color-border: #2a2f38;
-	--color-accent: #6ea8fe;
 
 	--font-heading: #{$font-heading};
 	--font-body: #{$font-body};
 	--font-mono: #{$font-mono};
+
+	--color-bg: #{$black};
+	--color-surface: #{$grey-darker};
+	--color-text: #{$white};
+	--color-text-muted: #{$grey-light};
+	--color-border: #{$grey-dark};
+	--color-accent: #{$coral};
+	--color-accent-text: #{$coral};
+	--color-secondary: #{$blue};
+	--color-tertiary: #{$green};
+	--color-error: #dc143c;
+	--color-glass: rgb(0 0 0 / 0.25);
 
 	--content-width: 1152px;
 
@@ -25,4 +52,55 @@ $font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
 	--cta-group-gap: 16px;
 
 	--radius: 8px;
+	--radius-btn: 4px;
+
+	--btn-font-size: 16px;
+	--btn-font-weight: 500;
+	--btn-padding: 8px 16px;
+	--btn-padding-sm: 6px 12px;
+	--btn-padding-lg: 12px 24px;
+	--btn-padding-icon: 8px;
+	--btn-gap: 0.5ch;
+
+	--space-eyebrow-title: 4px;
+	--space-title-paragraph: 24px;
+	--space-paragraph-cta-group: 12px;
+	--space-copy-columns: 48px; // between the heading and the description in a row layout
+	--max-width-text: 650px;
+
+	--float-offset: 16px;
+	--z-nav: 3;
+	--z-header: 4;
+	--z-cursor: 10;
+
+	--ease: cubic-bezier(0.18, 0.97, 0.47, 1);
+	--duration: 0.3s;
+}
+
+@media (max-width: 1152px) {
+	:root {
+		--body-padding: 48px;
+	}
+}
+
+@media (max-width: 1024px) {
+	:root {
+		--body-padding: 24px;
+		--float-offset: 12px;
+	}
+}
+
+// Without JS, follow the OS; the inline script in app.html sets data-theme otherwise.
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme]) {
+		@include light-tokens;
+	}
+}
+
+:root[data-theme='light'] {
+	@include light-tokens;
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
 }

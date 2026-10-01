@@ -1,30 +1,15 @@
-# sv
+# svelte-template
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.17.1 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:netlify" --no-download-check --install npm .
-```
+SvelteKit + SCSS + JSON content, edited through Decap CMS and hosted on Netlify.
 
 ## Developing
 
 ```sh
 bun install
-bun dev      # compiles SCSS, then starts the dev server
-bun watch    # live-compile src/styles/main.scss (run from anywhere in the project)
+bun dev
 ```
+
+Vite compiles SCSS (global `src/styles/` and component `<style lang="scss">` blocks) with hot reload. There is no separate Sass step.
 
 ## Building
 

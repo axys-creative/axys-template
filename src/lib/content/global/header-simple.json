@@ -1,0 +1,96 @@
+{
+	"float": true,
+	"glass": true,
+	"hideOnScroll": true,
+	"showSkipLink": true,
+	"linkPlacement": "center",
+	"links": [
+		{
+			"text": "Home",
+			"url": "/",
+			"newTab": false
+		},
+		{
+			"text": "Resources",
+			"links": [
+				{
+					"text": "Style Guide",
+					"url": "/style-guide",
+					"newTab": false,
+					"iconStart": "palette"
+				},
+				{
+					"text": "Components",
+					"url": "/components",
+					"newTab": false,
+					"iconStart": "orbit"
+				},
+				{
+					"text": "Combos",
+					"url": "/combos",
+					"newTab": false,
+					"iconStart": "blocks"
+				},
+				{
+					"text": "Attachments",
+					"url": "/attachments",
+					"newTab": false,
+					"iconStart": "bolt"
+				},
+				{
+					"text": "Sections",
+					"url": "/sections",
+					"newTab": false,
+					"iconStart": "dashboard"
+				},
+				{
+					"text": "Website",
+					"url": "https://axyscreative.com",
+					"newTab": true,
+					"iconStart": "rocket"
+				},
+				{
+					"text": "Tokens",
+					"url": "https://axyscreative.com/tokens",
+					"newTab": true,
+					"iconStart": "inventory"
+				}
+			]
+		}
+	],
+	"ctas": [
+		{
+			"text": "Log In",
+			"url": "/admin",
+			"newTab": false,
+			"type": "underline"
+		},
+		{
+			"text": "Get Started",
+			"textDescription": "Get started with AXYS Creative",
+			"url": "https://axyscreative.com",
+			"newTab": true,
+			"type": "outline",
+			"iconEnd": "chevron-right"
+		}
+	],
+	"navButton": {
+		"text": "menu",
+		"symbol": "burger",
+		"shape": "square",
+		"type": "icon"
+	},
+	"navFooterLinks": [
+		{
+			"text": "Privacy Policy",
+			"url": "/privacy-policy",
+			"newTab": false
+		},
+		{
+			"text": "Terms of Service",
+			"url": "/terms-of-service",
+			"newTab": false
+		}
+	],
+	"adminLogin": true
+}

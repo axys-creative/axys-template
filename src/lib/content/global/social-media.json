@@ -1,0 +1,8 @@
+{
+	"links": [
+		{ "title": "Instagram", "url": "https://www.instagram.com/sample", "icon": "social-instagram" },
+		{ "title": "X", "url": "https://twitter.com/sample", "icon": "social-x" },
+		{ "title": "LinkedIn", "url": "https://linkedin.com/sample", "icon": "social-linkedin" },
+		{ "title": "Facebook", "url": "https://facebook.com/sample", "icon": "social-facebook" }
+	]
+}

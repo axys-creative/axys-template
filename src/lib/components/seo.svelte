@@ -10,7 +10,7 @@
 	const crawlPage = $derived(entry?.crawlPage ?? true);
 	const isAdmin = $derived(page.url.pathname.startsWith('/admin'));
 
-	const fullTitle = $derived(site.titleTemplate.replace('%s', title));
+	const fullTitle = $derived(`${title} | ${site.siteName}`);
 	const metaDescription = $derived(description || site.description);
 	const image = $derived(ogImage || site.ogImage);
 	const imageUrl = $derived(image ? new URL(image, page.url.origin).href : '');

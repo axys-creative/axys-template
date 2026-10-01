@@ -6,6 +6,41 @@
 			"description": "",
 			"ogImage": "",
 			"crawlPage": true
+		},
+		{
+			"path": "/style-guide",
+			"title": "Style Guide",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
+		},
+		{
+			"path": "/components",
+			"title": "Components",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
+		},
+		{
+			"path": "/attachments",
+			"title": "Attachments",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
+		},
+		{
+			"path": "/combos",
+			"title": "Combos",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
+		},
+		{
+			"path": "/sections",
+			"title": "Sections",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
 		}
 	]
 }

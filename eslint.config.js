@@ -36,6 +36,9 @@ export default defineConfig(
 	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
-		rules: {}
+		rules: {
+			// Links come from CMS strings and the site has no base path.
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 );

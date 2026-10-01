@@ -1,19 +1,21 @@
 {
-	"eyebrowText": "Update from the admin dashboard",
-	"title": "Welcome to SvelteKit",
-	"description": "Visit svelte.dev/docs/kit to read the documentation.",
+	"eyebrowText": "svelte-template",
+	"title": "Welcome to the svelte template",
+	"description": "A fast, accessible starting point built with SvelteKit, SCSS and JSON content, edited through Decap CMS.",
 	"cta": {
 		"primary": {
-			"text": "Get started",
-			"textDescription": "",
-			"url": "/",
-			"newTab": false
+			"text": "View Style Guide",
+			"textDescription": "View the style guide",
+			"url": "/style-guide",
+			"newTab": false,
+			"iconEnd": ""
 		},
 		"secondary": {
-			"text": "Learn more",
-			"textDescription": "",
-			"url": "https://svelte.dev/docs/kit",
-			"newTab": true
+			"text": "Get Started",
+			"textDescription": "Get started with AXYS Creative",
+			"url": "https://axyscreative.com",
+			"newTab": true,
+			"iconEnd": "chevron-right"
 		}
 	}
 }
