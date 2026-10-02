@@ -13,6 +13,85 @@
 	"logo_url": "/images/admin/admin-logo.svg",
 	"collections": [
 		{
+			"name": "blog",
+			"label": "Blog",
+			"label_singular": "Post",
+			"description": "Each post is one file in src/lib/content/blog. The file name becomes the address: /blog/the-file-name.",
+			"folder": "src/lib/content/blog",
+			"extension": "json",
+			"format": "json",
+			"create": true,
+			"slug": "{{slug}}",
+			"identifier_field": "title",
+			"summary": "{{title}} · {{date}}",
+			"preview_path": "blog/{{slug}}",
+			"sortable_fields": ["date", "title"],
+			"editor": {
+				"preview": false
+			},
+			"fields": [
+				{
+					"name": "title",
+					"label": "Title",
+					"widget": "string",
+					"hint": "The address of the post comes from the title the first time it is saved. Changing the title later does not change the address."
+				},
+				{
+					"name": "description",
+					"label": "Description",
+					"widget": "text",
+					"hint": "Shown on the blog page and in search results. Keep it under about 155 characters."
+				},
+				{
+					"name": "author",
+					"label": "Author",
+					"widget": "string",
+					"required": false
+				},
+				{
+					"name": "date",
+					"label": "Publish date",
+					"widget": "datetime",
+					"date_format": "YYYY-MM-DD",
+					"time_format": false,
+					"format": "YYYY-MM-DD"
+				},
+				{
+					"name": "tag",
+					"label": "Tag",
+					"widget": "select",
+					"options": ["Announcement", "Best Practices", "Event", "Press Release", "Update"],
+					"required": false
+				},
+				{
+					"name": "coverImage",
+					"label": "Cover image",
+					"widget": "image",
+					"required": false
+				},
+				{
+					"name": "coverAlt",
+					"label": "Cover image description",
+					"widget": "string",
+					"required": false,
+					"hint": "Describe the image for screen readers. Leave empty if it is decorative."
+				},
+				{
+					"name": "draft",
+					"label": "Draft",
+					"widget": "boolean",
+					"default": false,
+					"required": false,
+					"hint": "Drafts are hidden from the site."
+				},
+				{
+					"name": "body",
+					"label": "Body",
+					"widget": "markdown"
+				}
+			]
+		},
+		{
 			"name": "page_home",
 			"label": "Home Page",
 			"files": [
@@ -177,6 +256,37 @@
 							"label": "Show buttons",
 							"widget": "boolean",
 							"default": true,
+							"required": false
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "page_blog",
+			"label": "Blog Page",
+			"files": [
+				{
+					"name": "hero_simple",
+					"label": "Hero",
+					"file": "src/lib/content/page_blog/hero-simple.json",
+					"preview_path": "blog",
+					"fields": [
+						{
+							"name": "eyebrowText",
+							"label": "Eyebrow text",
+							"widget": "string",
+							"required": false
+						},
+						{
+							"name": "title",
+							"label": "Title",
+							"widget": "string"
+						},
+						{
+							"name": "description",
+							"label": "Description",
+							"widget": "text",
 							"required": false
 						}
 					]
@@ -646,7 +756,7 @@
 							"label": "Copyright text",
 							"widget": "string",
 							"required": false,
-							"hint": "Leave empty for '\u00a9 year site name. All rights reserved.'"
+							"hint": "Leave empty for '© year site name. All rights reserved.'"
 						}
 					]
 				},
@@ -741,20 +851,63 @@
 						{
 							"name": "siteName",
 							"label": "Site name",
-							"widget": "string"
+							"widget": "string",
+							"hint": "Used in page titles, the footer and search results."
+						},
+						{
+							"name": "url",
+							"label": "URL",
+							"widget": "string",
+							"hint": "The full address of the live site, without an end slash. Used for canonical links."
+						},
+						{
+							"name": "author",
+							"label": "Author",
+							"widget": "string",
+							"required": false,
+							"hint": "Person or company name."
+						},
+						{
+							"name": "contactEmail",
+							"label": "Contact email",
+							"widget": "string",
+							"required": false,
+							"hint": "Added to the site's structured data (rich results)."
+						},
+						{
+							"name": "themeColor",
+							"label": "Theme color",
+							"widget": "color",
+							"required": false,
+							"hint": "Colors the browser bar on some phones."
+						},
+						{
+							"name": "faviconLight",
+							"label": "Favicon (light theme)",
+							"widget": "image",
+							"required": false,
+							"hint": "Shown in the browser tab when the device uses a light theme. SVG recommended."
+						},
+						{
+							"name": "faviconDark",
+							"label": "Favicon (dark theme)",
+							"widget": "image",
+							"required": false,
+							"hint": "Shown in the browser tab when the device uses a dark theme."
 						},
 						{
 							"name": "description",
 							"label": "Default meta description",
 							"widget": "text",
 							"required": false,
-							"hint": "Used when a page has no description of its own."
+							"hint": "Used when a page has no description of its own. Aim for 120-160 characters."
 						},
 						{
 							"name": "ogImage",
 							"label": "Default social share image",
 							"widget": "image",
-							"required": false
+							"required": false,
+							"hint": "1200x630 recommended."
 						}
 					]
 				},
@@ -810,5 +963,10 @@
 				}
 			]
 		}
-	]
+	],
+	"slug": {
+		"encoding": "ascii",
+		"clean_accents": true,
+		"sanitize_replacement": "-"
+	}
 }

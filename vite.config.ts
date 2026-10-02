@@ -17,7 +17,9 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter()
+			adapter: adapter(),
+			// Footer legal links may point at pages a site has not added yet; warn instead of failing the build.
+			prerender: { handleHttpError: 'warn' }
 		})
 	]
 });

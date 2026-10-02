@@ -1,5 +1,11 @@
 {
 	"siteName": "axys template",
+	"url": "https://axys-template.netlify.app",
+	"author": "Sample Author",
+	"contactEmail": "info@sample.com",
+	"themeColor": "#0a0a0a",
+	"faviconLight": "/images/favicon-dark.svg",
+	"faviconDark": "/images/favicon-light.svg",
 	"description": "",
 	"ogImage": ""
 }

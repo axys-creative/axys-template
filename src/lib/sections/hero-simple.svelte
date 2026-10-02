@@ -1,10 +1,10 @@
 <script lang="ts">
 	import SectionCopy, { type SectionCopyProps } from '$lib/components/section-copy.svelte';
 
-	let props: SectionCopyProps = $props();
+	let { compact = false, ...props }: SectionCopyProps & { compact?: boolean } = $props();
 </script>
 
-<section class="hero-simple">
+<section class="hero-simple" class:compact>
 	<div class="inner">
 		<SectionCopy level={1} align="center" {...props} />
 	</div>
@@ -16,6 +16,10 @@
 		place-items: center;
 		min-height: 80dvh;
 		padding: var(--body-padding-double) var(--body-padding);
+	}
+
+	.compact {
+		min-height: 40dvh;
 	}
 
 	.inner {

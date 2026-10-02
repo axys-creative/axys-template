@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../../styles/styles.scss';
 	import FooterSimple, { type FooterSimpleProps } from '$lib/components/footer-simple.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
 	import HeaderSimple, { type HeaderSimpleProps } from '$lib/components/header-simple.svelte';

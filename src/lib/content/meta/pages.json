@@ -8,6 +8,13 @@
 			"crawlPage": true
 		},
 		{
+			"path": "/blog",
+			"title": "Blog",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": true
+		},
+		{
 			"path": "/style-guide",
 			"title": "Style Guide",
 			"description": "",

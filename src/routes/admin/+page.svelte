@@ -1,4 +1,5 @@
 <script lang="ts">
+	import './admin.scss';
 	import { onMount } from 'svelte';
 	import config from './config.json';
 	import site from '$lib/content/meta/site.json';

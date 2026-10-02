@@ -1,0 +1,77 @@
+<script module lang="ts">
+	export type BlogArticleBodyProps = {
+		/** Trusted HTML rendered from the post's Markdown. */
+		html: string;
+	};
+</script>
+
+<script lang="ts">
+	let { html }: BlogArticleBodyProps = $props();
+</script>
+
+<section class="blog-article-body">
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	<article>{@html html}</article>
+</section>
+
+<style lang="scss">
+	@use 'base/mixins';
+
+	.blog-article-body {
+		padding: var(--body-padding-double) var(--body-padding);
+	}
+
+	article {
+		max-width: var(--max-width-text);
+		margin-inline: auto;
+
+		> :global(* + *) {
+			margin-block-start: 1.25em;
+		}
+
+		> :global(* + h2),
+		> :global(* + h3),
+		> :global(* + h4) {
+			margin-block-start: 2em;
+		}
+
+		:global(h2) {
+			@include mixins.h3;
+		}
+
+		:global(h3) {
+			@include mixins.h4;
+		}
+
+		:global(h4) {
+			@include mixins.h5;
+		}
+
+		:global(ul),
+		:global(ol) {
+			padding-inline-start: 1.8ch;
+		}
+
+		:global(li + li) {
+			margin-block-start: 0.5ch;
+		}
+
+		:global(blockquote) {
+			padding-inline-start: 2ch;
+			border-inline-start: 2px solid var(--color-border);
+			color: var(--color-text-muted);
+		}
+
+		:global(code) {
+			padding: 2px 6px;
+			border-radius: var(--radius-btn);
+			background: var(--color-surface);
+			font-family: var(--font-mono);
+			font-size: 0.875em;
+		}
+
+		:global(img) {
+			border-radius: var(--radius);
+		}
+	}
+</style>

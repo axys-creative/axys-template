@@ -194,10 +194,40 @@ export const videoOverlayProps = props(
 	['captionsLang', 'A string, the captions language. Defaults to `en`.']
 );
 
+export const postCardProps = props(
+	[
+		'post',
+		'An object: `slug`, `title`, `description`, `author`, `date` (`YYYY-MM-DD`), `tag`, `coverImage` and `coverAlt`. Links to `/blog/{slug}`. Required.'
+	],
+	[
+		'featured',
+		'A boolean. Lays the card out wide with the image beside the text. Defaults to `false`.'
+	]
+);
+
+export const blogArticleHeroProps = props(
+	['title', 'A string, the post title (the page `h1`). Required.'],
+	['description', 'A string shown under the title.'],
+	['author', 'A string.'],
+	['date', 'A string, `YYYY-MM-DD`. Required.'],
+	['tag', 'A string shown as a tag before the date.'],
+	['coverImage', 'A string, the image path. It drifts slightly as the page scrolls.'],
+	['coverAlt', 'A string, the image description. Leave empty if it is decorative.']
+);
+
+export const blogArticleBodyProps = props([
+	'html',
+	'A string of trusted HTML, rendered from the post Markdown by `renderMarkdown`. Required.'
+]);
+
 export const heroSimpleProps = props(
 	[
 		'...SectionCopy props',
 		'Takes every prop of Section Copy (see the Style Guide): `eyebrowText`, `eyebrowIcon`, `title`, `description`, `cta`, `layout`, `align`, the `show*` flags and the rest.'
+	],
+	[
+		'compact',
+		'A boolean. A shorter hero (40% of the screen instead of 80%), e.g. above a list. Defaults to `false`.'
 	],
 	['level', 'Defaults to `1`, since a hero is the page title.'],
 	['align', 'Defaults to `center`.']

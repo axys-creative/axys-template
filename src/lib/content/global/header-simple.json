@@ -14,28 +14,22 @@
 			"text": "Resources",
 			"links": [
 				{
-					"text": "Style Guide",
-					"url": "/style-guide",
+					"text": "Attachments",
+					"url": "/attachments",
 					"newTab": false,
-					"iconStart": "palette"
+					"iconStart": "bolt"
 				},
 				{
 					"text": "Components",
 					"url": "/components",
 					"newTab": false,
-					"iconStart": "orbit"
+					"iconStart": "blocks"
 				},
 				{
 					"text": "Combos",
 					"url": "/combos",
 					"newTab": false,
-					"iconStart": "blocks"
-				},
-				{
-					"text": "Attachments",
-					"url": "/attachments",
-					"newTab": false,
-					"iconStart": "bolt"
+					"iconStart": "orbit"
 				},
 				{
 					"text": "Sections",
@@ -44,10 +38,10 @@
 					"iconStart": "dashboard"
 				},
 				{
-					"text": "Website",
-					"url": "https://axyscreative.com",
-					"newTab": true,
-					"iconStart": "rocket"
+					"text": "Style Guide",
+					"url": "/style-guide",
+					"newTab": false,
+					"iconStart": "palette"
 				},
 				{
 					"text": "Tokens",
@@ -56,13 +50,18 @@
 					"iconStart": "inventory"
 				}
 			]
+		},
+		{
+			"text": "Blog",
+			"url": "/blog",
+			"newTab": false
 		}
 	],
 	"ctas": [
 		{
 			"text": "Log In",
 			"url": "/admin",
-			"newTab": false,
+			"newTab": true,
 			"type": "underline"
 		},
 		{

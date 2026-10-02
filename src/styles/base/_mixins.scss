@@ -121,7 +121,7 @@ $breakpoints: (
 	font-size: $size;
 	font-weight: 300;
 	line-height: $line-height;
-	letter-spacing: -1px;
+	letter-spacing: 0px;
 }
 
 @mixin h1 {
