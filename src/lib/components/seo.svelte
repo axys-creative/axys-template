@@ -4,14 +4,26 @@
 	import { pages } from '$lib/content/meta/pages.json';
 
 	// A page can pass its own `seo` in its load data (a blog post does); otherwise pages.json decides.
-	type PageSeo = { title: string; description?: string; ogImage?: string; type?: string };
+	type PageSeo = {
+		title: string;
+		description?: string;
+		ogImage?: string;
+		type?: string;
+		/** `YYYY-MM-DD`, for an article. */
+		published?: string;
+		author?: string;
+	};
 
-	const entry = $derived(pages.find((p) => p.path === page.url.pathname));
+	// An error page uses its own entry (the 404 one for a missing page) and is never indexed.
+	const failed = $derived(page.status >= 400);
+	const entry = $derived(
+		pages.find((p) => p.path === (failed ? (page.status === 404 ? '/404' : '') : page.url.pathname))
+	);
 	const seo = $derived(page.data.seo as PageSeo | undefined);
 	const title = $derived(seo?.title || entry?.title || site.siteName);
 	const description = $derived(seo?.description || entry?.description);
 	const ogImage = $derived(seo?.ogImage || entry?.ogImage);
-	const crawlPage = $derived(entry?.crawlPage ?? true);
+	const crawlPage = $derived(!failed && (entry?.crawlPage ?? true));
 	const isAdmin = $derived(page.url.pathname.startsWith('/admin'));
 
 	const fullTitle = $derived(`${title} | ${site.siteName}`);
@@ -20,13 +32,33 @@
 	const origin = $derived(site.url || page.url.origin);
 	const canonical = $derived(origin + page.url.pathname);
 	const imageUrl = $derived(image ? new URL(image, origin).href : '');
+	// Structured data that search engines and AI answer engines read: who the site is, and for a post, what it says.
 	const schema = $derived(
 		JSON.stringify({
 			'@context': 'https://schema.org',
-			'@type': 'Organization',
-			name: site.siteName,
-			url: origin,
-			...(site.contactEmail && { email: site.contactEmail })
+			'@graph': [
+				{
+					'@type': 'Organization',
+					'@id': `${origin}/#organization`,
+					name: site.siteName,
+					url: origin,
+					...(site.contactEmail && { email: site.contactEmail })
+				},
+				...(seo?.type === 'article'
+					? [
+							{
+								'@type': 'Article',
+								headline: title,
+								description: metaDescription,
+								mainEntityOfPage: canonical,
+								...(imageUrl && { image: imageUrl }),
+								...(seo.published && { datePublished: seo.published }),
+								...(seo.author && { author: { '@type': 'Person', name: seo.author } }),
+								publisher: { '@id': `${origin}/#organization` }
+							}
+						]
+					: [])
+			]
 		}).replaceAll('<', '\\u003c')
 	);
 	const schemaTag = $derived(`<script type="application/ld+json">${schema}</${'script'}>`);
@@ -48,7 +80,7 @@
 		{#if !crawlPage}
 			<meta name="robots" content="noindex, nofollow" />
 		{/if}
-		<link rel="canonical" href={canonical} />
+		{#if !failed}<link rel="canonical" href={canonical} />{/if}
 		{#if metaDescription}
 			<meta name="description" content={metaDescription} />
 			<meta property="og:description" content={metaDescription} />
@@ -56,7 +88,7 @@
 		<meta property="og:type" content={seo?.type ?? 'website'} />
 		<meta property="og:site_name" content={site.siteName} />
 		<meta property="og:title" content={fullTitle} />
-		<meta property="og:url" content={canonical} />
+		{#if !failed}<meta property="og:url" content={canonical} />{/if}
 		{#if imageUrl}
 			<meta property="og:image" content={imageUrl} />
 		{/if}

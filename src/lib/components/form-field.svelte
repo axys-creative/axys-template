@@ -297,6 +297,7 @@
 		display: flex;
 		gap: 8px;
 		max-width: calc(100% - 1em);
+		overflow: hidden;
 		line-height: 1.2;
 		white-space: nowrap;
 		opacity: 0.75;
@@ -336,6 +337,9 @@
 	}
 
 	.count {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		font-size: max(0.9em, 13px);
 		font-style: oblique;
 		opacity: 0;

@@ -7,6 +7,7 @@
 		logo?: LogoProps;
 		message?: string;
 		socialLinks?: SocialLink[];
+		/** Up to three columns of links. */
 		linksets?: { title?: string; links: ButtonProps[] }[];
 		legalLinks?: ButtonProps[];
 		returnToTop?: ButtonProps;
@@ -72,7 +73,7 @@
 
 				{#if linksets.length}
 					<div class="linksets">
-						{#each linksets as { title, links } (title ?? links[0]?.url)}
+						{#each linksets.slice(0, 3) as { title, links } (title ?? links[0]?.url)}
 							<div class="linkset">
 								{#if title}<strong>{title}</strong>{/if}
 								<MenuLinks {links} label={title ?? 'Footer'} direction="column" />
@@ -151,9 +152,17 @@
 	}
 
 	.linksets {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 64px;
+		display: grid;
+		grid-template-columns: repeat(3, max-content);
+		gap: 32px 64px;
+
+		@include mixins.max-md {
+			grid-template-columns: repeat(2, max-content);
+		}
+
+		@include mixins.max-xs {
+			grid-template-columns: max-content;
+		}
 	}
 
 	.linkset strong {

@@ -64,7 +64,12 @@ export const iconProps = props(
 );
 
 export const logoProps = props(
-	['src', 'A string, the path to the image.'],
+	['src', 'A string, the path to one image used in both themes.'],
+	[
+		'srcLight',
+		'A string, the image for the light theme. Use with `srcDark`; the right one shows for the theme, and a wide logo keeps its shape (set `--logo-height`).'
+	],
+	['srcDark', 'A string, the image for the dark theme.'],
 	['text', 'A string shown beside the image.'],
 	['alt', 'A string. The accessible name when there is no `text`.'],
 	['url', 'A string. Wraps the logo in a link.'],
@@ -325,6 +330,145 @@ export const formControlProps = props(
 	['multiple', 'A boolean, for a file input.'],
 	['accept', 'A string of file types, for a file input.'],
 	['disabled', 'A boolean.']
+);
+
+export const imageCircleProps = props(
+	['images', 'An array of `{ src, alt }`, any number of them. Required.'],
+	[
+		'itemWidth',
+		"A number, the card width as a percent of the component's own width (`24` is 24%). Defaults to `24`."
+	],
+	[
+		'gap',
+		'A number, the space between cards as a multiple of card width: `1` touches, more spaces them, less overlaps. Defaults to `1.15`.'
+	],
+	['direction', '`left | right`. Which way the ring spins. Defaults to `left`.'],
+	['duration', 'A number, seconds for one full turn. Defaults to `40`.'],
+	[
+		'bloom',
+		'`left | right | top`. Cards turn with the ring like petals instead of staying upright, with the left, right or top card upright. Off by default.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const imageWaveProps = props(
+	['images', 'An array of `{ src, alt }`, any number of them. Required.'],
+	[
+		'repeat',
+		'A number, how many times the images repeat inside one set. One set has to be wider than the screen or the loop shows a gap, so raise it for few or narrow images. Defaults to `1`.'
+	],
+	[
+		'speed',
+		'A number, seconds for the row to pan one full set. Higher is slower. Defaults to `60`.'
+	],
+	['duration', 'A number, seconds for one full up-and-down bob. Defaults to `4`.'],
+	[
+		'amplitude',
+		"A number, pixels each card travels up and down from center, the wave's height. `0` is a flat row. Defaults to `32`."
+	],
+	[
+		'waves',
+		'A whole number, how many crests the wave has across one set (fractions are rounded, since a partial crest cannot loop without a jump). Higher staggers the cards more tightly; `0` moves them together. Defaults to `1`.'
+	],
+	[
+		'scrub',
+		'A number. Ties the wave to scrolling, on top of its own motion: scrolling down pushes the row further left and moves the bob ahead, and scrolling up reverses both. `1` is 1px of pan per 1px scrolled and one full wave per 1000px, so higher is more sensitive. `0` is off. Defaults to `0`.'
+	],
+	[
+		'reverse',
+		'A boolean. The row and the bob run backwards after the page scrolls up and forwards again after it scrolls down, turning around smoothly each time. Works with or without `scrub`. Defaults to `false`.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const imageColumnsProps = props(
+	[
+		'images',
+		"An array of `{ src, alt, accent, caption, gnomon }`. The slots draw from it in order, looping if there are fewer images than slots. `accent` is a small handwritten note on the corner, `caption` is text on the image, and `gnomon` overrides that card's `gnomon` settings. Required."
+	],
+	[
+		'columns',
+		'An array, one number per column: how many images it holds at the widest size. Uneven is fine, e.g. `[4, 5, 4, 5]`. Defaults to an even split in four columns.'
+	],
+	[
+		'columnsMd',
+		'An array like `columns`, for tablet widths. Defaults to an even split of the same slots in one fewer column (at least two).'
+	],
+	[
+		'columnsSm',
+		'An array like `columns`, for mobile widths. Defaults to two fewer columns (at least two).'
+	],
+	[
+		'start',
+		"A string, a GSAP ScrollTrigger start such as `top 95%` (the default, as it enters from below), `top center` or `top top`. The element is the shortest column's first card."
+	],
+	[
+		'startOffset',
+		"A number or string, px (`40` or `'40px'`) or a percent of the shortest column's height (`'-10%'`). Moving columns start this far from their resting place, so their tops are staggered; the end, bottoms aligned, is unchanged."
+	],
+	['markers', 'A boolean. Shows GSAP start and end markers for debugging. Defaults to `false`.'],
+	[
+		'gnomon',
+		'An object `{ depth, length, radius, angle, borderWidth, cutouts }`. When set, every image is drawn as a Card Gnomon with these settings, and a `caption` fills the first notch.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const imageFanProps = props(
+	['images', 'An array of `{ src, alt }`, any number of them. Required.'],
+	[
+		'arc',
+		'A number, the degrees the fan wraps: `0` is a flat row, `90` a quarter circle, `180` a semicircle, `360` a full ring. Defaults to `90`.'
+	],
+	[
+		'gap',
+		'A number, the space between cards as a multiple of card width: `1` touches, more spaces them, less overlaps. Defaults to `1.15`.'
+	],
+	[
+		'chop',
+		'A number, the pixels each ring of cards drops below the one inside it, outward from the middle: `12` drops the 2nd and 4th cards 12px, the 1st and 5th 24px, for a stepped-down fan. Defaults to `0`.'
+	],
+	[
+		'closed',
+		'A boolean. Spreads the cards evenly around a full ring and ignores `arc`. Defaults to `false`.'
+	],
+	[
+		'direction',
+		'`up | down`. A rainbow with the middle card highest, or a valley. Defaults to `up`.'
+	],
+	[
+		'stack',
+		'`sequence | pyramid`. Stack in array order, or put the middle card on top and step down to the ends. Defaults to `sequence`.'
+	],
+	[
+		'itemWidth',
+		"A number, the card width as a percent of the component's own width. Defaults to `22`."
+	],
+	[
+		'animateIn',
+		'A boolean. Reveals the fan when it scrolls into view and again each time it returns: `sequence` rises the cards in with a staggered fade, `pyramid` starts them collapsed on the middle card then opens the fan out along the arc. Defaults to `false`.'
+	],
+	[
+		'class',
+		'A string of extra classes. Hover feel, reveal timing and easing are the `--push`, `--splay`, `--ripple`, `--in-*` and `--open-*` properties at the top of the component.'
+	]
+);
+
+export const imageComparisonProps = props(
+	['before', 'An object `{ src, alt }`, the image on the left of the divider. Required.'],
+	['after', 'An object `{ src, alt }`, the image on the right of the divider. Required.'],
+	[
+		'mode',
+		'`drag | hover`. `drag` moves the divider by dragging anywhere on the image; `hover` makes it follow the mouse. Touch screens always drag. Defaults to `drag`.'
+	],
+	[
+		'position',
+		'A number from 0 to 100, bindable. Where the divider starts: 0 shows all of the after image, 100 all of the before image. Defaults to `50`.'
+	],
+	['beforeLabel', 'A string, a Tag in the top left.'],
+	['afterLabel', 'A string, a Tag in the top right.'],
+	['aspectRatio', 'A string, the CSS aspect ratio of the frame. Defaults to `16 / 9`.'],
+	['class', 'A string of extra classes.']
 );
 
 export const accordionProps = props(

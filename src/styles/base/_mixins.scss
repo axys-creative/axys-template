@@ -127,11 +127,11 @@ $breakpoints: (
 }
 
 @mixin h1 {
-	@include heading(56px, 1.1);
+	@include heading(clamp(36px, 11.5vw, 56px), 1.1);
 }
 
 @mixin h2 {
-	@include heading(44px, 1.15);
+	@include heading(clamp(30px, 8vw, 44px), 1.15);
 }
 
 @mixin h3 {

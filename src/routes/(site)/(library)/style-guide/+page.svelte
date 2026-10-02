@@ -424,9 +424,10 @@
 		props={logoProps}
 	>
 		<div class="row">
-			<Logo src="/images/logo.svg" text="Tinted with text" tint />
+			<Logo srcLight="/images/logo-black.svg" srcDark="/images/logo-white.svg" alt="axys" />
+			<Logo src="/images/logo-axys-icon-white.svg" text="Tinted with text" tint />
 			<Logo text="Text only" />
-			<Logo src="/images/logo.svg" alt="Sample Business" tint />
+			<Logo src="/images/logo-axys-icon-white.svg" alt="axys" tint />
 		</div>
 	</LibrarySection>
 
@@ -570,7 +571,7 @@
 		gap: 20px 32px;
 
 		@include mixins.max-md {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 
@@ -587,7 +588,7 @@
 		width: 100%;
 
 		@include mixins.max-md {
-			grid-template-columns: 1fr;
+			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 

@@ -1,6 +1,10 @@
 <script module lang="ts">
 	export type LogoProps = {
 		src?: string;
+		/** Image shown in the light theme. Use with `srcDark`; the right one shows for the theme. */
+		srcLight?: string;
+		/** Image shown in the dark theme. */
+		srcDark?: string;
 		text?: string;
 		alt?: string;
 		url?: string;
@@ -9,13 +13,16 @@
 </script>
 
 <script lang="ts">
-	let { src, text, alt = '', url, tint = false }: LogoProps = $props();
+	let { src, srcLight, srcDark, text, alt = '', url, tint = false }: LogoProps = $props();
 
 	const label = $derived(text ? undefined : alt || undefined);
 </script>
 
 {#snippet content()}
-	{#if src && tint}
+	{#if srcLight || srcDark}
+		{#if srcLight}<img class="themed light" src={srcLight} alt={text ? '' : alt} />{/if}
+		{#if srcDark}<img class="themed dark" src={srcDark} alt={text ? '' : alt} />{/if}
+	{:else if src && tint}
 		<span class="mark" style="mask-image: url('{src}')" aria-hidden="true"></span>
 	{:else if src}
 		<img {src} alt={text ? '' : alt} />
@@ -31,7 +38,7 @@
 
 <style lang="scss">
 	.logo {
-		--logo-size: 28px;
+		--logo-size: 20px;
 
 		display: inline-flex;
 		align-items: center;
@@ -42,7 +49,41 @@
 		text-decoration: none;
 	}
 
-	img,
+	// A wide logo keeps its shape: its height is set and the width follows.
+	.themed {
+		width: auto;
+		height: var(--logo-height, var(--logo-size));
+		max-width: 100%;
+	}
+
+	// The dark image shows by default; the light one takes over in the light theme.
+	.light {
+		display: none;
+	}
+
+	:global(:root[data-theme='light']) {
+		.light {
+			display: block;
+		}
+
+		.dark {
+			display: none;
+		}
+	}
+
+	@media (prefers-color-scheme: light) {
+		:global(:root:not([data-theme])) {
+			.light {
+				display: block;
+			}
+
+			.dark {
+				display: none;
+			}
+		}
+	}
+
+	img:not(.themed),
 	.mark {
 		width: var(--logo-size);
 		height: var(--logo-size);

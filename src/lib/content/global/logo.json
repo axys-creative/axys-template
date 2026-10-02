@@ -1,6 +1,6 @@
 {
-	"src": "/images/logo.svg",
-	"tint": true,
-	"text": "Sample Business",
-	"alt": ""
+	"srcLight": "/images/logo-black.svg",
+	"srcDark": "/images/logo-white.svg",
+	"text": "",
+	"alt": "axys"
 }

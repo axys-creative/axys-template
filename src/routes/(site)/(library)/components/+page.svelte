@@ -1,5 +1,10 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
+	import ImageColumns from '$lib/components/image-columns.svelte';
+	import ImageFan from '$lib/components/image-fan.svelte';
+	import ImageCircle from '$lib/components/image-circle.svelte';
+	import ImageWave from '$lib/components/image-wave.svelte';
+	import ImageComparison from '$lib/components/image-comparison.svelte';
 	import Form from '$lib/components/form.svelte';
 	import Counter from '$lib/components/counter.svelte';
 	import Carousel from '$lib/components/carousel.svelte';
@@ -17,6 +22,11 @@
 		carouselProps,
 		counterProps,
 		formProps,
+		imageCircleProps,
+		imageColumnsProps,
+		imageFanProps,
+		imageComparisonProps,
+		imageWaveProps,
 		mouseCursorProps,
 		postCardProps,
 		videoOverlayProps
@@ -30,7 +40,15 @@
 
 	const long =
 		'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima numquam officiis ipsa obcaecati illo molestias aliquam molestiae praesentium provident eos? Excepturi veniam assumenda non corrupti similique aperiam rem enim dolores repellat.';
-	const images = ['img-sample-1', 'img-sample-2', 'img-sample-3'];
+	const images = [
+		'img-sample-1',
+		'img-sample-2',
+		'img-sample-3',
+		'img-sample-4',
+		'img-sample-5',
+		'img-sample-6',
+		'img-sample-7'
+	];
 	const photoSlides = (total: number) =>
 		Array.from({ length: total }, (_, index) => ({
 			title: `Title ${index + 1}`,
@@ -41,6 +59,20 @@
 		title: `Title ${index + 1}`,
 		desc: `Description ${index + 1}`
 	}));
+	const gallery = [
+		'img-sample-1',
+		'img-sample-2',
+		'img-sample-3',
+		'img-sample-4',
+		'img-sample-5',
+		'img-sample-6',
+		'img-sample-7'
+	];
+	const galleryImages = (total: number) =>
+		Array.from({ length: total }, (_, index) => ({
+			src: `/images/${gallery[index % gallery.length]}.jpg`,
+			alt: `Sample image ${index + 1}`
+		}));
 	const faq = [
 		{
 			title:
@@ -68,16 +100,16 @@
 			'A shorter description that sits directly beneath the year.'
 		],
 		['img-sample-3', '2019', 'Portland, OR', `${long} ${long}`],
-		['img-sample-1', '2018', 'Phoenix, AZ', 'Lorem ipsum dolor sit amet.'],
-		['img-sample-2', '2017', 'Las Vegas, NV', 'Lorem ipsum dolor sit amet.'],
-		['img-sample-3', '2015', 'Santa Fe, NM', 'Lorem ipsum dolor sit amet.']
+		['img-sample-4', '2018', 'Phoenix, AZ', 'Lorem ipsum dolor sit amet.'],
+		['img-sample-5', '2017', 'Las Vegas, NV', 'Lorem ipsum dolor sit amet.'],
+		['img-sample-6', '2015', 'Santa Fe, NM', 'Lorem ipsum dolor sit amet.']
 	].map(([image, year, location, content], index) => ({
 		photo: { src: `/images/${image}.jpg`, alt: '' },
 		year,
 		location,
 		content,
 		...(index === 2 && {
-			images: ['img-sample-1', 'img-sample-2', 'img-sample-3', 'img-sample-1'].map((name) => ({
+			images: ['img-sample-7', 'img-sample-5', 'img-sample-6', 'img-sample-4'].map((name) => ({
 				src: `/images/${name}.jpg`,
 				alt: ''
 			})),
@@ -271,6 +303,112 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Image Circle"
+		type="Component"
+		description="Cards spaced evenly around an exact circle, spinning slowly while each card turns against the ring to stay upright. It is decorative, so it has no hover response. It scales with its container, and is off with reduced motion."
+		props={imageCircleProps}
+	>
+		<h3 class="plain">Upright cards</h3>
+		<div class="circle-demo">
+			<ImageCircle images={galleryImages(8)} itemWidth={20} />
+		</div>
+		<h3 class="plain">Bloom, spinning the other way</h3>
+		<div class="circle-demo">
+			<ImageCircle images={galleryImages(8)} itemWidth={20} bloom="top" direction="right" />
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Image Columns"
+		type="Component"
+		description="A grid of images with an uneven number per column. As the page scrolls, every column moves up until its bottom lines up with the shortest column, which never moves. It needs GSAP ScrollTrigger, loaded only when the component is used, and is still when motion is reduced."
+		props={imageColumnsProps}
+	>
+		<h3 class="plain">Plain images</h3>
+		<ImageColumns
+			images={[
+				{ ...galleryImages(14)[0], accent: 'New', caption: 'Caption 1' },
+				{ ...galleryImages(14)[1], caption: 'Caption 2' },
+				...galleryImages(14).slice(2)
+			]}
+			columns={[3, 4, 3, 4]}
+			columnsMd={[5, 4, 5]}
+			columnsSm={[8, 6]}
+			start="top center"
+			startOffset="64px"
+		/>
+		<h3 class="plain">As gnomon cards</h3>
+		<ImageColumns
+			images={[
+				{ ...galleryImages(10)[0], caption: 'One' },
+				{ ...galleryImages(10)[1], caption: 'Two' },
+				...galleryImages(10).slice(2)
+			]}
+			columns={[2, 3, 2, 3]}
+			columnsMd={[4, 3, 3]}
+			columnsSm={[5, 5]}
+			gnomon={{ depth: 12, length: 36, radius: 4, angle: 80 }}
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Image Comparison"
+		type="Component"
+		description="Two images with a divider between them: the position of the divider decides how much of each shows. It works by dragging, by hovering, and with the keyboard (arrow keys, Home and End), and it announces its position to screen readers."
+		props={imageComparisonProps}
+	>
+		<h3 class="plain">Drag</h3>
+		<ImageComparison
+			before={{ src: '/images/img-sample-5.jpg', alt: 'The fifth sample image' }}
+			after={{ src: '/images/img-sample-6.jpg', alt: 'The sixth sample image' }}
+			beforeLabel="Before"
+			afterLabel="After"
+		/>
+		<h3 class="plain">Follows the mouse</h3>
+		<ImageComparison
+			mode="hover"
+			position={30}
+			aspectRatio="21 / 9"
+			before={{ src: '/images/img-sample-6.jpg', alt: 'The sixth sample image' }}
+			after={{ src: '/images/img-sample-5.jpg', alt: 'The fifth sample image' }}
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Image Fan"
+		type="Component"
+		description="Images curve along an arc whose radius comes from the spread and the card spacing, so the whole fan scales with its container. Hovering a card parts its neighbours. It is still when motion is reduced."
+		props={imageFanProps}
+	>
+		<h3 class="plain">Pyramid that opens as it scrolls in</h3>
+		<ImageFan
+			images={galleryImages(5)}
+			arc={40}
+			gap={0.8}
+			chop={16}
+			itemWidth={20}
+			stack="pyramid"
+			animateIn
+		/>
+		<h3 class="plain">Semicircle, a valley</h3>
+		<ImageFan images={galleryImages(7)} arc={180} gap={0.7} direction="down" itemWidth={18} />
+		<h3 class="plain">Closed ring that rises in</h3>
+		<ImageFan images={galleryImages(8)} closed gap={0.9} itemWidth={16} animateIn />
+	</LibrarySection>
+
+	<LibrarySection
+		title="Image Wave"
+		type="Component"
+		description="A row of image cards that pans slowly left and loops without a seam, while each card bobs a little behind the one before it, so the bob reads as a wave travelling along the row. The images repeat enough to fill the screen. It is off with reduced motion."
+		props={imageWaveProps}
+	>
+		<h3 class="plain">Scrolling pushes it along</h3>
+		<ImageWave images={galleryImages(8)} scrub={0.5} />
+		<h3 class="plain">Reverses with the scroll direction</h3>
+		<ImageWave images={galleryImages(8)} scrub={0.5} reverse />
+	</LibrarySection>
+
+	<LibrarySection
 		title="Mouse Cursor"
 		type="Component"
 		description="A custom cursor that follows the mouse. Mount it once in a layout; attachments such as `cursorContent` and `cursorTarget` then change how it looks. It is hidden on touch devices and with reduced motion. See the Attachments page for live demos."
@@ -336,6 +474,10 @@
 		flex-wrap: wrap;
 		gap: 128px;
 		align-items: flex-start;
+	}
+
+	.circle-demo {
+		width: min(560px, 100%);
 	}
 
 	.form-demo {

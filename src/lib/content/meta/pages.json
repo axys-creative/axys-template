@@ -62,6 +62,13 @@
 			"description": "",
 			"ogImage": "",
 			"crawlPage": false
+		},
+		{
+			"path": "/404",
+			"title": "Page Not Found",
+			"description": "The page you are looking for cannot be found. Check the address or return to the home page.",
+			"ogImage": "",
+			"crawlPage": false
 		}
 	]
 }

@@ -18,7 +18,9 @@ export const load = ({ params }) => {
 			title: post.title,
 			description: post.description,
 			ogImage: post.coverImage,
-			type: 'article'
+			type: 'article',
+			published: post.date,
+			author: post.author
 		}
 	};
 };

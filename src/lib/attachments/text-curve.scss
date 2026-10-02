@@ -1,6 +1,8 @@
+// An arc longer than its container is capped to it; the letters stay centered and overflow evenly.
 .text-curve {
 	position: relative;
 	display: inline-block;
+	max-width: 100%;
 	white-space: nowrap;
 }
 

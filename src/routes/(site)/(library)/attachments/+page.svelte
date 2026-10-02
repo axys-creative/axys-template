@@ -1540,9 +1540,11 @@
 	.push-box {
 		display: grid;
 		place-items: center;
-		width: max(180px, 20%);
+		flex: 0 1 max(180px, 20%);
+		min-width: 0;
 		aspect-ratio: 1;
-		padding: 24px;
+		padding: clamp(8px, 3vw, 24px);
+		font-size: clamp(11px, 3.4vw, 16px);
 		border-radius: var(--radius);
 		background: var(--color-surface);
 		text-align: center;
@@ -1766,9 +1768,11 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: max(180px, 20%);
+		flex: 0 1 max(180px, 20%);
+		min-width: 0;
 		aspect-ratio: 1;
-		padding: 24px;
+		padding: clamp(8px, 3vw, 24px);
+		font-size: clamp(11px, 3.4vw, 16px);
 		border-radius: var(--radius);
 		color: #fff;
 		font-weight: 600;
@@ -1800,7 +1804,10 @@
 		cursor: pointer;
 	}
 
+	// The spinning rings' invisible corners would otherwise add sideways scroll on small screens.
 	.curve-samples {
+		width: 100%;
+		overflow-x: clip;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

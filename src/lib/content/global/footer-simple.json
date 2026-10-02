@@ -25,6 +25,16 @@
 					"text": "Style Guide",
 					"url": "/style-guide",
 					"newTab": false
+				}
+			]
+		},
+		{
+			"title": "Library",
+			"links": [
+				{
+					"text": "Attachments",
+					"url": "/attachments",
+					"newTab": false
 				},
 				{
 					"text": "Components",
@@ -34,11 +44,6 @@
 				{
 					"text": "Combos",
 					"url": "/combos",
-					"newTab": false
-				},
-				{
-					"text": "Attachments",
-					"url": "/attachments",
 					"newTab": false
 				},
 				{
