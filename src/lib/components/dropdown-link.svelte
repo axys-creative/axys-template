@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { glass } from '$lib/attachments/glass';
+	import { textRoll } from '$lib/attachments/text-roll';
 	import Button, { type ButtonProps } from './button.svelte';
 
 	type Props = {
@@ -27,6 +29,14 @@
 		openedByHover = false;
 	};
 
+	// Scrolling down hides the header, so the menu closes; scrolling up keeps it, as the header stays in view.
+	let lastY = 0;
+	const onscroll = () => {
+		const y = scrollY;
+		if (mode === 'popover' && y > lastY) open = false;
+		lastY = y;
+	};
+
 	const toggle = () => {
 		if (openedByHover) openedByHover = false;
 		else open = !open;
@@ -47,7 +57,7 @@
 	};
 </script>
 
-<svelte:window onscroll={() => mode === 'popover' && (open = false)} />
+<svelte:window {onscroll} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
@@ -60,12 +70,24 @@
 	{onfocusout}
 	{onclick}
 >
-	<Button {text} {type} iconEnd="chevron-down" expanded={open} controls={id} onclick={toggle} />
+	<Button
+		{text}
+		{type}
+		iconEnd="chevron-down"
+		expanded={open}
+		controls={id}
+		onclick={toggle}
+		{@attach textRoll()}
+	/>
 
-	<div class="panel" {id}>
+	<div
+		class="panel"
+		{id}
+		{@attach mode === 'popover' ? glass({ blur: 12, tint: 'rgb(0 0 0 / 0.45)' }) : undefined}
+	>
 		<ul class="list">
 			{#each links as link (link.url ?? link.text)}
-				<li><Button {...link} type={link.type ?? 'text'} /></li>
+				<li><Button {...link} type={link.type ?? 'text'} {@attach textRoll()} /></li>
 			{/each}
 		</ul>
 	</div>
@@ -121,13 +143,11 @@
 			padding: 24px;
 			border: 1px solid var(--color-border);
 			border-radius: var(--radius-btn);
-			background: color-mix(in srgb, var(--color-surface) 80%, transparent);
-			backdrop-filter: blur(8px);
 			opacity: 0;
 			translate: 0 16px;
 
 			// Keeps the menu open while the pointer crosses the gap.
-			&::before {
+			&::after {
 				content: '';
 				position: absolute;
 				bottom: 100%;

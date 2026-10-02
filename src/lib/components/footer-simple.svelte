@@ -16,11 +16,16 @@
 		includeBottom?: boolean;
 		divider?: boolean;
 		float?: boolean;
+		/** A translucent, blurred background. */
+		blur?: boolean;
+		/** The glass attachment's background: refraction in Chrome, blur elsewhere. Wins over `blur`. */
 		glass?: boolean;
 	};
 </script>
 
 <script lang="ts">
+	import { glass as glassEffect } from '$lib/attachments/glass';
+	import { textRoll } from '$lib/attachments/text-roll';
 	import site from '$lib/content/meta/site.json';
 	import Button from './button.svelte';
 	import Logo from './logo.svelte';
@@ -41,6 +46,7 @@
 		includeBottom = true,
 		divider = true,
 		float = false,
+		blur = false,
 		glass = false
 	}: FooterSimpleProps = $props();
 
@@ -49,7 +55,12 @@
 	);
 </script>
 
-<footer class="footer" class:float class:glass>
+<footer
+	class="footer"
+	class:float
+	class:blur={blur && !glass}
+	{@attach glass ? glassEffect() : undefined}
+>
 	<div class="inner">
 		{#if includeTop}
 			<div class="top">
@@ -77,7 +88,7 @@
 		{#if includeBottom}
 			<div class="bottom">
 				<div class="bottom-start">
-					{#if returnToTop}<Button {...returnToTop} />{/if}
+					{#if returnToTop}<Button {...returnToTop} {@attach textRoll()} />{/if}
 				</div>
 				<p class="copyright">{copyrightText}</p>
 				<div class="bottom-end">
@@ -106,7 +117,7 @@
 		border-radius: var(--radius);
 	}
 
-	.glass {
+	.blur {
 		@include mixins.glass;
 	}
 

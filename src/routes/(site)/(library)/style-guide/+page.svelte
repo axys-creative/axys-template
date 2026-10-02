@@ -1,8 +1,18 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
+	import { bgSlide } from '$lib/attachments/bg-slide';
+	import { cursorHide } from '$lib/attachments/cursor-hide';
+	import { glitchHover } from '$lib/attachments/glitch-hover';
+	import { magnet } from '$lib/attachments/magnet';
+	import { textRoll } from '$lib/attachments/text-roll';
+	import { underline } from '$lib/attachments/underline';
 	import Button from '$lib/components/button.svelte';
 	import CtaGroup from '$lib/components/cta-group.svelte';
 	import Eyebrow from '$lib/components/eyebrow.svelte';
+	import FormChoice from '$lib/components/form-choice.svelte';
+	import FormControl from '$lib/components/form-control.svelte';
+	import FormField, { type FormFieldProps } from '$lib/components/form-field.svelte';
+	import FormGroup from '$lib/components/form-group.svelte';
 	import Icon from '$lib/components/icon.svelte';
 	import Logo from '$lib/components/logo.svelte';
 	import MenuLinks from '$lib/components/menu-links.svelte';
@@ -16,6 +26,10 @@
 		colorTokens,
 		ctaGroupProps,
 		eyebrowProps,
+		formChoiceProps,
+		formControlProps,
+		formFieldProps,
+		formGroupProps,
 		iconProps,
 		logoProps,
 		menuLinksProps,
@@ -44,6 +58,44 @@
 		'error'
 	];
 	const icons = ['check', 'chevron-right', 'arrow-tr', 'new-tab', 'copy', 'x', 'mail', 'social-x'];
+	let plan = $state('team');
+	let notify = $state(true);
+	let volume = $state(40);
+	let rating = $state(65);
+
+	const fieldTypes: {
+		type: FormFieldProps['type'];
+		label: string;
+		extra?: Partial<FormFieldProps>;
+	}[] = [
+		{ type: 'text', label: 'Text' },
+		{ type: 'email', label: 'Email' },
+		{ type: 'password', label: 'Password' },
+		{ type: 'search', label: 'Search' },
+		{ type: 'url', label: 'URL' },
+		{ type: 'tel', label: 'Phone (digits only)' },
+		{ type: 'number', label: 'Number' },
+		{ type: 'date', label: 'Date' },
+		{ type: 'time', label: 'Time' },
+		{
+			type: 'text',
+			label: 'With suggestions',
+			extra: { datalist: ['Salt Lake City', 'Denver', 'Portland', 'Phoenix'] }
+		},
+		{
+			type: 'select',
+			label: 'Select',
+			extra: {
+				options: [
+					'One',
+					'Two',
+					{ value: 'three', label: 'Three (disabled)', disabled: true },
+					{ group: 'More', options: ['Four', 'Five'] }
+				]
+			}
+		}
+	];
+
 	const sizes = ['sm', 'md', 'lg'] as const;
 	const symbols: NonNullable<SiteNavButtonProps['symbol']>[] = ['burger', 'chocolate', 'kebab'];
 	const shapes: NonNullable<SiteNavButtonProps['shape']>[] = ['square', 'round'];
@@ -140,6 +192,42 @@
 			<Button text="Icon start" iconStart="copy" type="outline" />
 			<Button textDescription="Close" iconStart="x" type="outline" />
 		</div>
+		<h3 class="plain">Mixed with attachments</h3>
+		<div class="row">
+			<Button text="Solid custom 1" size="sm" iconStart="orbit" {@attach bgSlide()} />
+			<Button
+				text="Solid custom 2"
+				url="/"
+				iconEnd="new-tab"
+				{@attach magnet({ x: 0.25, y: 0.75 })}
+				{@attach glitchHover({ newText: 'Let’s do this!' })}
+				{@attach underline()}
+				{@attach cursorHide()}
+			/>
+		</div>
+		<div class="row">
+			<Button
+				text="Outline custom"
+				url="/"
+				type="outline"
+				iconEnd="chevron-right"
+				{@attach textRoll()}
+			/>
+			<Button
+				text="Icon end circle"
+				type="text"
+				iconEnd="chevron-right"
+				iconCircle
+				iconEndAttach={magnet({ x: 1, y: 1 })}
+				{@attach cursorHide()}
+			/>
+			<Button
+				text="Outline slide"
+				type="outline"
+				{@attach bgSlide({ direction: 'up' })}
+				{@attach cursorHide()}
+			/>
+		</div>
 	</LibrarySection>
 
 	<LibrarySection
@@ -161,6 +249,156 @@
 			<Eyebrow text="Text only" />
 			<Eyebrow text="With icon" icon="check" />
 		</div>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Form Components"
+		type="Component"
+		description="The pieces a form is built from. Fields come in two looks, an underline and a full border, set with `variant` on each field or once on a whole `Form`. Checkboxes, radios and switches look the same everywhere. All of them work with the keyboard and screen readers."
+	>
+		<LibrarySection
+			level={3}
+			title="Form Field"
+			description="One label and one control, covering every text-like input, a textarea and a select."
+			props={formFieldProps}
+		>
+			<div class="fields">
+				<div>
+					<h4 class="plain">Underline</h4>
+					<div class="field-grid">
+						{#each fieldTypes as { type, label, extra } (label)}
+							<FormField name="underline-{label}" {label} {type} required={false} {...extra} />
+						{/each}
+						<FormField
+							name="underline-message"
+							label="Message"
+							type="textarea"
+							maxLength={250}
+							required={false}
+						/>
+						<FormField
+							name="underline-hint"
+							label="With a hint"
+							hint="We never share your email."
+							required={false}
+						/>
+						<FormField
+							name="underline-error"
+							label="With an error"
+							error="Enter a valid email address."
+							value="nope"
+							required={false}
+						/>
+						<FormField name="underline-disabled" label="Disabled" disabled required={false} />
+					</div>
+				</div>
+				<div>
+					<h4 class="plain">Outline</h4>
+					<div class="field-grid">
+						{#each fieldTypes as { type, label, extra } (label)}
+							<FormField
+								variant="outline"
+								name="outline-{label}"
+								{label}
+								{type}
+								required={false}
+								{...extra}
+							/>
+						{/each}
+						<FormField
+							variant="outline"
+							name="outline-message"
+							label="Message"
+							type="textarea"
+							maxLength={250}
+							required={false}
+						/>
+						<FormField
+							variant="outline"
+							name="outline-hint"
+							label="With a hint"
+							hint="We never share your email."
+							required={false}
+						/>
+						<FormField
+							variant="outline"
+							name="outline-error"
+							label="With an error"
+							error="Enter a valid email address."
+							value="nope"
+							required={false}
+						/>
+						<FormField
+							variant="outline"
+							name="outline-disabled"
+							label="Disabled"
+							disabled
+							required={false}
+						/>
+					</div>
+				</div>
+			</div>
+		</LibrarySection>
+
+		<LibrarySection
+			level={3}
+			title="Form Choice"
+			description="A checkbox, a radio or a switch with its label. Clicking the label toggles it."
+			props={formChoiceProps}
+		>
+			<div class="choices">
+				<FormGroup legend="Checkboxes">
+					<FormChoice name="topics" value="news" label="News" checked />
+					<FormChoice name="topics" value="offers" label="Offers" />
+					<FormChoice name="topics" value="events" label="Events (disabled)" disabled />
+				</FormGroup>
+				<FormGroup legend="Radios">
+					<FormChoice type="radio" name="plan" value="solo" label="Solo" bind:group={plan} />
+					<FormChoice type="radio" name="plan" value="team" label="Team" bind:group={plan} />
+					<FormChoice
+						type="radio"
+						name="plan"
+						value="company"
+						label="Company (disabled)"
+						disabled
+						bind:group={plan}
+					/>
+				</FormGroup>
+				<FormGroup legend="Switches">
+					<FormChoice type="switch" name="notify" label="Notifications" bind:checked={notify} />
+					<FormChoice type="switch" name="marketing" label="Marketing emails" />
+				</FormGroup>
+			</div>
+		</LibrarySection>
+
+		<LibrarySection
+			level={3}
+			title="Form Group"
+			description="A `fieldset` and `legend` around related choices, so a screen reader announces what the options belong to. It is the heading above each group of choices here."
+			props={formGroupProps}
+		>
+			<FormGroup legend="Contact me by" direction="row">
+				<FormChoice type="radio" name="contact" value="email" label="Email" />
+				<FormChoice type="radio" name="contact" value="phone" label="Phone" />
+				<FormChoice type="radio" name="contact" value="text" label="Text" />
+			</FormGroup>
+		</LibrarySection>
+
+		<LibrarySection
+			level={3}
+			title="Form Control"
+			description="The controls that are not text: a range, a color picker, a file input, a progress bar and a meter."
+			props={formControlProps}
+		>
+			<div class="controls">
+				<FormControl type="range" name="volume" label="Volume" bind:value={volume} />
+				<FormControl type="range" label="Disabled range" disabled />
+				<FormControl type="color" name="color" label="Color" />
+				<FormControl type="file" name="upload" label="File" />
+				<FormControl type="progress" label="Progress" value={70} />
+				<FormControl type="meter" label="Meter" bind:value={rating} />
+			</div>
+		</LibrarySection>
 	</LibrarySection>
 
 	<LibrarySection
@@ -308,14 +546,49 @@
 </div>
 
 <style lang="scss">
+	@use 'base/mixins';
 	/* LIBRARY: DELETE ME */
 	.style-guide {
 		display: flex;
 		flex-direction: column;
-		gap: 64px;
+		gap: 128px;
 		max-width: var(--content-width);
 		margin-inline: auto;
 		padding: var(--body-padding);
+	}
+
+	.fields {
+		display: grid;
+		gap: 64px;
+		width: 100%;
+	}
+
+	.field-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: 20px 32px;
+
+		@include mixins.max-md {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.choices {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 48px;
+	}
+
+	.controls {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 32px;
+		width: 100%;
+
+		@include mixins.max-md {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.plain {

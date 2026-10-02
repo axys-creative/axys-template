@@ -42,6 +42,9 @@ $green: #a4d1a2;
 	--color-secondary: #{$blue};
 	--color-tertiary: #{$green};
 	--color-error: #dc143c;
+	--color-success: #{$green};
+	--color-info: #{$blue};
+	--color-warning: #e8b84f;
 	--color-glass: rgb(0 0 0 / 0.25);
 
 	--content-width: 1152px;
@@ -72,6 +75,7 @@ $green: #a4d1a2;
 	--z-nav: 3;
 	--z-header: 4;
 	--z-cursor: 10;
+	--z-alert: 20;
 
 	--ease: cubic-bezier(0.18, 0.97, 0.47, 1);
 	--duration: 0.3s;

@@ -12,7 +12,7 @@
 
 <span
 	class="icon {size} {className ?? ''}"
-	style="mask-image: url('/icons/{name}.svg'); {style ?? ''}"
+	style="mask-image: url('{name.startsWith('/') ? name : `/icons/${name}.svg`}'); {style ?? ''}"
 	role={label ? 'img' : undefined}
 	aria-label={label}
 	aria-hidden={label ? undefined : 'true'}

@@ -1,5 +1,6 @@
 {
 	"float": true,
+	"blur": false,
 	"glass": true,
 	"hideOnScroll": true,
 	"showSkipLink": true,
@@ -36,6 +37,12 @@
 					"url": "/sections",
 					"newTab": false,
 					"iconStart": "dashboard"
+				},
+				{
+					"text": "Transitions",
+					"url": "/transitions",
+					"newTab": false,
+					"iconStart": "infinity"
 				},
 				{
 					"text": "Style Guide",

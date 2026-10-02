@@ -1,5 +1,6 @@
 {
 	"float": true,
+	"blur": false,
 	"glass": true,
 	"includeTop": true,
 	"includeBottom": true,
@@ -43,6 +44,11 @@
 				{
 					"text": "Sections",
 					"url": "/sections",
+					"newTab": false
+				},
+				{
+					"text": "Transitions",
+					"url": "/transitions",
 					"newTab": false
 				}
 			]

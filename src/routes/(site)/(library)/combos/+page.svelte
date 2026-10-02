@@ -1,11 +1,14 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
+	import Alert from '$lib/components/alert.svelte';
+	import Button from '$lib/components/button.svelte';
 	import Icon from '$lib/components/icon.svelte';
 	import Tooltip from '$lib/components/tooltip.svelte';
 	import { mouseTooltip } from '$lib/attachments/mouse-tooltip';
-	import { mouseTooltipProps, tooltipProps } from '$lib/library/component-props';
+	import { alertProps, mouseTooltipProps, tooltipProps } from '$lib/library/component-props';
 	import LibrarySection from '$lib/library/library-section.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
+	import { alerts } from '$lib/utils/alerts.svelte';
 	import { navEntry } from '$lib/utils/nav';
 
 	const nav = navEntry('/combos');
@@ -19,6 +22,99 @@
 />
 
 <div class="combos">
+	<LibrarySection
+		title="Alert"
+		type="Combo"
+		description="Feedback after something happens. The `Alert` component is one message. `alerts.show()` puts an alert on screen from anywhere (a form, a button) and stacks several in a column, newest at the bottom, each closing on its own. `<AlertStack />` is mounted once in the site layout; to remove alerts, delete it, `alert.svelte` and `utils/alerts.svelte.ts`."
+		props={alertProps}
+	>
+		<LibrarySection
+			level={3}
+			title="Alert Component"
+			tag="Static"
+			description="The component on its own, for a message that belongs in the page."
+		>
+			<div class="alerts">
+				<Alert
+					type="success"
+					title="Message received!"
+					message="We will get back to you shortly."
+				/>
+				<Alert
+					type="info"
+					title="Heads up"
+					message="This is some helpful information."
+					leftBorder
+				/>
+				<Alert type="warning" title="Almost there" message="Check the highlighted fields." />
+				<Alert
+					type="error"
+					title="Something went wrong"
+					message="Please try again."
+					links={[{ text: 'Contact us', url: '/' }]}
+				/>
+			</div>
+		</LibrarySection>
+
+		<LibrarySection
+			level={3}
+			title="alerts.show()"
+			tag="Stacked"
+			description="Press a few of these quickly: the alerts stack in the bottom right instead of covering one another. Hover one to hold its countdown."
+		>
+			<div class="row">
+				<Button
+					text="Success"
+					type="outline"
+					onclick={() =>
+						alerts.show({
+							type: 'success',
+							title: 'Saved',
+							message: 'Your changes were saved.',
+							autoClose: 6000,
+							timer: true
+						})}
+				/>
+				<Button
+					text="Info with link"
+					type="outline"
+					onclick={() =>
+						alerts.show({
+							type: 'info',
+							title: 'New feature',
+							message: 'Alerts now stack.',
+							links: [{ text: 'Learn more', url: '/combos' }],
+							autoClose: 8000,
+							leftBorder: true
+						})}
+				/>
+				<Button
+					text="Warning"
+					type="outline"
+					onclick={() =>
+						alerts.show({
+							type: 'warning',
+							title: 'Low storage',
+							message: 'You are almost out of room.',
+							autoClose: 6000,
+							timer: true
+						})}
+				/>
+				<Button
+					text="Error that stays"
+					type="outline"
+					onclick={() =>
+						alerts.show({
+							type: 'error',
+							title: 'Connection lost',
+							message: 'Close this one yourself.'
+						})}
+				/>
+				<Button text="Clear all" type="underline" onclick={() => alerts.clear()} />
+			</div>
+		</LibrarySection>
+	</LibrarySection>
+
 	<LibrarySection
 		title="Tooltip"
 		type="Combo"
@@ -116,7 +212,7 @@
 	.combos {
 		display: flex;
 		flex-direction: column;
-		gap: 64px;
+		gap: 128px;
 		max-width: var(--content-width);
 		margin-inline: auto;
 		padding: var(--body-padding);
@@ -127,6 +223,13 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 32px;
+	}
+
+	.alerts {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		width: min(480px, 100%);
 	}
 
 	.inline,

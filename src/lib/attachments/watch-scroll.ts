@@ -7,7 +7,7 @@ export type WatchScrollOptions = {
 	nearBottom?: number;
 	/** Milliseconds without scrolling before `data-scroll-idle` is set. */
 	idle?: number;
-	/** Minimum scroll delta (px) before the direction changes. */
+	/** Distance (px) to scroll against the current direction before it flips. `0` flips at once. */
 	threshold?: number;
 };
 
@@ -20,6 +20,7 @@ type Watcher = {
 const watchers = new Set<Watcher>();
 let lastY = 0;
 let down = false;
+let pivot = 0;
 let ticking = false;
 
 function update() {
@@ -29,7 +30,14 @@ function update() {
 	for (const watcher of watchers) {
 		const { el, options } = watcher;
 
-		if (Math.abs(y - lastY) >= options.threshold) down = y > lastY;
+		if (y !== lastY) {
+			const direction = y > lastY;
+			if (direction === down) pivot = y;
+			else if (Math.abs(y - pivot) >= options.threshold) {
+				down = direction;
+				pivot = y;
+			}
+		}
 		const away = y > options.awayFromTop;
 
 		el.toggleAttribute('data-scroll-away', away);
@@ -57,11 +65,11 @@ export function watchScroll(options: WatchScrollOptions = {}): Attachment<HTMLEl
 	return (el) => {
 		const watcher: Watcher = {
 			el,
-			options: { awayFromTop: 96, nearBottom: 296, idle: 150, threshold: 4, ...options }
+			options: { awayFromTop: 96, nearBottom: 296, idle: 150, threshold: 0, ...options }
 		};
 
 		if (!watchers.size) {
-			lastY = Math.max(0, window.scrollY);
+			lastY = pivot = Math.max(0, window.scrollY);
 			window.addEventListener('scroll', onScroll, { passive: true });
 		}
 		watchers.add(watcher);

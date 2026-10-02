@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../../styles/styles.scss';
+	import AlertStack from '$lib/components/alert-stack.svelte';
 	import FooterSimple, { type FooterSimpleProps } from '$lib/components/footer-simple.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
 	import HeaderSimple, { type HeaderSimpleProps } from '$lib/components/header-simple.svelte';
@@ -20,6 +21,8 @@
 	</main>
 	<FooterSimple {...footer as FooterSimpleProps} {logo} socialLinks={social.links} />
 </div>
+
+<AlertStack />
 
 <style lang="scss">
 	.site {

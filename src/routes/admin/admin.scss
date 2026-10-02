@@ -1,7 +1,12 @@
 // The CMS dashboard is not part of the site: it gets none of the global styles in src/styles.
 // Add your own overrides here. Decap mounts everything inside #nc-root.
 #nc-root {
-	* {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		letter-spacing: -0.5px;
 		font-weight: 400;
 	}

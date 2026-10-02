@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+	import { textRoll } from '$lib/attachments/text-roll';
 	import { page } from '$app/state';
 	import Button from './button.svelte';
 	import DropdownLink from './dropdown-link.svelte';
@@ -46,7 +47,12 @@
 							mode={direction === 'column' ? 'accordion' : 'popover'}
 						/>
 					{:else}
-						<Button {...link} type={link.type ?? type} current={link.url === page.url.pathname} />
+						<Button
+							{...link}
+							type={link.type ?? type}
+							current={link.url === page.url.pathname}
+							{@attach textRoll()}
+						/>
 					{/if}
 				</li>
 			{/each}

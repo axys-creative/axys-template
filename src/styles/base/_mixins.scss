@@ -15,7 +15,9 @@ $breakpoints: (
 }
 
 @mixin -max($name) {
-	@media (max-width: map.get($breakpoints, $name) - 1px) {
+	$max-width: map.get($breakpoints, $name) - 1px;
+
+	@media (max-width: $max-width) {
 		@content;
 	}
 }

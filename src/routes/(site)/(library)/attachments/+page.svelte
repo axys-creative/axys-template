@@ -23,12 +23,17 @@
 	import { gridFade } from '$lib/attachments/grid-fade';
 	import { magnet } from '$lib/attachments/magnet';
 	import { parallax } from '$lib/attachments/parallax';
+	import { bgSlide } from '$lib/attachments/bg-slide';
+	import { typingCycle } from '$lib/attachments/typing-cycle';
+	import { typingScroll } from '$lib/attachments/typing-scroll';
+	import { underline } from '$lib/attachments/underline';
 	import { push } from '$lib/attachments/push';
 	import { scribble } from '$lib/attachments/scribble';
 	import { textCurve } from '$lib/attachments/text-curve';
 	import { textFade } from '$lib/attachments/text-fade';
 	import { textFill } from '$lib/attachments/text-fill';
 	import { textFlip } from '$lib/attachments/text-flip';
+	import { textRoll } from '$lib/attachments/text-roll';
 	import { textReveal } from '$lib/attachments/text-reveal';
 	import { textScale } from '$lib/attachments/text-scale';
 	import { tilt } from '$lib/attachments/tilt';
@@ -195,6 +200,27 @@
 				<li class="demo-box">{number}</li>
 			{/each}
 		</ul>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Bg Slide"
+		type="Attachment"
+		description="Slides a block of color across a button on hover: out of a solid button, into an outline button. Use it on Button. The color is the accent, or `--bg-slide-color`."
+		props={[
+			{
+				name: 'direction',
+				description:
+					"`'right' | 'left' | 'up' | 'down'`. The way the color slides. Defaults to `right`."
+			}
+		]}
+		propsLabel="options"
+	>
+		<div class="row">
+			{#each ['right', 'left', 'up', 'down'] as const as direction (direction)}
+				<Button text="Solid {direction}" {@attach bgSlide({ direction })} />
+				<Button text="Outline {direction}" type="outline" {@attach bgSlide({ direction })} />
+			{/each}
+		</div>
 	</LibrarySection>
 
 	<LibrarySection
@@ -1133,6 +1159,31 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Text Roll"
+		type="Attachment"
+		description="Each letter rolls up and out on hover or keyboard focus, replaced by a copy rising from below, one after another. Plain CSS and a little script, no GSAP. Screen readers get the original text. Off with reduced motion. Do not combine it with a glitch attachment on the same text."
+		props={[
+			{
+				name: 'stagger',
+				description: 'A number, seconds between each letter starting. Defaults to `0.02`.'
+			},
+			{ name: 'duration', description: 'A number, seconds each letter takes. Defaults to `0.6`.' },
+			{
+				name: 'target',
+				description:
+					'A selector or element that holds the text. Defaults to a `.label` (as in Button), else the element itself.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<div class="row">
+			<Button text="Outline roll" type="outline" iconEnd="chevron-right" {@attach textRoll()} />
+			<Button text="Underline roll" type="underline" {@attach textRoll({ stagger: 0.04 })} />
+			<Button text="Slow roll" {@attach textRoll({ duration: 1.2 })} />
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Text Scale"
 		type="Attachment"
 		titleAttachment={textScale()}
@@ -1275,6 +1326,118 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Typing Cycle"
+		type="Attachment"
+		description="Types a word, deletes it, and moves to the next, forever, like someone at a keyboard. Screen readers get all the words at once. With reduced motion it shows the first word."
+		props={[
+			{ name: 'words', description: 'An array of strings to type, in order. Required.' },
+			{
+				name: 'colors',
+				description: 'An array of CSS colors, one switched to with each word. Variables work.'
+			},
+			{
+				name: 'speedIn',
+				description: 'A number, milliseconds per character typed. Defaults to `120`.'
+			},
+			{
+				name: 'speedOut',
+				description: 'A number, milliseconds per character deleted. Defaults to `50`.'
+			},
+			{
+				name: 'interval',
+				description:
+					'A number, milliseconds a finished word stays before deleting. Defaults to `2000`.'
+			},
+			{
+				name: 'cursor',
+				description: "`'caret' | 'underscore' | 'none'`. Defaults to `caret`."
+			},
+			{
+				name: 'delay',
+				description: 'A number, milliseconds before the first word. Defaults to `0`.'
+			},
+			{
+				name: 'onScroll',
+				description:
+					'A boolean. Starts when the element scrolls into view instead of right away. Defaults to `false`.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<h4>
+			The human senses:
+			<span
+				{@attach typingCycle({
+					words: ['touch', 'sight', 'sound', 'taste', 'smell'],
+					colors: ['var(--color-accent)', 'forestgreen', '#c0c0c0', 'crimson', 'slateblue'],
+					speedIn: 100,
+					speedOut: 25,
+					interval: 2000,
+					delay: 1500,
+					cursor: 'underscore'
+				})}
+			></span>
+		</h4>
+		<h4>
+			The four seasons:
+			<span
+				{@attach typingCycle({
+					words: ['Spring', 'Summer', 'Autumn', 'Winter'],
+					speedIn: 75,
+					speedOut: 200,
+					interval: 1250,
+					cursor: 'none'
+				})}
+			></span>
+		</h4>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Typing Scroll"
+		type="Attachment"
+		titleAttachment={typingScroll({ cursor: 'none' })}
+		description="Types the element's text out, character by character, when it scrolls into view. Screen readers get the whole text at once. Off with reduced motion."
+		props={[
+			{
+				name: 'speed',
+				description: 'A number, milliseconds per character. Defaults to `50`.'
+			},
+			{
+				name: 'once',
+				description:
+					'A boolean. Only types the first time it scrolls into view, instead of every time. Defaults to `false`.'
+			},
+			{
+				name: 'cursor',
+				description: "`'caret' | 'underscore' | 'none'`. Defaults to `caret`."
+			},
+			{
+				name: 'delay',
+				description: 'A number, milliseconds before typing starts. Defaults to `0`.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<p {@attach typingScroll()}>
+			This sentence types itself out each time it scrolls into view, with a blinking caret.
+		</p>
+		<p {@attach typingScroll({ speed: 25, once: true, cursor: 'underscore', delay: 300 })}>
+			Faster, only the first time, with an underscore cursor and a short delay.
+		</p>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Underline"
+		type="Attachment"
+		description="Draws a line under a button's label that slides away on hover, the same effect as the underline Button type, for mixing into other types. It uses the label's text color and takes no options."
+	>
+		<div class="row">
+			<Button text="Solid underline" {@attach underline()} />
+			<Button text="Outline underline" type="outline" {@attach underline()} />
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Watch Scroll"
 		type="Attachment"
 		description="Tracks scroll position and direction with data attributes on an element, using one shared listener, so CSS can react. It sets `data-scroll-away`, `data-scroll-down` (scrolling down and away from the top), `data-scroll-bottom` and `data-scroll-idle`. It is what hides the header as you scroll down."
@@ -1297,7 +1460,7 @@
 			{
 				name: 'threshold',
 				description:
-					'A number, the minimum scroll in px before the direction changes. Defaults to `4`.'
+					'A number, how far in px to scroll against the current direction before it flips. `0` flips at once, so even a slow scroll up reveals a hidden header. Defaults to `0`.'
 			}
 		]}
 		propsLabel="options"
@@ -1315,7 +1478,7 @@
 	.attachments {
 		display: flex;
 		flex-direction: column;
-		gap: 64px;
+		gap: 128px;
 		max-width: var(--content-width);
 		margin-inline: auto;
 		padding: var(--body-padding);
@@ -1658,6 +1821,13 @@
 		> * {
 			margin: 0;
 		}
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px;
 	}
 
 	.scribble-block {

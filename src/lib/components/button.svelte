@@ -1,4 +1,5 @@
 <script module lang="ts">
+	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLAttributes, MouseEventHandler } from 'svelte/elements';
 
 	export type ButtonProps = {
@@ -15,6 +16,10 @@
 		controls?: string;
 		iconStart?: string;
 		iconEnd?: string;
+		/** Draws a ring around the end icon on hover. */
+		iconCircle?: boolean;
+		/** An attachment for the end icon alone, e.g. `magnet()` to make only the icon follow the mouse. */
+		iconEndAttach?: Attachment<HTMLElement>;
 		class?: string;
 		onclick?: MouseEventHandler<HTMLButtonElement>;
 	} & Omit<HTMLAttributes<HTMLElement>, 'class' | 'children' | 'onclick'>;
@@ -37,6 +42,8 @@
 		controls,
 		iconStart,
 		iconEnd,
+		iconCircle = false,
+		iconEndAttach,
 		class: className,
 		onclick,
 		...rest
@@ -54,7 +61,19 @@
 	{#if newTab && !textDescription}
 		<span class="visually-hidden">(opens in a new tab)</span>
 	{/if}
-	{#if iconEnd}<Icon name={iconEnd} />{/if}
+	{#if iconEnd}
+		<span class="end" {@attach iconEndAttach}>
+			<Icon name={iconEnd} />
+			{#if iconCircle}
+				<svg class="circle" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+					<path
+						pathLength="1"
+						d="M24.014 1C36.7101 1.00759 47 11.3021 47 24C47 36.7025 36.7025 47 24 47C11.2975 47 1 36.7025 1 24C1 11.3021 11.2899 1.00759 23.986 1"
+					/>
+				</svg>
+			{/if}
+		</span>
+	{/if}
 {/snippet}
 
 {#if url}
@@ -77,6 +96,7 @@
 		class={classes}
 		type={htmlType}
 		aria-label={label}
+		aria-current={current ? 'true' : undefined}
 		aria-expanded={expanded}
 		aria-controls={controls}
 		{disabled}
@@ -153,14 +173,50 @@
 		position: relative;
 	}
 
-	.button > :global(.icon) {
-		@include mixins.mq-motion-allow {
-			transition: rotate var(--duration) var(--ease);
+	.end {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.circle {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 1.5em;
+		height: 1.5em;
+		translate: -50% -50%;
+		pointer-events: none;
+
+		path {
+			stroke: currentColor;
+			stroke-width: 2px;
+			stroke-dasharray: 1;
+			stroke-dashoffset: 1;
+
+			@include mixins.mq-motion-allow {
+				transition: stroke-dashoffset 1.2s var(--ease);
+			}
 		}
 	}
 
-	.button[aria-expanded='true'] > :global(.icon:last-child) {
-		rotate: 180deg;
+	.button {
+		@include mixins.desktop-hover {
+			.circle path {
+				stroke-dashoffset: 0;
+			}
+		}
+	}
+
+	.button > :global(.icon),
+	.end > :global(.icon) {
+		@include mixins.mq-motion-allow {
+			transition: scale var(--duration) var(--ease);
+		}
+	}
+
+	.button[aria-expanded='true'] > :global(.icon:last-child),
+	.button[aria-expanded='true'] > .end:last-child > :global(.icon) {
+		scale: 1 -1;
 	}
 
 	.underline {

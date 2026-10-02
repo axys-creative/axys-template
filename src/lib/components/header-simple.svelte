@@ -12,6 +12,9 @@
 		socialLinks?: SocialLink[];
 		linkPlacement?: 'start' | 'center' | 'end';
 		float?: boolean;
+		/** A translucent, blurred background. */
+		blur?: boolean;
+		/** The glass attachment's background: refraction in Chrome, blur elsewhere. Wins over `blur`. */
 		glass?: boolean;
 		hideOnScroll?: boolean;
 		showSkipLink?: boolean;
@@ -25,6 +28,8 @@
 </script>
 
 <script lang="ts">
+	import { glass as glassEffect } from '$lib/attachments/glass';
+	import { textRoll } from '$lib/attachments/text-roll';
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import Button from './button.svelte';
 	import Logo from './logo.svelte';
@@ -39,6 +44,7 @@
 		socialLinks = [],
 		linkPlacement = 'end',
 		float = false,
+		blur = false,
 		glass = false,
 		hideOnScroll = true,
 		showSkipLink = true,
@@ -96,10 +102,13 @@
 <header
 	class="header {linkPlacement}"
 	class:float
-	class:glass
+	class:blur={blur && !glass}
+	class:has-glass={glass}
 	data-nav-open={open || undefined}
 	{@attach hideOnScroll ? watchScroll() : undefined}
 >
+	{#if glass}<div class="glass-layer" aria-hidden="true" {@attach glassEffect()}></div>{/if}
+
 	{#if showSkipLink}
 		<a class="skip-link" href="#main">Skip to main content</a>
 	{/if}
@@ -112,7 +121,7 @@
 		{#if ctas.length}
 			<div class="ctas">
 				{#each ctas as cta (cta.url ?? cta.text)}
-					<Button {...cta} />
+					<Button {...cta} {@attach textRoll()} />
 				{/each}
 			</div>
 		{/if}
@@ -140,7 +149,7 @@
 			{#if footerLinks.length}
 				<ul class="footer-links">
 					{#each footerLinks as link (link.url ?? link.text)}
-						<li><Button {...link} type="underline" size="sm" /></li>
+						<li><Button {...link} type="underline" size="sm" {@attach textRoll()} /></li>
 					{/each}
 				</ul>
 			{/if}
@@ -181,10 +190,21 @@
 		}
 	}
 
-	// Glass sits on a pseudo-element so dropdown panels can blur the page behind them.
-	.glass {
+	// The blur sits on a pseudo-element, and glass on its own layer, so dropdown panels can still blur the page behind them.
+	.blur,
+	.has-glass {
 		background: transparent;
+	}
 
+	.glass-layer {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
+		pointer-events: none;
+	}
+
+	.blur {
 		&::before {
 			content: '';
 			position: absolute;

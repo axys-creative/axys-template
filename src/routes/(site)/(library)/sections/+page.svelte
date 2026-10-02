@@ -47,7 +47,7 @@
 	.sections {
 		display: flex;
 		flex-direction: column;
-		gap: 64px;
+		gap: 128px;
 		max-width: var(--content-width);
 		margin-inline: auto;
 		padding: var(--body-padding);
