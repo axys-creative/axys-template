@@ -22,6 +22,8 @@
 		slidesPerView?: number;
 		/** A button under the carousel. */
 		cta?: ButtonProps;
+		/** Starts this row open. */
+		defaultOpen?: boolean;
 		/** One field per column `key`. */
 		[key: string]: unknown;
 	};
@@ -32,6 +34,8 @@
 		/** Icon name from `static/icons`, shown along the right edge of each row and flipped when open. */
 		icon?: string;
 		singleOpen?: boolean;
+		/** Which rows start open: `true` for all, a row's number (from 0), or a list of them. With `singleOpen` only the first opens. */
+		defaultOpen?: boolean | number | number[];
 		/** Pins the header row while scrolling through the rows. */
 		sticky?: boolean;
 		/** The 1-indexed column the opened content lines up with. */
@@ -44,7 +48,7 @@
 </script>
 
 <script lang="ts">
-	import { createDisclosure } from '$lib/utils/disclosure.svelte';
+	import { createDisclosure, startingOpen } from '$lib/utils/disclosure.svelte';
 	import Carousel from './carousel.svelte';
 	import Icon from './icon.svelte';
 
@@ -53,6 +57,7 @@
 		items,
 		icon,
 		singleOpen = false,
+		defaultOpen = false,
 		sticky = false,
 		contentColumn = 2,
 		slidesPerView = 1,
@@ -62,7 +67,8 @@
 	const id = $props.id();
 	const disclosure = createDisclosure(
 		() => items.length,
-		() => singleOpen
+		() => singleOpen,
+		() => startingOpen(items, defaultOpen)
 	);
 
 	const tracks = $derived(columns.map((column) => column.width ?? '1fr').join(' '));

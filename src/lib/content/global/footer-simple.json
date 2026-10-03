@@ -1,7 +1,7 @@
 {
-	"float": true,
+	"float": false,
 	"blur": false,
-	"glass": true,
+	"glass": false,
 	"includeTop": true,
 	"includeBottom": true,
 	"divider": true,
@@ -31,6 +31,11 @@
 		{
 			"title": "Library",
 			"links": [
+				{
+					"text": "Advanced",
+					"url": "/advanced",
+					"newTab": false
+				},
 				{
 					"text": "Attachments",
 					"url": "/attachments",

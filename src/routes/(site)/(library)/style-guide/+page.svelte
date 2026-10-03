@@ -4,6 +4,7 @@
 	import { cursorHide } from '$lib/attachments/cursor-hide';
 	import { glitchHover } from '$lib/attachments/glitch-hover';
 	import { magnet } from '$lib/attachments/magnet';
+	import { toggleSlider } from '$lib/attachments/toggle-slider';
 	import { textRoll } from '$lib/attachments/text-roll';
 	import { underline } from '$lib/attachments/underline';
 	import Button from '$lib/components/button.svelte';
@@ -37,6 +38,7 @@
 		siteNavButtonProps,
 		socialLinksProps,
 		tagProps,
+		toggleSliderProps,
 		typographyTokens
 	} from '$lib/library/component-props';
 	import LibrarySection from '$lib/library/library-section.svelte';
@@ -59,6 +61,8 @@
 	];
 	const icons = ['check', 'chevron-right', 'arrow-tr', 'new-tab', 'copy', 'x', 'mail', 'social-x'];
 	let plan = $state('team');
+	let chosen = $state('Monthly');
+	let view = $state('grid');
 	let notify = $state(true);
 	let volume = $state(40);
 	let rating = $state(65);
@@ -131,7 +135,7 @@
 	description="Colors, type and the base components every site starts from."
 />
 
-<div class="style-guide">
+<div class="style-guide page-grid">
 	<LibrarySection
 		title="Colors"
 		type="Tokens"
@@ -544,18 +548,65 @@
 			<Tag text="With icon" icon="bolt" type="outline" />
 		</div>
 	</LibrarySection>
+	<LibrarySection
+		title="Toggle Slider"
+		type="Attachment"
+		description="A slider that glides behind the selected one of a row of options: tabs, links, buttons or radio labels. The attachment adds the slider itself and follows whichever option is selected, by `aria-selected`, `aria-current`, a checked radio or a click. The Theme Toggle and the Tabs combo use it, so it mixes with other concepts. With `trigger: 'hover'` the slider also follows the pointer and returns when it leaves."
+		props={toggleSliderProps}
+	>
+		<h3 class="plain">Solid, moves on click</h3>
+		<div class="row">
+			<div {@attach toggleSlider()}>
+				{#each ['Monthly', 'Quarterly', 'Yearly'] as option (option)}
+					<button type="button" onclick={() => (chosen = option)} aria-current={chosen === option}>
+						{option}
+					</button>
+				{/each}
+			</div>
+		</div>
+		<h3 class="plain">Underline, with links</h3>
+		<div class="row">
+			<nav aria-label="Sample sections" {@attach toggleSlider({ variant: 'underline' })}>
+				<a href="#overview" aria-current="true">Overview</a>
+				<a href="#features">Features</a>
+				<a href="#pricing">Pricing</a>
+			</nav>
+		</div>
+		<h3 class="plain">Solid, following the pointer</h3>
+		<div class="row">
+			<div {@attach toggleSlider({ trigger: 'hover' })}>
+				{#each ['grid', 'list', 'map'] as option (option)}
+					<button type="button" onclick={() => (view = option)} aria-current={view === option}>
+						{option}
+					</button>
+				{/each}
+			</div>
+		</div>
+		<h3 class="plain">Radio labels</h3>
+		<div class="row">
+			<fieldset class="slider-radios" {@attach toggleSlider({ options: 'label' })}>
+				<legend class="visually-hidden">Size</legend>
+				{#each ['Small', 'Medium', 'Large'] as option (option)}
+					<label
+						><input
+							type="radio"
+							name="slider-size"
+							value={option}
+							checked={option === 'Medium'}
+						/>{option}</label
+					>
+				{/each}
+			</fieldset>
+		</div>
+	</LibrarySection>
 </div>
 
 <style lang="scss">
 	@use 'base/mixins';
 	/* LIBRARY: DELETE ME */
 	.style-guide {
-		display: flex;
-		flex-direction: column;
-		gap: 128px;
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: var(--body-padding);
+		row-gap: 128px;
+		padding-block: var(--body-padding);
 	}
 
 	.fields {
@@ -589,6 +640,20 @@
 
 		@include mixins.max-md {
 			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.slider-radios {
+		margin: 0;
+		padding: 4px;
+
+		label {
+			cursor: pointer;
+		}
+
+		input {
+			position: absolute;
+			opacity: 0;
 		}
 	}
 

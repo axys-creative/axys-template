@@ -22,6 +22,13 @@
 			"crawlPage": false
 		},
 		{
+			"path": "/advanced",
+			"title": "Advanced",
+			"description": "",
+			"ogImage": "",
+			"crawlPage": false
+		},
+		{
 			"path": "/components",
 			"title": "Components",
 			"description": "",

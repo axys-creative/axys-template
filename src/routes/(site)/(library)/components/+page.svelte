@@ -1,23 +1,31 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
 	import ImageColumns from '$lib/components/image-columns.svelte';
+	import MarqueeCurve from '$lib/components/marquee-curve.svelte';
+	import Marquee from '$lib/components/marquee.svelte';
+	import ImageShuffle from '$lib/components/image-shuffle.svelte';
 	import ImageFan from '$lib/components/image-fan.svelte';
 	import ImageCircle from '$lib/components/image-circle.svelte';
 	import ImageWave from '$lib/components/image-wave.svelte';
 	import ImageComparison from '$lib/components/image-comparison.svelte';
+	import SolarSystem from '$lib/components/solar-system.svelte';
+	import ScrollProgress from '$lib/components/scroll-progress.svelte';
 	import Form from '$lib/components/form.svelte';
 	import Counter from '$lib/components/counter.svelte';
 	import Carousel from '$lib/components/carousel.svelte';
 	import CardGnomon from '$lib/components/card-gnomon.svelte';
+	import AvatarCycle from '$lib/components/avatar-cycle.svelte';
 	import Accordion from '$lib/components/accordion.svelte';
 	import AccordionTable from '$lib/components/accordion-table.svelte';
 	import Button from '$lib/components/button.svelte';
 	import PostCard from '$lib/components/post-card.svelte';
 	import ThemeToggle from '$lib/components/theme-toggle.svelte';
+	import VideoPlayer from '$lib/components/video-player.svelte';
 	import VideoOverlay from '$lib/components/video-overlay.svelte';
 	import {
 		accordionProps,
 		accordionTableProps,
+		avatarCycleProps,
 		cardGnomonProps,
 		carouselProps,
 		counterProps,
@@ -25,11 +33,17 @@
 		imageCircleProps,
 		imageColumnsProps,
 		imageFanProps,
+		imageShuffleProps,
+		marqueeCurveProps,
+		marqueeProps,
 		imageComparisonProps,
 		imageWaveProps,
 		mouseCursorProps,
 		postCardProps,
-		videoOverlayProps
+		scrollProgressProps,
+		solarSystemProps,
+		videoOverlayProps,
+		videoPlayerProps
 	} from '$lib/library/component-props';
 	import LibrarySection from '$lib/library/library-section.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
@@ -37,6 +51,7 @@
 
 	const nav = navEntry('/components');
 	let videoOpen = $state(false);
+	let progress = $state<'bottom' | 'right' | 'left' | null>(null);
 
 	const long =
 		'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima numquam officiis ipsa obcaecati illo molestias aliquam molestiae praesentium provident eos? Excepturi veniam assumenda non corrupti similique aperiam rem enim dolores repellat.';
@@ -73,6 +88,47 @@
 			src: `/images/${gallery[index % gallery.length]}.jpg`,
 			alt: `Sample image ${index + 1}`
 		}));
+	const partners = [
+		'Logoipsum',
+		'Logoipsum signature',
+		'Logoipsum Academy',
+		'Logoipsum Network',
+		'Logoipsum Ipsum',
+		'Logoipsum 标识',
+		'Logoipsum colorful'
+	].map((alt, index) => ({ src: `/images/logo-sample-${index + 1}.svg`, alt }));
+	const people = [
+		[
+			'Ada',
+			'Founder',
+			'Started the studio to make the web feel simple, quick and a little bit playful.'
+		],
+		[
+			'Grace',
+			'Engineering',
+			'Keeps the build fast and the pages light, and loves a good accessibility audit.'
+		],
+		[
+			'Linus',
+			'Design',
+			'Turns rough ideas into clean layouts, then sweats the spacing until it feels right.'
+		],
+		[
+			'Margaret',
+			'Strategy',
+			'Finds the real goal behind a project and keeps every decision pointed at it.'
+		],
+		[
+			'Alan',
+			'Support',
+			'The first to answer, and the last to stop until the problem is actually solved.'
+		]
+	].map(([title, role, caption], index) => ({
+		src: `/images/img-sample-${index + 1}.jpg`,
+		alt: `${title}, ${role}`,
+		title: `${title}, ${role}`,
+		caption
+	}));
 	const faq = [
 		{
 			title:
@@ -108,7 +164,7 @@
 		year,
 		location,
 		content,
-		...(index === 2 && {
+		...(index === 0 && {
 			images: ['img-sample-7', 'img-sample-5', 'img-sample-6', 'img-sample-4'].map((name) => ({
 				src: `/images/${name}.jpg`,
 				alt: ''
@@ -126,7 +182,7 @@
 	description="Larger pieces of UI that bring their own behavior. The smaller building blocks live in the style guide."
 />
 
-<div class="components">
+<div class="components page-grid">
 	<LibrarySection
 		title="Accordion"
 		type="Component"
@@ -135,8 +191,8 @@
 	>
 		<h3 class="plain">Icon, one open at a time</h3>
 		<Accordion items={faq} icon="chevron-down" singleOpen />
-		<h3 class="plain">Plus sign with open all</h3>
-		<Accordion items={faq} plus toggleAll />
+		<h3 class="plain">Plus sign with open all, the first item open</h3>
+		<Accordion items={faq} plus toggleAll defaultOpen={0} />
 	</LibrarySection>
 
 	<LibrarySection
@@ -150,6 +206,7 @@
 			items={places.slice(0, 3)}
 			icon="chevron-down"
 			singleOpen
+			defaultOpen={0}
 			contentColumn={3}
 		/>
 		<h3 class="plain">Sticky header, several rows open at once</h3>
@@ -160,6 +217,22 @@
 			sticky
 			contentColumn={3}
 		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Avatar Cycle"
+		type="Component"
+		description="A row of round avatars with a caption card below. The one in the middle is the largest and the ones further out are smaller, overlapping a little, with the middle on top. It turns by itself, the middle moving to the left as the next one comes in. The ring around each avatar matches the background, so each looks as if it cuts into its neighbors. The caption cards stack behind the front one, showing their tops, and turn in step. Clicking an avatar brings it to the middle. It holds while hovered or focused."
+		props={avatarCycleProps}
+	>
+		<h3 class="plain">Three avatars</h3>
+		<div class="avatar-demo">
+			<AvatarCycle items={people.slice(0, 3)} />
+		</div>
+		<h3 class="plain">Five avatars, same settings</h3>
+		<div class="avatar-demo">
+			<AvatarCycle items={people} />
+		</div>
 	</LibrarySection>
 
 	<LibrarySection
@@ -397,15 +470,71 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Image Shuffle"
+		type="Component"
+		description="A grid of logos for a credibility section. Cells swap to a different image: the new one rolls up from below, or crossfades, one cell at a time or several together. The choice is random, but not truly: it prefers an image that is not on screen, never puts the same image beside itself, and never makes every cell match. Hovering or focusing the grid holds the shuffling, and it stops while off screen. Give it more images than cells (eight by default) for the most variety; with fewer, some repeat, but never side by side. Logos made for white backgrounds can use the `light` tiles."
+		props={imageShuffleProps}
+	>
+		<h3 class="plain">Roll, one at a time, on light tiles</h3>
+		<ImageShuffle images={partners} interval={2000} tiles="light" />
+		<h3 class="plain">Roll, three at a time</h3>
+		<ImageShuffle images={partners} interval={2500} shuffle={3} />
+		<h3 class="plain">Fade, everything at once, with only five images</h3>
+		<ImageShuffle images={partners.slice(0, 5)} type="fade" interval={3000} shuffle={8} />
+	</LibrarySection>
+
+	<LibrarySection
 		title="Image Wave"
 		type="Component"
 		description="A row of image cards that pans slowly left and loops without a seam, while each card bobs a little behind the one before it, so the bob reads as a wave travelling along the row. The images repeat enough to fill the screen. It is off with reduced motion."
 		props={imageWaveProps}
 	>
 		<h3 class="plain">Scrolling pushes it along</h3>
-		<ImageWave images={galleryImages(8)} scrub={0.5} />
+		<ImageWave class="full" images={galleryImages(8)} scrub={0.5} />
 		<h3 class="plain">Reverses with the scroll direction</h3>
-		<ImageWave images={galleryImages(8)} scrub={0.5} reverse />
+		<ImageWave class="full" images={galleryImages(8)} scrub={0.5} reverse />
+	</LibrarySection>
+
+	<LibrarySection
+		title="Marquee"
+		type="Component"
+		description="Text or images that run across the screen, also called a ticker. The content repeats to fill the width on its own, and rows move the same speed at every screen size. It holds still while off screen, and is still when motion is reduced."
+		props={marqueeProps}
+	>
+		<h3 class="plain">Text, the simplest form</h3>
+		<Marquee
+			class="full"
+			text="• Sample marquee • Sometimes known as a ticker • Use the text prop to control the content"
+		/>
+		<h3 class="plain">Two rows that turn around with the scroll direction</h3>
+		<Marquee class="full" text="This one is more configured → " rows={2} speed={80} reverse />
+		<h3 class="plain">Images, pushed along by scrolling</h3>
+		<Marquee class="full" images={galleryImages(7)} rows={2} speed={40} scrub={0.5} pauseOnHover />
+	</LibrarySection>
+
+	<LibrarySection
+		title="Marquee Curve"
+		type="Component"
+		description="Text that runs along a curve you draw. In the curve tool, drag the points until the shape is right, copy the cubic Bézier it gives you, and paste it into `curve` as it is. The text is centered on the curve, and an optional band with edge lines follows the same curve, so the background and both borders stay parallel to the text however much it bends. It repeats to fill the curve, moves the same speed at every screen size, holds still while off screen, and is still when motion is reduced."
+		props={marqueeCurveProps}
+	>
+		<h3 class="plain">The curve exactly as the tool draws it</h3>
+		<div class="curve-demo">
+			<MarqueeCurve
+				text="Marquee with a twist (literally) using the marquee curve component! Recommended to use a mono spaced font!"
+				curve="cubic-bezier(0.35, -0.05, 0.48, 1.12)"
+			/>
+		</div>
+		<h3 class="plain">Full width, a band with edge lines, and scroll reversing</h3>
+		<MarqueeCurve
+			class="full"
+			text="A second sample of the marquee curve component with different curve and spacing values!"
+			curve="cubic-bezier(0.72, 1.01, 0.27, -0.06)"
+			spacing={0.8}
+			band={120}
+			aspect={1.7}
+			reverse
+		/>
 	</LibrarySection>
 
 	<LibrarySection
@@ -435,6 +564,83 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Scroll Progress"
+		type="Component"
+		description="A small bar that fills as the page scrolls, down the right edge by default. It fades back after a moment without scrolling and returns on hover, and clicking it can jump the page to that point. It is decorative for screen readers, since the page's own scrollbar and keyboard already do the job. Mount it once in a layout. The buttons below show it on this page."
+		props={scrollProgressProps}
+	>
+		<div class="row">
+			<Button
+				text="Right bar"
+				type="outline"
+				expanded={progress === 'right'}
+				onclick={() => (progress = progress === 'right' ? null : 'right')}
+			/>
+			<Button
+				text="Left bar"
+				type="outline"
+				expanded={progress === 'left'}
+				onclick={() => (progress = progress === 'left' ? null : 'left')}
+			/>
+			<Button
+				text="Bottom bar"
+				type="outline"
+				expanded={progress === 'bottom'}
+				onclick={() => (progress = progress === 'bottom' ? null : 'bottom')}
+			/>
+		</div>
+		{#if progress}<ScrollProgress placement={progress} hideScrollbar={false} />{/if}
+	</LibrarySection>
+
+	<LibrarySection
+		title="Solar System"
+		type="Component"
+		description="A picture in a circle with up to two rings of tags orbiting it. Each ring turns slowly and its tags turn against it, so they stay upright and readable. It scales with its container, stops while off screen or hovered, and is still when motion is reduced. Tags are the Tag component, so they can take an icon."
+		props={solarSystemProps}
+	>
+		<h3 class="plain">Two rings</h3>
+		<div class="solar-demo">
+			<SolarSystem
+				image={{ src: '/images/img-sample-1.jpg', alt: 'A sample landscape' }}
+				rings={[
+					{
+						tags: [
+							{ text: 'Creative', icon: 'palette' },
+							{ text: 'Responsive', icon: 'mobile' },
+							{ text: 'Accessible', icon: 'accessible' },
+							{ text: 'Engaging', icon: 'target' },
+							{ text: 'Speedy', icon: 'bolt' },
+							{ text: 'Unlimited', icon: 'infinity' }
+						]
+					},
+					{
+						tags: [
+							{ text: 'HTML5' },
+							{ text: 'CSS3/SCSS' },
+							{ text: 'JavaScript' },
+							{ text: 'TypeScript' },
+							{ text: 'Svelte' }
+						]
+					}
+				]}
+			/>
+		</div>
+		<h3 class="plain">One ring, outline tags</h3>
+		<div class="solar-demo">
+			<SolarSystem
+				image={{ src: '/images/img-sample-2.jpg', alt: 'A second sample landscape' }}
+				tagType="outline"
+				rings={[
+					{
+						tags: [{ text: 'Design' }, { text: 'Build' }, { text: 'Launch' }, { text: 'Grow' }],
+						duration: 30
+					}
+				]}
+			/>
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Theme Toggle"
 		type="Component"
 		description="Switches between system, light and dark, and remembers the choice. It takes no props; an inline script in `app.html` applies the saved theme before the page paints."
@@ -456,17 +662,28 @@
 			poster="/images/img-sample-1.jpg"
 		/>
 	</LibrarySection>
+
+	<LibrarySection
+		title="Video Player"
+		type="Component"
+		description="A plain `<video>` with its native controls, plus a play button of your own resting on top while it is not playing. The button is only the circle, so the controls along the bottom stay clickable, and it follows the video's own state, so it fades out however playback starts. It is a simple way to style the video tag: pass the icon, the frame shape and the button's colors and size, and any video attribute goes straight through. For a video in a popup, use the Video Overlay."
+		props={videoPlayerProps}
+	>
+		<div class="video-demo">
+			<VideoPlayer
+				src="https://www.dropbox.com/scl/fi/6sh06eo6b3x84qo823qcq/sample-video-1.mp4?rlkey=0v6dqkra2wk7de0rz849ufm7o&st=0705ulra&raw=1"
+				poster="/images/img-sample-1.jpg"
+				title="Sample video"
+			/>
+		</div>
+	</LibrarySection>
 </div>
 
 <style lang="scss">
 	/* LIBRARY: DELETE ME */
 	.components {
-		display: flex;
-		flex-direction: column;
-		gap: 128px;
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: var(--body-padding);
+		row-gap: 128px;
+		padding-block: var(--body-padding);
 	}
 
 	.counters {
@@ -474,6 +691,29 @@
 		flex-wrap: wrap;
 		gap: 128px;
 		align-items: flex-start;
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.curve-demo {
+		width: min(640px, 100%);
+	}
+
+	.avatar-demo {
+		width: min(760px, 100%);
+	}
+
+	.video-demo {
+		width: min(760px, 100%);
+	}
+
+	.solar-demo {
+		width: min(720px, 100%);
 	}
 
 	.circle-demo {

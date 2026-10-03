@@ -2,6 +2,8 @@
 	import '../../styles/styles.scss';
 	import AlertStack from '$lib/components/alert-stack.svelte';
 	import FooterSimple, { type FooterSimpleProps } from '$lib/components/footer-simple.svelte';
+	import PageTransition from '$lib/components/page-transition.svelte';
+	import ScrollProgress from '$lib/components/scroll-progress.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
 	import HeaderSimple, { type HeaderSimpleProps } from '$lib/components/header-simple.svelte';
 	import logo from '$lib/content/global/logo.json';
@@ -13,6 +15,7 @@
 </script>
 
 <SmoothScroll />
+<PageTransition name="fade" />
 
 <div class="site">
 	<HeaderSimple {...header as HeaderSimpleProps} {logo} socialLinks={social.links} />
@@ -22,6 +25,7 @@
 	<FooterSimple {...footer as FooterSimpleProps} {logo} socialLinks={social.links} />
 </div>
 
+<ScrollProgress />
 <AlertStack />
 
 <style lang="scss">

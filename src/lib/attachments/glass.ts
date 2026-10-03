@@ -50,16 +50,37 @@ function displacementMap(width: number, height: number, radius: number) {
 	`.trim();
 }
 
+// The displacement map is built from blurred gradients, which are costly to paint. Left as an SVG inside the filter, it
+// would be painted again for every frame the backdrop changes. So it is drawn once into a bitmap, at half size
+// because it is smooth anyway, and the filter only reads pixels.
+const MAP_SCALE = 0.5;
+const mapCache: Record<string, Promise<string>> = {};
+
+function rasterMap(width: number, height: number, radius: number) {
+	const key = `${width}x${height}x${radius}`;
+	return (mapCache[key] ??= (async () => {
+		const image = new Image();
+		image.src = `data:image/svg+xml,${encodeURIComponent(displacementMap(width, height, radius))}`;
+		await image.decode();
+
+		const canvas = document.createElement('canvas');
+		canvas.width = Math.max(1, Math.round(width * MAP_SCALE));
+		canvas.height = Math.max(1, Math.round(height * MAP_SCALE));
+		canvas.getContext('2d')!.drawImage(image, 0, 0, canvas.width, canvas.height);
+		return canvas.toDataURL('image/png');
+	})());
+}
+
 // Three displacement passes at slightly different scales, one color channel each, give the edge a
 // subtle chromatic fringe like real glass.
-function refractionFilter(width: number, height: number, radius: number, scale: number) {
-	const mapUri = `data:image/svg+xml,${encodeURIComponent(displacementMap(width, height, radius))}`;
+async function refractionFilter(width: number, height: number, radius: number, scale: number) {
+	const mapUri = await rasterMap(width, height, radius);
 
 	const filter = `
 		<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
 			<defs>
 				<filter id="glass-displace" color-interpolation-filters="sRGB">
-					<feImage x="0" y="0" width="${width}" height="${height}" href="${mapUri}" result="displacementMap" />
+					<feImage x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="none" href="${mapUri}" result="displacementMap" />
 					<feDisplacementMap in="SourceGraphic" in2="displacementMap" scale="${scale}" xChannelSelector="R" yChannelSelector="G" />
 					<feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="displacedR" />
 					<feDisplacementMap in="SourceGraphic" in2="displacementMap" scale="${scale - 1}" xChannelSelector="R" yChannelSelector="G" />
@@ -88,34 +109,50 @@ export function glass({
 		if (saturate !== undefined) el.style.setProperty('--glass-saturate', `${saturate}%`);
 		if (tint) el.style.setProperty('--glass-tint', tint === 'dark' ? 'rgb(0 0 0 / 0.25)' : tint);
 
-		let observer: ResizeObserver | undefined;
+		let resizer: ResizeObserver | undefined;
+		let visibility: IntersectionObserver | undefined;
 		let timeout: ReturnType<typeof setTimeout> | undefined;
+		let latest = 0;
 
 		if (supportsRefraction()) {
-			const apply = () => {
+			const apply = async () => {
 				const { width, height } = el.getBoundingClientRect();
 				if (!width || !height) return;
 
 				const w = Math.round(width);
 				const h = Math.round(height);
 				const raw = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
-				el.style.setProperty(
-					'backdrop-filter',
-					refractionFilter(w, h, Math.round(Math.min(raw, w / 2, h / 2)), scale)
-				);
+				const request = ++latest;
+				const filter = await refractionFilter(w, h, Math.round(Math.min(raw, w / 2, h / 2)), scale);
+				// A newer size may have been asked for while the map was being drawn.
+				if (request === latest) el.style.setProperty('backdrop-filter', filter);
 			};
 
 			apply();
-			observer = new ResizeObserver(() => {
+			resizer = new ResizeObserver(() => {
 				clearTimeout(timeout);
 				timeout = setTimeout(apply, 150);
 			});
-			observer.observe(el);
+			resizer.observe(el);
+
+			// Far from the screen the backdrop is never seen, so the filter is switched off there instead of kept
+			// ready. A tall element like a footer would otherwise hold a full-size filter all the time.
+			visibility = new IntersectionObserver(
+				([entry]) => {
+					if (entry.isIntersecting) delete el.dataset.glassIdle;
+					else el.dataset.glassIdle = '';
+				},
+				{ rootMargin: '200px 0px' }
+			);
+			visibility.observe(el);
 		}
 
 		return () => {
 			clearTimeout(timeout);
-			observer?.disconnect();
+			latest++;
+			resizer?.disconnect();
+			visibility?.disconnect();
+			delete el.dataset.glassIdle;
 			el.classList.remove('glass');
 			for (const name of ['--glass-blur', '--glass-saturate', '--glass-tint', 'backdrop-filter']) {
 				el.style.removeProperty(name);

@@ -198,6 +198,33 @@ export const mouseTooltipProps = props(
 	['tilt', tilt]
 );
 
+export const videoPlayerProps = props(
+	['src', 'A string, the video file. Self-hosted or CDN files are best. Required.'],
+	['poster', 'A string, an image shown before the video plays.'],
+	['captions', 'A string, the path to a `.vtt` captions file.'],
+	['captionsLang', 'A string, the captions language. Defaults to `en`.'],
+	['title', "A string, the video's accessible name."],
+	[
+		'playIcon',
+		'A string, the icon on the play button: a name from `static/icons`, or a path to any single-color SVG. Defaults to `play`.'
+	],
+	['playLabel', "A string, the play button's accessible name. Defaults to `Play video`."],
+	['aspect', 'A string, the shape of the frame as a CSS aspect ratio. Defaults to `16 / 9`.'],
+	['controls', 'A boolean. The native controls along the bottom. Defaults to `true`.'],
+	[
+		'preload',
+		'`none | metadata | auto`. How much of the video loads up front. Defaults to `metadata`.'
+	],
+	[
+		'...rest',
+		'Any other video attribute, such as `loop`, `muted`, `autoplay` or `onended`, goes straight to the `<video>`.'
+	],
+	[
+		'class',
+		'A string of extra classes. Style the button with `--play-size`, `--play-bg` and `--play-color`; the corners follow `--radius`.'
+	]
+);
+
 export const videoOverlayProps = props(
 	['open', 'A boolean, bindable. `bind:open` to show or hide the video. Defaults to `false`.'],
 	['src', 'A string, the video file. Self-hosted or CDN files are best. Required.'],
@@ -348,7 +375,11 @@ export const imageCircleProps = props(
 		'bloom',
 		'`left | right | top`. Cards turn with the ring like petals instead of staying upright, with the left, right or top card upright. Off by default.'
 	],
-	['class', 'A string of extra classes.']
+	['class', 'A string of extra classes.'],
+	[
+		'clip',
+		'A boolean. Crops the cards that swing past the square the component sits in. Turn it off to let them bleed out, as in Hero Image Circle. Defaults to `true`.'
+	]
 );
 
 export const imageWaveProps = props(
@@ -454,6 +485,114 @@ export const imageFanProps = props(
 	]
 );
 
+export const marqueeCurveProps = props(
+	['text', 'A string that runs along the curve, repeated to fill it. Required.'],
+	[
+		'curve',
+		"A string pasted straight from the curve tool, `cubic-bezier(x1, y1, x2, y2)`, or the four numbers. The curve starts and ends at the frame's vertical middle; `x` runs across the width (0 to 1), and `y` is a control point's height, where `1` is the top edge, `0` the bottom and `0.5` the middle, so values past 0 or 1 swing outside the frame. To look like the tool's canvas, the frame must be the same shape (see `aspect`). Defaults to a flat line."
+	],
+	[
+		'aspect',
+		"A number, the shape of the box the curve is drawn in, as width ÷ height. `1` is a square, the shape of the curve tool's canvas, so the curve looks just as it did there. A bigger number gives a flatter frame, and a flatter curve. Defaults to `1`."
+	],
+	[
+		'height',
+		'A number, a fixed height in px, instead of `aspect`. The curve is stretched to fit it, so it will no longer match the tool.'
+	],
+	[
+		'band',
+		'A number, the thickness in px of a colored band the text runs along. It follows the curve with the same thickness all the way, edge lines included. `0` is no band. Defaults to `0`.'
+	],
+	['bandColor', 'A string, any CSS color. Defaults to the accent color.'],
+	[
+		'borderColor',
+		'A string, any CSS color, for the two lines along the edges of the band. Defaults to the text color.'
+	],
+	['borderWidth', 'A number, the width in px of each edge line. `0` is none. Defaults to `2`.'],
+	[
+		'spacing',
+		"A number, the space between letters as a multiple of each letter's own width. Letter widths come from the font, so any font works, though mono-spaced looks tidiest. Defaults to `1`."
+	],
+	[
+		'speed',
+		'A number, pixels per second the text moves along the curve. `0` turns the automatic motion off. Defaults to `60`.'
+	],
+	['backwards', 'A boolean. Runs the text the other way. Defaults to `false`.'],
+	[
+		'reverse',
+		'A boolean. The text runs backwards after the page scrolls up and forwards again after it scrolls down, turning around smoothly. Defaults to `false`.'
+	],
+	[
+		'scrub',
+		'A number. Ties the text to scrolling, on top of its own motion: `1` is 1px along the curve per 1px scrolled. Defaults to `0`.'
+	],
+	[
+		'uppercase',
+		'A boolean. Shows the text in capitals, and centers on the capitals. Defaults to `true`.'
+	],
+	[
+		'class',
+		'A string of extra classes. Set `font-size` and `color` on it; the text is `--font-mono` at 44px by default.'
+	]
+);
+
+export const marqueeProps = props(
+	['text', 'A string repeated across the row. For links or styled words, use `children` instead.'],
+	['children', 'A snippet repeated across the row, for rich text.'],
+	[
+		'images',
+		'An array of `{ src, alt }` repeated across the row, at a set height (`--image-height`).'
+	],
+	[
+		'label',
+		'A string, the accessible name. Defaults to `text`. Only one copy of the content is exposed to screen readers.'
+	],
+	['rows', 'A number, how many rows are stacked. Defaults to `1`.'],
+	[
+		'speed',
+		'A number, pixels per second the rows move, the same at every screen size. `0` turns the automatic motion off, for a row that only moves as the page scrolls. Defaults to `60`.'
+	],
+	['alternate', 'A boolean. Every other row moves the opposite way. Defaults to `true`.'],
+	[
+		'reverse',
+		'A boolean. The rows move backwards after the page scrolls up and forwards again after it scrolls down, turning around smoothly. Defaults to `false`.'
+	],
+	[
+		'scrub',
+		'A number. Ties the rows to scrolling, on top of their own motion: scrolling down pushes them along. `1` is 1px per 1px scrolled, so higher is more sensitive. Defaults to `0`.'
+	],
+	[
+		'pauseOnHover',
+		'A boolean. Holds the motion while the pointer or keyboard focus is on the marquee. Defaults to `false`.'
+	],
+	[
+		'class',
+		'A string of extra classes. The text size follows the h2 style; `--gap` and `--image-height` adjust the spacing and the image size.'
+	]
+);
+
+export const imageShuffleProps = props(
+	[
+		'images',
+		'An array of `{ src, alt, url }`. `alt` is required, since these are usually logos; `url` makes one a link. Give it more images than cells so every cell can show a different one. Required.'
+	],
+	[
+		'type',
+		'`roll | fade`. `roll` slides the new image up from below as the old one leaves upward, like Text Roll; `fade` crossfades. Defaults to `roll`.'
+	],
+	[
+		'interval',
+		'A number, milliseconds between swaps. One cell changes each time. Defaults to `3000`.'
+	],
+	['columns', 'A number. Defaults to `4`.'],
+	['rows', 'A number. Defaults to `2`.'],
+	[
+		'tiles',
+		"`surface | light`. `surface` draws the cells in the theme's surface color; `light` draws them on a light tile in both themes, which suits logos made for white backgrounds. Defaults to `surface`."
+	],
+	['class', 'A string of extra classes.']
+);
+
 export const imageComparisonProps = props(
 	['before', 'An object `{ src, alt }`, the image on the left of the divider. Required.'],
 	['after', 'An object `{ src, alt }`, the image on the right of the divider. Required.'],
@@ -463,7 +602,7 @@ export const imageComparisonProps = props(
 	],
 	[
 		'position',
-		'A number from 0 to 100, bindable. Where the divider starts: 0 shows all of the after image, 100 all of the before image. Defaults to `50`.'
+		'A number from 0 to 100, bindable. Where the divider starts: 0 shows all of the after image, 100 all of the before image. Defaults to `30`.'
 	],
 	['beforeLabel', 'A string, a Tag in the top left.'],
 	['afterLabel', 'A string, a Tag in the top right.'],
@@ -471,10 +610,138 @@ export const imageComparisonProps = props(
 	['class', 'A string of extra classes.']
 );
 
+export const avatarCycleProps = props(
+	[
+		'items',
+		'An array of three or more `{ src, alt, title, caption }`. Odd counts look the most balanced; with an even count, one side has an extra avatar. Required.'
+	],
+	['interval', 'A number, milliseconds between turns. Defaults to `4000`.'],
+	[
+		'autoplay',
+		'A boolean. Turns by itself, and pauses while the pointer or keyboard focus is on it. Defaults to `true`.'
+	],
+	[
+		'size',
+		'A number, the most the middle avatar can be across, in px. It shrinks to fit a narrow container. Defaults to `120`.'
+	],
+	[
+		'cardSize',
+		'A number, the width in px of the caption card, which is as tall as it is wide. Defaults to `280`.'
+	],
+	[
+		'ringColor',
+		'A string, any CSS color for the ring around each avatar. The default matches the page background, so each avatar looks as if it cuts into its neighbors.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const solarSystemProps = props(
+	['image', 'An object `{ src, alt }`, the picture in the middle, shown as a circle. Required.'],
+	[
+		'rings',
+		'An array of one or two rings. The first orbits close to the image and the second further out; a single ring sits wider and the picture grows to fill it. Each ring is `{ tags, duration, direction }`: `tags` is up to six `{ text, icon, type }` tags, spaced evenly around the ring (the outer ring is offset half a step so the two interleave); `duration` is the seconds for one turn (`40` for the inner ring, `60` for the outer); `direction` is `left` or `right` (the inner ring turns left and the outer right). Required.'
+	],
+	[
+		'tagType',
+		'`solid | outline | glass`. The look of every tag; a tag can set its own `type`. Defaults to `glass`.'
+	],
+	[
+		'class',
+		'A string of extra classes. The component is square and sized by its container, and its tags scale with it.'
+	]
+);
+
+export const scrollProgressProps = props(
+	[
+		'placement',
+		'`bottom | right | left`. Where the bar sits: a short bar along the bottom that fills left to right, or a bar down the right or left edge that fills downward. Defaults to `right`.'
+	],
+	[
+		'allowClick',
+		'A boolean. Clicking the bar scrolls the page to that point, and the bar grows on hover. It also hides the custom cursor while over it. Defaults to `true`.'
+	],
+	[
+		'hideScrollbar',
+		"A boolean. Hides the browser's own scrollbar, since the bar takes its place. Defaults to `true`."
+	],
+	[
+		'class',
+		'A string of extra classes. Size and position are set by `placement`; override them with this.'
+	]
+);
+
+export const toggleSliderProps = props(
+	[
+		'variant',
+		'`solid | underline`. A block behind the selected option (with a frame around the row), or a line under it. Defaults to `solid`.'
+	],
+	[
+		'trigger',
+		'`click | hover`. `click` moves the slider to the option that becomes selected. `hover` also follows the pointer and keyboard focus, and goes back to the selected option when it leaves. Defaults to `click`.'
+	],
+	[
+		'options',
+		'A string, a selector for the options inside the element. Defaults to its direct children, except a `<legend>`.'
+	]
+);
+
+export const copyProps = props(
+	['text', 'A string, or a function that returns one, to copy.'],
+	[
+		'target',
+		"A selector or element to copy from instead of `text`. It copies the element's `data-copy-value` if it has one, otherwise its text."
+	],
+	[
+		'copiedText',
+		'A string the label changes to right after copying, such as `Copied!`. Without it the label does not change.'
+	],
+	['copiedTime', 'A number, milliseconds the copied state lasts. Defaults to `2000`.'],
+	[
+		'alert',
+		'Alert options (`title`, `message`, `autoClose` and so on). When set, an alert from the Alert combo shows on copying.'
+	],
+	['onCopy', 'A function called with the copied text.']
+);
+
+export const copyButtonProps = props(
+	['text', 'A string to copy.'],
+	['target', 'A selector or element to copy from instead of `text` (see the `copy` options).'],
+	['label', 'A string, the button label. Defaults to `Copy`.'],
+	['copiedText', 'A string the label changes to after copying. Defaults to `Copied!`.'],
+	['copiedTime', 'A number, milliseconds the copied state lasts. Defaults to `2000`.'],
+	['icon', 'An icon name from `static/icons`, shown before the label. Defaults to `copy`.'],
+	['type', '`solid | outline | underline | text`. A Button type. Defaults to `outline`.'],
+	['size', '`sm | md | lg`. Defaults to `sm`.'],
+	['alert', 'Alert options, to show an alert on copying (see the `copy` options).'],
+	['onCopy', 'A function called with the copied text.'],
+	['class', 'A string of extra classes.']
+);
+
+export const tabsProps = props(
+	[
+		'tabs',
+		'An array of `{ label, title, description, image }`. `label` is the tab button, and `image` is `{ src, alt }`. Required.'
+	],
+	['defaultTab', 'A number, the tab that starts selected, counting from `0`. Defaults to `0`.'],
+	[
+		'variant',
+		'`underline | solid`. A line under the selected tab, or a filled tab. Defaults to `underline`.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const tabsAttachmentProps = props(
+	[
+		'defaultTab',
+		'A number, the tab that starts selected, counting from `0`. Defaults to the first panel that is not `hidden`, else the first.'
+	],
+	['onChange', 'A function called with the new tab number whenever the selection changes.']
+);
+
 export const accordionProps = props(
 	[
 		'items',
-		'An array of `{ title, content }`. `content` is trusted HTML, so it can hold links. Required.'
+		'An array of `{ title, content, defaultOpen }`. `content` is trusted HTML, so it can hold links, and `defaultOpen` starts that item open. Required.'
 	],
 	[
 		'icon',
@@ -485,6 +752,10 @@ export const accordionProps = props(
 		'A boolean. A plus sign that turns into a minus, instead of an icon. Defaults to `false`.'
 	],
 	['singleOpen', 'A boolean. Only one item open at a time. Defaults to `false`.'],
+	[
+		'defaultOpen',
+		"Which items start open: `true` for all, an item's number (from `0`), or a list such as `[0, 2]`. With `singleOpen` only the first opens. An item can also set `defaultOpen: true` itself. Defaults to none."
+	],
 	[
 		'toggleAll',
 		'A boolean. Shows a button that opens or closes every item; it reads "Close All" once all are open and goes back to "Open All" only when all are closed. Ignored with `singleOpen`. Defaults to `false`.'
@@ -510,6 +781,10 @@ export const accordionTableProps = props(
 		'An icon name from `static/icons`, shown along the right edge of each row and flipped when open.'
 	],
 	['singleOpen', 'A boolean. Only one row open at a time. Defaults to `false`.'],
+	[
+		'defaultOpen',
+		"Which rows start open: `true` for all, a row's number (from `0`), or a list such as `[0, 2]`. With `singleOpen` only the first opens. A row can also set `defaultOpen: true` itself. Defaults to none."
+	],
 	[
 		'sticky',
 		'A boolean. Pins the header row while scrolling through the rows. Defaults to `false`.'
@@ -631,6 +906,254 @@ export const blogArticleBodyProps = props([
 	'A string of trusted HTML, rendered from the post Markdown by `renderMarkdown`. Required.'
 ]);
 
+export const circleHighlightProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description',
+		'The copy beside the ring, from Section Copy (see the Style Guide). Leave them all out and the ring is centered on its own.'
+	],
+	[
+		'slices',
+		'An array of `{ title, description }`, one slice of the ring each. The title and description are its caption. Required.'
+	],
+	[
+		'holeSize',
+		'A number from 0 to 99, the hole as a percent of the ring’s radius. A bigger hole is a thinner ring, and `0` draws solid pie slices. Defaults to `55`.'
+	],
+	[
+		'radius',
+		'A number, the curve on every slice corner, in the ring’s own 0–100 units. `0` keeps them sharp. Defaults to `0`.'
+	],
+	['gap', 'A number, the space between slices, in the same units. Defaults to `0`.'],
+	[
+		'captionPlacement',
+		'`outside | inside`. `outside` places a caption around the ring for every slice. `inside` shows only the active one, in the hole. Defaults to `outside`.'
+	],
+	[
+		'orientation',
+		'`default | tilted`. `default` centers the first slice at 12 o’clock. `tilted` puts a division there instead. Defaults to `default`.'
+	],
+	[
+		'image',
+		'An image in the hole, shown until the section pins. It takes Logo props (`src`, `srcLight`, `srcDark`, `alt`), so it can change with the theme.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const carouselTunnelProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description',
+		'The copy above the carousel, from Section Copy (see the Style Guide). It reveals once the zoom ends.'
+	],
+	[
+		'slides',
+		'An array of `{ img, eyebrow, title }`, where `img` is `{ src, alt }`. The eyebrow and title sit in the bottom left corner of the slide. Required.'
+	],
+	[
+		'autoplay',
+		'An object of `{ interval, quickStart }`. `interval` is the milliseconds between slides, and `0` turns autoplay off (default `4500`). `quickStart` advances one slide as soon as the copy reveals instead of waiting a full interval. Autoplay holds while the carousel is hovered or focused, and is off when motion is reduced.'
+	],
+	[
+		'titleEffect',
+		'`reveal | fade | scale | flip | none`. A word-by-word effect that plays once when the copy reveals. Defaults to `reveal`.'
+	],
+	['descriptionEffect', 'Same options as `titleEffect`. Defaults to `none`.'],
+	[
+		'dragThreshold',
+		'A number from 0 to 1, the share of a slide’s width a drag must cross to change slides. Lower is more sensitive. Defaults to `0.1`.'
+	],
+	[
+		'pagination',
+		'`arrows | dots | both`. Arrows alone scale better with many slides. Defaults to `arrows`.'
+	],
+	[
+		'config',
+		'Optional tuning: `sectionHeight` (the total scroll distance, `220svh`), `slideWidth` (the resting slide width, which sets how much of the next ones peek in, `min(25vw, 720px)`), `slideGap` (`24px`), `slideAspect` (`2 / 1.25`), `scaleDuration` (the share of the scroll spent zooming, `0.6`), `revealDuration` (seconds, `0.6`) and `captionOffset` (`12px`). Anything left out keeps its default, including the smaller slide width on mobile.'
+	],
+	['label', 'A string, the carousel’s accessible name. Defaults to `Featured work`.'],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const scrollStackProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description, cta',
+		'The copy, from Section Copy (see the Style Guide). Beside the panels it stays pinned next to them; otherwise it sits above.'
+	],
+	[
+		'panels',
+		'An array of `{ title, description, icon, cta }`, two or more. `icon` is a name from `static/icons` and `cta` is Button props for a button along the bottom. Required.'
+	],
+	[
+		'nav',
+		'A boolean. A row of links above the stack that jump to a panel and show which one is on top. Hidden on small screens. Defaults to `false`.'
+	],
+	[
+		'size',
+		'`full | half`. `half` makes the panels half as wide from the `lg` breakpoint up. Defaults to `full`.'
+	],
+	[
+		'placement',
+		'`left | center | right`. Which side the panels sit on, with the copy pinned on the other side. `center` puts the copy above. Defaults to `center`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const workGalleryProps = props(
+	[
+		'title, description, eyebrowText, eyebrowIcon, cta',
+		'The opening copy, from Section Copy (see the Style Guide), with the title and description side by side. Leave them out for no header.'
+	],
+	[
+		'items',
+		'An array of `{ title, type, year, img, url }`. `type` is shown under the image (`Design`, `Development`) and `year` in a glass tag on its corner. `img` is `{ src, alt }`. `url` makes the image a link, opening in a new tab for a full URL. Required.'
+	],
+	[
+		'grid',
+		'`default | alternate`. `default` is two columns. `alternate` is three from the `xl` breakpoint up, where the images take turns being two columns wide. Defaults to `alternate`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const galleryHorizontalProps = props(
+	[
+		'title, description, eyebrowText, eyebrowIcon, cta',
+		'The opening copy above the gallery, from Section Copy (see the Style Guide). Leave them all out for no header.'
+	],
+	[
+		'groups',
+		'An array of `{ images, copy }`. `images` is up to four `{ src, alt, caption, gnomon }`, placed in a collage: a tall card top left, a wide one under it, then the same pair again after the copy. `caption` fills the notch on the card’s bottom left, and `gnomon` overrides the shared settings for that card. `copy` is a short paragraph between the two halves. Required.'
+	],
+	['accent', 'A string, handwritten text before the first group.'],
+	[
+		'gnomon',
+		'`{ depth, length, radius, angle }`, the Card Gnomon settings every card shares (see Card Gnomon in Components). Defaults to `{ depth: 18, length: 48, radius: 4, angle: 85 }`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const scrollHorizontalProps = props(
+	[
+		'title, description, eyebrowText, eyebrowIcon, cta',
+		'The opening copy, shown beside each other above the track, from Section Copy (see the Style Guide). Leave them all out for none.'
+	],
+	[
+		'items',
+		'An array of `{ src, alt, title, description }`, the images that slide, each with an optional caption. Use this or `message`.'
+	],
+	[
+		'message',
+		'A string, one long line of large text that slides instead of images. Trusted HTML, so `<span class="stroke">word</span>` outlines a word.'
+	],
+	[
+		'parallax',
+		'A boolean. Images drift a little inside their frames as the row slides, so landscape images in the tall frames show more as you scroll. Defaults to `true`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const tunnelProps = props(
+	['img', 'An object of `{ src, alt }`, a picture. Use this or `video`.'],
+	['video', 'A string, a video file, played muted and looping. Use this or `img`.'],
+	['message', 'A string that fills in with color over the end of the section.'],
+	[
+		'extended',
+		'A boolean. A taller section, so the media is on screen longer. Defaults to `false`.'
+	],
+	[
+		'centered',
+		'A boolean. Pins the media in the middle of the screen, then grows it to fill the screen as you scroll. Without it the media is full height and widens as the section arrives. Defaults to `false`.'
+	],
+	[
+		'reversed',
+		'A boolean. Plays the change backwards: the media starts full width (full screen when centered) and shrinks. Defaults to `false`.'
+	],
+	[
+		'parallax',
+		'An object of `{ offset, scrub }`. `offset` is how far the media starts from rest, as a CSS translate such as `-75%` (the default). `scrub` is the seconds the motion takes to catch up with the scroll, and `0` (the default) plays it once when it is reached.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const headlineProps = props(
+	[
+		'text',
+		'A string, the statement. It flips in word by word as it scrolls into view. Trusted HTML, so `<em>` and `<strong>` accents work. Required.'
+	],
+	['eyebrowText', 'A string shown above the statement.'],
+	['eyebrowIcon', 'An icon name from `static/icons`. Works without `eyebrowText` too.'],
+	[
+		'quote',
+		'An object of `{ name, role, image }`, where `image` is `{ src, alt }`. With a `name` the statement is wrapped in quotes and credited beneath, with the image, name and role. Leave it out for a plain headline.'
+	],
+	['class', 'A string of extra classes.']
+);
+
+export const planSelectionProps = props(
+	[
+		'title, description, eyebrowText, eyebrowIcon',
+		'The opening copy, from Section Copy (see the Style Guide).'
+	],
+	[
+		'plans',
+		'An array of plans. Each is `{ title, priceMonthly, priceQuarterly, totalQuarterly, savingsQuarterly, features, ctaMonthly, ctaQuarterly, featured }`. `features` are strings, or `{ text, strong }` to make one bold. The two `cta` objects are Button props (`text`, `textDescription`, `url`, `newTab`). `featured` gives the card an accent background. Required.'
+	],
+	[
+		'priceToggle',
+		'A boolean. Shows the Monthly / Quarterly switch, built the same way as the Theme Toggle with the Toggle Slider attachment. Picking one scrambles the prices and message into the new ones and swaps each card’s button. The quarterly fields on each plan are only needed with it. Defaults to `false`.'
+	],
+	[
+		'discount',
+		'A string, the saving named in the switch’s tooltip and each card’s message, e.g. `15%`. Defaults to `20%`.'
+	],
+	['defaultBilling', '`monthly | quarterly`. Which one starts selected. Defaults to `monthly`.'],
+	['class', 'A string of extra classes.']
+);
+
+export const heroImageWaveProps = props(
+	[
+		'...SectionCopy props',
+		'Takes every prop of Section Copy (see the Style Guide): `eyebrowText`, `eyebrowIcon`, `title`, `description`, `cta` and the rest. `level` defaults to `1`.'
+	],
+	['images', 'An array of `{ src, alt }` for the wave. Required.'],
+	[
+		'accent',
+		'A string, decorative handwritten text pinned beside the copy. Hidden below the `lg` breakpoint. Leave it out for none.'
+	],
+	[
+		'wave',
+		'Image Wave props: `repeat`, `speed`, `duration`, `amplitude`, `waves`, `scrub` and `reverse` (see Image Wave in Components).'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const heroImageCircleProps = props(
+	[
+		'...SectionCopy props',
+		'Takes every prop of Section Copy (see the Style Guide): `eyebrowText`, `eyebrowIcon`, `title`, `description`, `cta` and the rest. `level` defaults to `1`.'
+	],
+	['images', 'An array of `{ src, alt }` for the first circle. Required.'],
+	[
+		'imagesEnd',
+		'An array of `{ src, alt }` for the second circle. Defaults to the same images as the first.'
+	],
+	[
+		'direction',
+		'`center | left`. `center` puts a circle on each side of centered copy. `left` keeps one circle, on the right, and left-aligns the copy. Below the `lg` breakpoint both stack the copy over the top half of one circle. Defaults to `center`.'
+	],
+	[
+		'scrub',
+		'A number. Spins the circles as the page scrolls, in opposite directions, with `1` about a quarter turn across the section’s pass. `0` is off, and it is skipped when motion is reduced. Defaults to `0`.'
+	],
+	[
+		'offset',
+		'A number, how far the circles sit from the copy as a percent of their own width. Higher pushes them further off the screen. Defaults to `30`.'
+	],
+	[
+		'circle',
+		'Image Circle props for both circles: `itemWidth`, `gap` and `duration`. The section sets `direction`, `bloom` and `clip` itself.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
 export const heroSimpleProps = props(
 	[
 		'...SectionCopy props',
@@ -670,4 +1193,23 @@ export const typographyTokens = props(
 		'Heading styles for any element, so the visual size and the heading level can differ.'
 	],
 	['.body, .body-large, .body-small', 'Body text sizes.']
+);
+
+export const videoBgProps = props(
+	['src', 'A string, the video file. Self-hosted or CDN files are best. Required.'],
+	[
+		'poster',
+		'A string, an image shown before the video plays. Best paired with `autoplay: false`.'
+	],
+	[
+		'autoplay',
+		'A boolean. Plays on its own, muted and looping, unless the visitor prefers reduced motion. Defaults to `true`. On mobile, a video that is not autoplaying needs a `poster`.'
+	],
+	[
+		'shadow',
+		'`top | bottom | null`. A dark gradient over the video to help text stand out. Defaults to `bottom`.'
+	],
+	['placement', '`br | bl | tr | tl`. The corner of the play / pause button. Defaults to `br`.'],
+	['toggleAttach', 'An attachment for the button, such as `magnet()`.'],
+	['title', "A string, the video's accessible name. Defaults to `Background video`."]
 );

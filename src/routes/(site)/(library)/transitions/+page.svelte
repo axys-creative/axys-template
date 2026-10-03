@@ -15,7 +15,7 @@
 	description="How the site changes from one page to the next. Each demo is a mock page in a small frame: use its two links to see the transition play."
 />
 
-<div class="transitions">
+<div class="transitions page-grid">
 	<LibrarySection
 		title="Fade"
 		type="Transition"
@@ -93,11 +93,7 @@
 <style lang="scss">
 	/* LIBRARY: DELETE ME */
 	.transitions {
-		display: flex;
-		flex-direction: column;
-		gap: 128px;
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: var(--body-padding);
+		row-gap: 128px;
+		padding-block: var(--body-padding);
 	}
 </style>

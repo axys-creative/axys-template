@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toggleSlider } from '$lib/attachments/toggle-slider';
 	import Icon from './icon.svelte';
 	import { theme, setTheme, type ThemePreference } from '$lib/theme.svelte';
 
@@ -9,7 +10,7 @@
 	];
 </script>
 
-<fieldset class="theme-toggle">
+<fieldset class="theme-toggle" {@attach toggleSlider({ options: 'label' })}>
 	<legend class="visually-hidden">Display theme</legend>
 	{#each options as { value, label, icon } (value)}
 		<label title="{label} theme">
@@ -35,6 +36,7 @@
 		padding: 2px;
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
+		--slider-radius: calc(var(--radius) - 2px);
 	}
 
 	label {
@@ -45,15 +47,13 @@
 		font-size: 16px;
 		cursor: pointer;
 		color: var(--color-text-muted);
+		opacity: 1;
 
 		@include mixins.mq-motion-allow {
-			transition:
-				background var(--duration) var(--ease),
-				color var(--duration) var(--ease);
+			transition: color var(--duration) var(--ease);
 		}
 
 		&:has(input:checked) {
-			background: var(--color-surface);
 			color: var(--color-text);
 		}
 

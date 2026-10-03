@@ -1,7 +1,7 @@
 {
-	"float": true,
+	"float": false,
 	"blur": false,
-	"glass": true,
+	"glass": false,
 	"hideOnScroll": true,
 	"showSkipLink": true,
 	"linkPlacement": "center",
@@ -14,6 +14,12 @@
 		{
 			"text": "Resources",
 			"links": [
+				{
+					"text": "Advanced",
+					"url": "/advanced",
+					"newTab": false,
+					"iconStart": "rocket"
+				},
 				{
 					"text": "Attachments",
 					"url": "/attachments",

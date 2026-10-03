@@ -59,6 +59,18 @@ h6,
 
 a {
 	color: var(--color-accent-text);
+	text-decoration: none;
+}
+
+// Buttons start plain: no browser border, gray fill or padding. Components style their own.
+button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
 }
 
 img,

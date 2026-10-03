@@ -116,7 +116,12 @@
 	<div class="inner">
 		{#if logo}<Logo {...logo} url="/" />{/if}
 
-		<MenuLinks class="links" {links} label="Primary" />
+		<MenuLinks
+			class="links"
+			{links}
+			label="Primary"
+			dropdownSurface={glass ? 'glass' : blur ? 'blur' : 'solid'}
+		/>
 
 		{#if ctas.length}
 			<div class="ctas">

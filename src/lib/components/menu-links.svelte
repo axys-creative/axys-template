@@ -17,6 +17,8 @@
 		direction?: 'row' | 'column';
 		/** Render a `<nav>` landmark. Turn off when an ancestor is already the navigation landmark. */
 		landmark?: boolean;
+		/** The background of dropdown panels, so they can match their header. */
+		dropdownSurface?: 'glass' | 'blur' | 'solid';
 		class?: string;
 	};
 
@@ -26,6 +28,7 @@
 		type = 'underline',
 		direction = 'row',
 		landmark = true,
+		dropdownSurface,
 		class: className
 	}: Props = $props();
 </script>
@@ -45,6 +48,7 @@
 							links={children}
 							type={link.type ?? type}
 							mode={direction === 'column' ? 'accordion' : 'popover'}
+							surface={dropdownSurface}
 						/>
 					{:else}
 						<Button

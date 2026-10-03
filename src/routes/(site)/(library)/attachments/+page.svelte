@@ -155,7 +155,7 @@
 	description="Behavior you add to any element with an attachment. Each one is a single file in src/lib/attachments."
 />
 
-<div class="attachments">
+<div class="attachments page-grid">
 	<LibrarySection
 		title="Animate"
 		type="Attachment"
@@ -964,6 +964,43 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Scroll Slide"
+		type="Attachment"
+		description="Pins an element to the center of the screen and slides a row inside it sideways as the page scrolls, for exactly as far as the row overflows, then lets go. Put it on the pinned element, mark the box the row slides across with `data-slide-viewport` and the row with `data-slide-track` (or point at your own with `viewport` and `track`). While it is active the element has `data-sliding`, which is when the viewport should clip. It needs GSAP ScrollTrigger, loaded only when used, and does nothing when motion is reduced, so the row can scroll on its own. Gallery Horizontal and Scroll Horizontal in Sections use it."
+		props={[
+			{
+				name: 'viewport',
+				description:
+					'A selector inside for the box the row slides across. Defaults to `[data-slide-viewport]`.'
+			},
+			{
+				name: 'track',
+				description: 'A selector inside for the row that slides. Defaults to `[data-slide-track]`.'
+			},
+			{
+				name: 'media',
+				description:
+					'A media query. Outside it nothing is pinned. Defaults to `(min-width: 1024px)`; use `all` for every size.'
+			},
+			{
+				name: 'scrub',
+				description: 'A number, seconds the row takes to catch up with the scroll. Defaults to `1`.'
+			},
+			{
+				name: 'parallax',
+				description:
+					'A selector for elements inside the row that drift sideways as it slides, such as images in frames.'
+			},
+			{
+				name: 'parallaxAmount',
+				description:
+					'A number, how far they drift as a percent of their own width. Defaults to `25`.'
+			}
+		]}
+		propsLabel="options"
+	/>
+
+	<LibrarySection
 		title="Text Curve"
 		type="Attachment"
 		description="Bends an element's text along a circular arc. Screen readers still get the plain text. It sizes the element to fit the arc, and measures again on resize and when fonts load. The spin is off with reduced motion."
@@ -1476,12 +1513,8 @@
 	@use 'base/mixins';
 
 	.attachments {
-		display: flex;
-		flex-direction: column;
-		gap: 128px;
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: var(--body-padding);
+		row-gap: 128px;
+		padding-block: var(--body-padding);
 	}
 
 	.tilt-card-group {
@@ -1743,21 +1776,26 @@
 		text-align: center;
 	}
 
+	// The image is tall, and the three samples stick to the middle of the screen from the top of the image to the bottom.
+	// `overflow: clip` (not `hidden`) keeps the stage from becoming a scroll container, which would stop the sticking.
 	.glass-stage {
 		position: relative;
 		width: 100%;
-	}
-
-	.glass-stage img {
-		width: 100%;
-		max-height: 420px;
-		object-fit: cover;
+		height: max(50vh, 500px);
 		border-radius: var(--radius);
 	}
 
-	.glass-samples {
+	.glass-stage img {
 		position: absolute;
 		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.glass-samples {
+		position: sticky;
+		top: 25%;
 		display: flex;
 		align-items: center;
 		justify-content: center;

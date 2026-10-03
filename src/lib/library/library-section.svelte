@@ -75,19 +75,58 @@
 		</ul>
 	{/if}
 
-	{@render children?.()}
+	{#if children}
+		<div class="examples">{@render children()}</div>
+	{/if}
 </svelte:element>
 
 <style lang="scss">
 	/* LIBRARY: DELETE ME */
+	// A section spans the whole page grid and lays its own children on the same columns (subgrid), so each one sits in
+	// the content column unless it is marked `full`.
 	.library-section {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 16px;
+		display: grid;
+		grid-column: full;
+		grid-template-columns: subgrid;
+		justify-items: start;
+		gap: 16px 0;
+
+		> :global(*) {
+			grid-column: content;
+		}
+
+		// Examples sit three times further apart than the copy above them, so each one reads on its own.
+		> .examples {
+			display: grid;
+			grid-column: full;
+			grid-template-columns: subgrid;
+			justify-items: start;
+			gap: 48px 0;
+			margin-block-start: 32px;
+
+			> :global(*) {
+				grid-column: content;
+			}
+
+			> :global(.library-section),
+			> :global(.full) {
+				grid-column: full;
+			}
+
+			> :global(.full) {
+				justify-self: stretch;
+			}
+
+			// A small heading belongs to the example under it.
+			> :global(.plain) {
+				position: relative;
+				z-index: 1;
+				margin-block-end: -32px;
+			}
+		}
 
 		&.level-3 {
-			margin-block-start: 32px;
+			margin-block-start: 48px;
 		}
 
 		:global(p) {

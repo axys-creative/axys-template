@@ -8,9 +8,11 @@
 		links: ButtonProps[];
 		type?: ButtonProps['type'];
 		mode?: 'popover' | 'accordion';
+		/** The popover's background: the glass attachment, a plain blur, or a solid color. */
+		surface?: 'glass' | 'blur' | 'solid';
 	};
 
-	let { text, links, type = 'underline', mode = 'popover' }: Props = $props();
+	let { text, links, type = 'underline', mode = 'popover', surface = 'glass' }: Props = $props();
 
 	const id = $props.id();
 	let root = $state<HTMLElement>();
@@ -81,9 +83,11 @@
 	/>
 
 	<div
-		class="panel"
+		class="panel {mode === 'popover' && surface !== 'glass' ? surface : ''}"
 		{id}
-		{@attach mode === 'popover' ? glass({ blur: 12, tint: 'rgb(0 0 0 / 0.45)' }) : undefined}
+		{@attach mode === 'popover' && surface === 'glass'
+			? glass({ blur: 12, tint: 'rgb(0 0 0 / 0.45)' })
+			: undefined}
 	>
 		<ul class="list">
 			{#each links as link (link.url ?? link.text)}
@@ -160,6 +164,14 @@
 		&.open .panel {
 			opacity: 1;
 			translate: 0 0;
+		}
+
+		.panel.blur {
+			@include mixins.glass;
+		}
+
+		.panel.solid {
+			background: var(--color-bg);
 		}
 	}
 

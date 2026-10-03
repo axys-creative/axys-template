@@ -1,0 +1,69 @@
+<script module lang="ts">
+	import type { ImageWaveProps } from '$lib/components/image-wave.svelte';
+
+	export type HeroImageWaveProps = SectionCopyProps & {
+		images: ImageWaveProps['images'];
+		/** Decorative handwritten text beside the copy. Hidden below the `lg` breakpoint. */
+		accent?: string;
+		/** Image Wave props: `repeat`, `speed`, `duration`, `amplitude`, `waves`, `scrub` and `reverse`. */
+		wave?: Omit<ImageWaveProps, 'images' | 'class'>;
+		class?: string;
+	};
+</script>
+
+<script lang="ts">
+	import ImageWave from '$lib/components/image-wave.svelte';
+	import SectionCopy, { type SectionCopyProps } from '$lib/components/section-copy.svelte';
+
+	let { images, accent, wave, class: className, ...copy }: HeroImageWaveProps = $props();
+</script>
+
+<section class="hero-image-wave {className ?? ''}">
+	<div class="inner">
+		<div class="copy">
+			{#if accent}<span class="accent" aria-hidden="true">{accent}</span>{/if}
+			<SectionCopy level={1} align="center" {...copy} />
+		</div>
+	</div>
+
+	<ImageWave {...wave} {images} />
+</section>
+
+<style lang="scss">
+	@use 'base/mixins';
+
+	// The wave runs past the sides of the screen, so only the sides are clipped.
+	.hero-image-wave {
+		overflow-x: clip;
+		padding-block-end: var(--body-padding-double);
+	}
+
+	.inner {
+		display: flex;
+		justify-content: center;
+		max-width: var(--content-width);
+		margin-inline: auto;
+		padding: var(--body-padding-double) var(--body-padding);
+	}
+
+	.copy {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		width: min(100%, var(--max-width-text));
+	}
+
+	.accent {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		translate: -100% 100%;
+		rotate: -8deg;
+		font-family: cursive;
+		pointer-events: none;
+
+		@include mixins.max-lg {
+			display: none;
+		}
+	}
+</style>

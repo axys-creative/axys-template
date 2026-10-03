@@ -70,6 +70,12 @@
 			font-size: 0.875em;
 		}
 
+		// Links in running text keep their underline, so they can be told from the words around them.
+		:global(a) {
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
+		}
+
 		:global(img) {
 			border-radius: var(--radius);
 		}

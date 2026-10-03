@@ -13,6 +13,8 @@
 		duration?: number;
 		/** Cards turn with the ring like petals instead of staying upright, with this side's card upright. */
 		bloom?: 'left' | 'right' | 'top';
+		/** Crops the cards that swing past the square. Turn off to let them bleed out of it. */
+		clip?: boolean;
 		class?: string;
 	};
 </script>
@@ -25,6 +27,7 @@
 		direction = 'left',
 		duration = 40,
 		bloom,
+		clip = true,
 		class: className
 	}: ImageCircleProps = $props();
 
@@ -32,7 +35,8 @@
 </script>
 
 <div
-	class="image-circle {direction} {bloom ? `bloom-${bloom}` : ''} {className ?? ''}"
+	class="image-circle {direction} {clip ? 'clip' : ''} {bloom ? `bloom-${bloom}` : ''} {className ??
+		''}"
 	style="--step: {step}; --gap: {gap}; --item-width: {itemWidth}; --duration: {duration}s"
 >
 	<div class="ring">
@@ -66,13 +70,16 @@
 		position: relative;
 		width: 100%;
 		aspect-ratio: 1;
-		overflow: hidden;
 		container-type: inline-size;
 		isolation: isolate;
 
 		--w: calc(var(--item-width) * 1cqw);
 		--chord: calc(var(--w) * var(--gap));
 		--radius: calc(var(--chord) / (2 * sin(calc(var(--step) / 2 * 1deg))));
+	}
+
+	.clip {
+		overflow: hidden;
 	}
 
 	.ring {

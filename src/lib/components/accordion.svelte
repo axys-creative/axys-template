@@ -3,6 +3,8 @@
 		title: string;
 		/** Trusted HTML from the CMS, so it can hold links and other markup. */
 		content: string;
+		/** Starts this item open. */
+		defaultOpen?: boolean;
 	};
 
 	export type AccordionProps = {
@@ -12,6 +14,8 @@
 		/** A plus sign that turns into a minus, instead of an icon. */
 		plus?: boolean;
 		singleOpen?: boolean;
+		/** Which items start open: `true` for all, an item's number (from 0), or a list of them. With `singleOpen` only the first opens. */
+		defaultOpen?: boolean | number | number[];
 		/** A button that opens or closes every item. Ignored with `singleOpen`. */
 		toggleAll?: boolean;
 		toggleAllTextOpen?: string;
@@ -20,7 +24,7 @@
 </script>
 
 <script lang="ts">
-	import { createDisclosure } from '$lib/utils/disclosure.svelte';
+	import { createDisclosure, startingOpen } from '$lib/utils/disclosure.svelte';
 	import Button from './button.svelte';
 	import Icon from './icon.svelte';
 
@@ -29,6 +33,7 @@
 		icon,
 		plus = false,
 		singleOpen = false,
+		defaultOpen = false,
 		toggleAll = false,
 		toggleAllTextOpen = 'Open All',
 		toggleAllTextClose = 'Close All'
@@ -37,7 +42,8 @@
 	const id = $props.id();
 	const disclosure = createDisclosure(
 		() => items.length,
-		() => singleOpen
+		() => singleOpen,
+		() => startingOpen(items, defaultOpen)
 	);
 
 	// Flips only at the extremes, so a mix of open and closed keeps the button's last label.
