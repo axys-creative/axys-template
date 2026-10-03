@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import site from '$lib/content/meta/site.json';
 	import { pages } from '$lib/content/meta/pages.json';
+	import { imageUrl as optimized } from '$lib/utils/image';
 
 	// A page can pass its own `seo` in its load data (a blog post does); otherwise pages.json decides.
 	type PageSeo = {
@@ -31,7 +32,13 @@
 	const image = $derived(ogImage || site.ogImage);
 	const origin = $derived(site.url || page.url.origin);
 	const canonical = $derived(origin + page.url.pathname);
-	const imageUrl = $derived(image ? new URL(image, origin).href : '');
+	// Share previews want a JPEG at 1200 by 630, whatever was uploaded.
+	const imageUrl = $derived(
+		image
+			? new URL(optimized(image, { width: 1200, height: 630, fit: 'cover', format: 'jpg' }), origin)
+					.href
+			: ''
+	);
 	// Structured data that search engines and AI answer engines read: who the site is, and for a post, what it says.
 	const schema = $derived(
 		JSON.stringify({

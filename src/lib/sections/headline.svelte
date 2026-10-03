@@ -12,6 +12,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import Eyebrow from '$lib/components/eyebrow.svelte';
 	import { textFlip } from '$lib/attachments/text-flip';
 
@@ -44,7 +45,7 @@
 				<figcaption class="giver">
 					{#if quote.image?.src}
 						<img
-							src={quote.image.src}
+							{...imageProps(quote.image.src, { sizes: '48px' })}
 							alt={quote.image.alt ?? ''}
 							width="48"
 							height="48"

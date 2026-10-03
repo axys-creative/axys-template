@@ -62,6 +62,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 	import { loadGsap } from '$lib/utils/gsap';
 	import CardGnomon from './card-gnomon.svelte';
@@ -221,7 +222,13 @@
 						cutouts={cutoutsFor(image)}
 					/>
 				{:else}
-					<img src={image.src} alt={image.alt ?? ''} loading="lazy" />
+					<img
+						{...imageProps(image.src, {
+							sizes: '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+						})}
+						alt={image.alt ?? ''}
+						loading="lazy"
+					/>
 					{#if image.caption}<span class="caption">{image.caption}</span>{/if}
 				{/if}
 				{#if image.accent}<span class="accent" aria-hidden="true">{image.accent}</span>{/if}

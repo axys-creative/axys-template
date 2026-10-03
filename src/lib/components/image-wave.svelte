@@ -22,6 +22,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 
 	let {
@@ -120,7 +121,7 @@
 					{#each images as image, index (index)}
 						<figure class="item" style="--i: {set * perSet + round * images.length + index}">
 							<img
-								src={image.src}
+								{...imageProps(image.src, { sizes: '(min-width: 768px) 360px, 240px' })}
 								alt={set === 0 && round === 0 ? (image.alt ?? '') : ''}
 								width={image.width ?? 400}
 								height={image.height ?? 500}

@@ -24,6 +24,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount, tick } from 'svelte';
 
 	const SHRINK = 0.2;
@@ -138,7 +139,7 @@
 				aria-current={steps === 0 ? 'true' : undefined}
 				onclick={() => go(index)}
 			>
-				<img src={item.src} alt={item.alt} draggable="false" />
+				<img {...imageProps(item.src, { sizes: '96px' })} alt={item.alt} draggable="false" />
 			</button>
 		{/each}
 	</div>

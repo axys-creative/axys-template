@@ -21,6 +21,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import Tag from '$lib/components/tag.svelte';
 	import SectionCopy from '$lib/components/section-copy.svelte';
 	import { animate } from '$lib/attachments/animate';
@@ -37,7 +38,13 @@
 
 {#snippet picture(item: WorkGalleryItem)}
 	<div class="frame">
-		<img src={item.img.src} alt={item.img.alt ?? ''} loading="lazy" />
+		<img
+			{...imageProps(item.img.src, {
+				sizes: '(min-width: 1280px) 760px, (min-width: 1024px) 50vw, 100vw'
+			})}
+			alt={item.img.alt ?? ''}
+			loading="lazy"
+		/>
 		{#if item.year}<Tag class="year" text={String(item.year)} type="glass" />{/if}
 	</div>
 {/snippet}

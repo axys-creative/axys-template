@@ -20,6 +20,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	let {
 		images,
 		itemWidth = 24,
@@ -44,7 +45,7 @@
 			<div class="item" style="--i: {index}">
 				<figure class="card">
 					<img
-						src={image.src}
+						{...imageProps(image.src, { sizes: '160px' })}
 						alt={image.alt ?? ''}
 						width={image.width ?? 400}
 						height={image.height ?? 400}

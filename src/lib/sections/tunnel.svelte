@@ -23,6 +23,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import type { Attachment } from 'svelte/attachments';
 	import { textFill } from '$lib/attachments/text-fill';
 	import { loadGsap } from '$lib/utils/gsap';
@@ -124,7 +125,7 @@
 {#snippet frame()}
 	<div class="clip">
 		{#if img?.src}
-			<img class="media" src={img.src} alt={img.alt ?? ''} />
+			<img class="media" {...imageProps(img.src, { sizes: '100vw' })} alt={img.alt ?? ''} />
 		{:else if video}
 			<video class="media" src={video} muted loop playsinline aria-hidden="true" {@attach play}
 			></video>

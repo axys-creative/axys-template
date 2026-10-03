@@ -1,6 +1,7 @@
 {
 	"siteName": "axys template",
 	"url": "https://axys-template.netlify.app",
+	"footerTemplate": "simple",
 	"author": "Sample Author",
 	"contactEmail": "info@sample.com",
 	"themeColor": "#0a0a0a",

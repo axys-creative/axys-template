@@ -24,6 +24,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 	import Tag from './tag.svelte';
 
@@ -71,7 +72,11 @@
 			</div>
 		{/each}
 
-		<img class="image" src={image.src} alt={image.alt} />
+		<img
+			class="image"
+			{...imageProps(image.src, { sizes: '(min-width: 768px) 480px, 80vw' })}
+			alt={image.alt}
+		/>
 	</div>
 </div>
 

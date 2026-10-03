@@ -20,6 +20,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import SectionCopy from '$lib/components/section-copy.svelte';
 	import { animate } from '$lib/attachments/animate';
 	import { scrollSlide } from '$lib/attachments/scroll-slide';
@@ -60,7 +61,11 @@
 					{#each items as item, index (index)}
 						<figure class="figure">
 							<div class="frame" class:parallax>
-								<img src={item.src} alt={item.alt ?? ''} loading="lazy" />
+								<img
+									{...imageProps(item.src, { sizes: '(min-width: 1280px) 700px, 500px' })}
+									alt={item.alt ?? ''}
+									loading="lazy"
+								/>
 							</div>
 							{#if item.title || item.description}
 								<figcaption>

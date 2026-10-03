@@ -48,6 +48,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { createDisclosure, startingOpen } from '$lib/utils/disclosure.svelte';
 	import Carousel from './carousel.svelte';
 	import Icon from './icon.svelte';
@@ -104,7 +105,10 @@
 						{@const value = item[column.key]}
 						<span class="cell" class:image={column.type === 'image'}>
 							{#if column.type === 'image'}
-								{#if isImage(value)}<img src={value.src} alt={value.alt ?? ''} />{/if}
+								{#if isImage(value)}<img
+										{...imageProps(value.src, { sizes: '120px' })}
+										alt={value.alt ?? ''}
+									/>{/if}
 							{:else}
 								{value ?? ''}
 							{/if}
@@ -124,7 +128,12 @@
 					{#each columns as column (column.key)}
 						{@const value = item[column.key]}
 						{#if column.type === 'image' && isImage(value)}
-							<img class="media" src={value.src} alt={value.alt ?? ''} loading="lazy" />
+							<img
+								class="media"
+								{...imageProps(value.src, { sizes: '(min-width: 1024px) 400px, 100vw' })}
+								alt={value.alt ?? ''}
+								loading="lazy"
+							/>
 						{/if}
 					{/each}
 					<div class="body">

@@ -25,6 +25,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount, tick } from 'svelte';
 
 	const DURATION = 700;
@@ -216,10 +217,20 @@
 				>
 					{#if image.url}
 						<a href={image.url} target="_blank" rel="noopener noreferrer">
-							<img src={image.src} alt={image.alt} width={image.width} height={image.height} />
+							<img
+								{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 25vw' })}
+								alt={image.alt}
+								width={image.width}
+								height={image.height}
+							/>
 						</a>
 					{:else}
-						<img src={image.src} alt={image.alt} width={image.width} height={image.height} />
+						<img
+							{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 25vw' })}
+							alt={image.alt}
+							width={image.width}
+							height={image.height}
+						/>
 					{/if}
 				</div>
 			{/each}

@@ -28,6 +28,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 	import Button from './button.svelte';
 
@@ -298,7 +299,7 @@
 				>
 					{#if slide.img}
 						<img
-							src={slide.img}
+							{...imageProps(slide.img, { sizes: '(min-width: 768px) 50vw, 100vw' })}
 							alt={slide.alt ?? slide.title ?? ''}
 							draggable="false"
 							loading="lazy"

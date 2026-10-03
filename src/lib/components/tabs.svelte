@@ -19,6 +19,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { tabs as tabsAttachment } from '$lib/attachments/tabs';
 	import { toggleSlider } from '$lib/attachments/toggle-slider';
 
@@ -34,7 +35,11 @@
 
 	{#each tabs as tab, index (index)}
 		<div class="panel" role="tabpanel" hidden={index !== defaultTab}>
-			{#if tab.image}<img src={tab.image.src} alt={tab.image.alt ?? ''} loading="lazy" />{/if}
+			{#if tab.image}<img
+					{...imageProps(tab.image.src, { sizes: '(min-width: 1024px) 560px, 100vw' })}
+					alt={tab.image.alt ?? ''}
+					loading="lazy"
+				/>{/if}
 			<div class="text">
 				<h4>{tab.title}</h4>
 				<p>{tab.description}</p>

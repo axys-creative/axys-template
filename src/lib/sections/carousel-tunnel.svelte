@@ -49,6 +49,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount, tick } from 'svelte';
 	import Button from '$lib/components/button.svelte';
 	import Eyebrow from '$lib/components/eyebrow.svelte';
@@ -363,7 +364,11 @@
 							aria-roledescription={clone ? undefined : 'slide'}
 							aria-hidden={clone ? 'true' : undefined}
 						>
-							<img src={slide.img.src} alt={slide.img.alt ?? ''} draggable="false" />
+							<img
+								{...imageProps(slide.img.src, { sizes: '100vw' })}
+								alt={slide.img.alt ?? ''}
+								draggable="false"
+							/>
 							{#if slide.eyebrow || slide.title}
 								<div class="caption">
 									{#if slide.eyebrow}<Eyebrow text={slide.eyebrow} />{/if}

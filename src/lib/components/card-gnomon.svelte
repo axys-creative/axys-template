@@ -15,7 +15,7 @@
 		angle?: number;
 		/** The stroke width in px. */
 		borderWidth?: number;
-		img?: { src: string; alt?: string; eager?: boolean };
+		img?: { src: string; alt?: string; eager?: boolean; sizes?: string };
 		/** Anything else the card holds, on top of the image. */
 		children?: Snippet;
 		class?: string;
@@ -23,6 +23,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { gnomonShape } from '$lib/utils/gnomon';
 
 	let {
@@ -59,7 +60,11 @@
 
 	<div class="inner" style="clip-path: url(#{id})">
 		{#if img?.src}
-			<img src={img.src} alt={img.alt ?? ''} loading={img.eager ? 'eager' : 'lazy'} />
+			<img
+				{...imageProps(img.src, { sizes: img.sizes ?? '(min-width: 768px) 400px, 80vw' })}
+				alt={img.alt ?? ''}
+				loading={img.eager ? 'eager' : 'lazy'}
+			/>
 		{/if}
 		{#if children}<div class="body">{@render children()}</div>{/if}
 	</div>

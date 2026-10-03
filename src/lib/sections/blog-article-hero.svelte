@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { parallax } from '$lib/attachments/parallax';
 	import Tag from '$lib/components/tag.svelte';
 	import { formatDate } from '$lib/utils/collection';
@@ -35,7 +36,13 @@
 
 		{#if coverImage}
 			<figure>
-				<img src={coverImage} alt={coverAlt} {@attach parallax({ from: -5, to: 5 })} />
+				<img
+					{...imageProps(coverImage, { sizes: '(min-width: 1280px) 1152px, 100vw' })}
+					alt={coverAlt}
+					loading="eager"
+					fetchpriority="high"
+					{@attach parallax({ from: -5, to: 5 })}
+				/>
 			</figure>
 		{/if}
 	</div>

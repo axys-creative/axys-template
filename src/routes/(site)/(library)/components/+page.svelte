@@ -29,6 +29,7 @@
 		cardGnomonProps,
 		carouselProps,
 		counterProps,
+		footerScrollRevealProps,
 		formProps,
 		imageCircleProps,
 		imageColumnsProps,
@@ -348,6 +349,13 @@
 			<Counter digit={1529718} comma prefix="$" label="'Ticker' style" ticker />
 		</div>
 	</LibrarySection>
+
+	<LibrarySection
+		title="Footer Scroll Reveal"
+		type="Component"
+		description="A footer that sits fixed to the bottom of the screen, behind the page. The page slides away as you reach its end and uncovers it, whatever the page is made of: it needs no background color on the content, so background effects still show. The footer is clipped to a box at the end of the page that is exactly as tall as it is, which also keeps it from covering anything. Choose it with Footer template in Site Defaults, and edit it under Global in the CMS. Without JavaScript it is an ordinary footer at the end of the page."
+		props={footerScrollRevealProps}
+	/>
 
 	<LibrarySection
 		title="Form"

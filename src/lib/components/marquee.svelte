@@ -29,6 +29,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 
 	let {
@@ -133,7 +134,12 @@
 		<span>{text}</span>
 	{:else if images}
 		{#each images as image, index (index)}
-			<img src={image.src} alt={image.alt} width={image.width} height={image.height} />
+			<img
+				{...imageProps(image.src, { sizes: '300px' })}
+				alt={image.alt}
+				width={image.width}
+				height={image.height}
+			/>
 		{/each}
 	{/if}
 {/snippet}

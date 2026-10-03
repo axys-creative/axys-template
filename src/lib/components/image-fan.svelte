@@ -24,6 +24,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { onMount } from 'svelte';
 
 	let {
@@ -75,7 +76,7 @@
 				<div class="reveal">
 					<figure class="card">
 						<img
-							src={image.src}
+							{...imageProps(image.src, { sizes: '200px' })}
 							alt={image.alt ?? ''}
 							width={image.width ?? 400}
 							height={image.height ?? 533}

@@ -20,6 +20,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import Tag from './tag.svelte';
 
 	let {
@@ -50,8 +51,18 @@
 	role="group"
 	aria-label="Image comparison"
 >
-	<img class="image" src={after.src} alt={after.alt ?? ''} draggable="false" />
-	<img class="image before" src={before.src} alt={before.alt ?? ''} draggable="false" />
+	<img
+		class="image"
+		{...imageProps(after.src, { sizes: '(min-width: 1280px) 1152px, 100vw' })}
+		alt={after.alt ?? ''}
+		draggable="false"
+	/>
+	<img
+		class="image before"
+		{...imageProps(before.src, { sizes: '(min-width: 1280px) 1152px, 100vw' })}
+		alt={before.alt ?? ''}
+		draggable="false"
+	/>
 
 	{#if beforeLabel}
 		<span class="label start" aria-hidden="true"><Tag text={beforeLabel} type="glass" /></span>

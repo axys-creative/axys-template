@@ -9,6 +9,7 @@
 </script>
 
 <script lang="ts">
+	import { imageProps } from '$lib/utils/image';
 	import { formatDate } from '$lib/utils/collection';
 	import Tag from './tag.svelte';
 
@@ -18,7 +19,11 @@
 <a class="post-card" class:featured href="/blog/{post.slug}">
 	{#if post.coverImage}
 		<figure>
-			<img src={post.coverImage} alt={post.coverAlt ?? ''} loading="lazy" />
+			<img
+				{...imageProps(post.coverImage, { sizes: '(min-width: 1024px) 560px, 100vw' })}
+				alt={post.coverAlt ?? ''}
+				loading="lazy"
+			/>
 		</figure>
 	{/if}
 

@@ -1167,6 +1167,25 @@ export const heroSimpleProps = props(
 	['align', 'Defaults to `center`.']
 );
 
+export const footerScrollRevealProps = props(
+	['title', 'A string, the large heading on the left.'],
+	['cta', 'The buttons under the title: `{ primary, secondary }`, as in Cta Group.'],
+	['message', 'A string, a line of text beside the title.'],
+	[
+		'bigLink',
+		'`{ text, textDescription, url, newTab }`, a large underlined link, such as an email address.'
+	],
+	['socialLinks', 'The social links, from the global Social Media settings.'],
+	['showThemeToggle', 'A boolean. Shows the Theme Toggle. Defaults to `false`.'],
+	['copyright', 'A string. Defaults to the year, the site name and "All rights reserved."'],
+	['credit', '`{ text, linkText, url }`, a line such as "Made in collaboration with" and a link.'],
+	[
+		'parallax',
+		'A boolean. The content rises and grows into place as the footer is revealed. It is off when motion is reduced. Defaults to `true`.'
+	],
+	['class', 'A string of extra classes.']
+);
+
 export const colorTokens = props(
 	['--color-bg', 'The page background.'],
 	['--color-surface', 'Cards, panels and other raised areas.'],
