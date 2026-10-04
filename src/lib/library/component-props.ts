@@ -973,6 +973,26 @@ export const carouselTunnelProps = props(
 	['class', 'A string of extra classes, such as `full` on a Library page.']
 );
 
+export const scrollTimelineProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description, cta',
+		'The section copy, from Section Copy (see the Style Guide).'
+	],
+	[
+		'events',
+		'An array of `{ date, title, description, image }`, two or more, in order. `date` is shown under its circle on the timeline. `image` is the event’s card on the circle, and every event needs one in the `circle` variant. Required.'
+	],
+	[
+		'variant',
+		'`details | circle`. `details` shows the active event’s title and text under the timeline. `circle` shows a ring of the events’ images, with the ring turned to the active card (as petals), and the active card and two on each side in view. It is an arc, not a full circle: the cards sit 40° apart, so a few events never wrap round, and the event’s details take the place of the section copy. Defaults to `details`.'
+	],
+	[
+		'copyLayout',
+		'`center | split`. `center` stacks the copy in the middle. `split` puts the eyebrow and title on the left and the description on the right. Defaults to `center`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
 export const scrollStackProps = props(
 	[
 		'eyebrowText, eyebrowIcon, title, description, cta',
@@ -1184,6 +1204,22 @@ export const footerScrollRevealProps = props(
 		'A boolean. The content rises and grows into place as the footer is revealed. It is off when motion is reduced. Defaults to `true`.'
 	],
 	['class', 'A string of extra classes.']
+);
+
+export const headerIslandProps = props(
+	[
+		'logo, links, ctas, socialLinks, navFooterLinks, adminLogin, showSkipLink, navButton',
+		'The content every header takes (`HeaderNavProps`). It lives in one shared file, `global/navigation.json`, edited under Navigation in the CMS, so swapping header templates never means retyping the links.'
+	],
+	[
+		'glass',
+		'A boolean. The glass attachment as the island’s background: refraction in Chrome, blur elsewhere. Wins over `blur`. Defaults to `false`.'
+	],
+	['blur', 'A boolean. A plain translucent, blurred background. Defaults to `false`.'],
+	[
+		'hideOnScroll',
+		'A boolean. The island slides up out of view while scrolling down, and back as you scroll up. It stays while it is open or focused. Defaults to `true`.'
+	]
 );
 
 export const colorTokens = props(

@@ -8,6 +8,7 @@
 	import PageTransition from '$lib/components/page-transition.svelte';
 	import ScrollProgress from '$lib/components/scroll-progress.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
+	import HeaderIsland, { type HeaderIslandProps } from '$lib/components/header-island.svelte';
 	import HeaderSimple, { type HeaderSimpleProps } from '$lib/components/header-simple.svelte';
 	import logo from '$lib/content/global/logo.json';
 	import social from '$lib/content/global/social-media.json';
@@ -15,6 +16,8 @@
 	import footerScrollReveal from '$lib/content/global/footer-scroll-reveal.json';
 	import site from '$lib/content/meta/site.json';
 	import header from '$lib/content/global/header-simple.json';
+	import headerIsland from '$lib/content/global/header-island.json';
+	import navigation from '$lib/content/global/navigation.json';
 
 	let { children } = $props();
 </script>
@@ -23,7 +26,21 @@
 <PageTransition name="fade" />
 
 <div class="site">
-	<HeaderSimple {...header as HeaderSimpleProps} {logo} socialLinks={social.links} />
+	{#if site.headerTemplate === 'island'}
+		<HeaderIsland
+			{...navigation as HeaderIslandProps}
+			{...headerIsland as HeaderIslandProps}
+			{logo}
+			socialLinks={social.links}
+		/>
+	{:else}
+		<HeaderSimple
+			{...navigation as HeaderSimpleProps}
+			{...header as HeaderSimpleProps}
+			{logo}
+			socialLinks={social.links}
+		/>
+	{/if}
 	<main id="main" tabindex="-1">
 		{@render children()}
 	</main>

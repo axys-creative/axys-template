@@ -1,15 +1,8 @@
 <script module lang="ts">
 	import type { ButtonProps } from './button.svelte';
-	import type { NavLink } from './menu-links.svelte';
-	import type { LogoProps } from './logo.svelte';
-	import type { SiteNavButtonProps } from './site-nav-button.svelte';
-	import type { SocialLink } from './social-links.svelte';
+	import type { HeaderNavProps } from './header-types';
 
-	export type HeaderSimpleProps = {
-		logo?: LogoProps;
-		links?: NavLink[];
-		ctas?: ButtonProps[];
-		socialLinks?: SocialLink[];
+	export type HeaderSimpleProps = HeaderNavProps & {
 		linkPlacement?: 'start' | 'center' | 'end';
 		float?: boolean;
 		/** A translucent, blurred background. */
@@ -17,13 +10,6 @@
 		/** The glass attachment's background: refraction in Chrome, blur elsewhere. Wins over `blur`. */
 		glass?: boolean;
 		hideOnScroll?: boolean;
-		showSkipLink?: boolean;
-		/** The button that opens the mobile navigation. */
-		navButton?: Omit<SiteNavButtonProps, 'expanded' | 'controls'>;
-		/** Small links at the bottom of the mobile navigation. */
-		navFooterLinks?: ButtonProps[];
-		/** Adds an "Admin Log In" link to the bottom of the mobile navigation. */
-		adminLogin?: boolean;
 	};
 </script>
 

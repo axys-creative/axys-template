@@ -221,7 +221,7 @@
 
 	.bottom {
 		display: flex;
-		align-items: center;
+		align-items: end;
 		justify-content: space-between;
 		width: 100%;
 
@@ -246,6 +246,8 @@
 
 	.bottom-right {
 		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
 		align-items: center;
 		justify-content: space-between;
 
@@ -263,5 +265,7 @@
 	.credit {
 		font-size: 14px;
 		color: var(--color-text-muted);
+		flex-shrink: 0;
+		order: 1;
 	}
 </style>

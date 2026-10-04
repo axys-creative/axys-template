@@ -13,6 +13,7 @@
 		planSelectionProps,
 		scrollHorizontalProps,
 		scrollStackProps,
+		scrollTimelineProps,
 		tunnelProps,
 		workGalleryProps
 	} from '$lib/library/component-props';
@@ -27,6 +28,7 @@
 	import PlanSelection from '$lib/sections/plan-selection.svelte';
 	import ScrollHorizontal from '$lib/sections/scroll-horizontal.svelte';
 	import ScrollStack from '$lib/sections/scroll-stack.svelte';
+	import ScrollTimeline from '$lib/sections/scroll-timeline.svelte';
 	import Tunnel from '$lib/sections/tunnel.svelte';
 	import WorkGallery from '$lib/sections/work-gallery.svelte';
 	import MouseCursor from '$lib/components/mouse-cursor.svelte';
@@ -174,6 +176,53 @@
 		year,
 		url: String(url),
 		img: { src: `/images/img-sample-${(index % 7) + 1}.jpg`, alt: '' }
+	}));
+	const history = [
+		[
+			'2018',
+			'The first sketch',
+			'A napkin, a pen and an idea about how a studio could work with its clients.'
+		],
+		[
+			'2019',
+			'A studio opens',
+			'The first small team, a shared space and a handful of founding clients.'
+		],
+		[
+			'2020',
+			'A studio opens',
+			'The first small team, a shared space and a handful of founding clients.'
+		],
+		[
+			'2021',
+			'A process of our own',
+			'Years of projects distilled into a way of working that we could write down.'
+		],
+		[
+			'2022',
+			'The product years',
+			'Moving from one-off sites to products that grow with the people who use them.'
+		],
+		[
+			'2023',
+			'The product years',
+			'Moving from one-off sites to products that grow with the people who use them.'
+		],
+		[
+			'2024',
+			'A bigger table',
+			'More designers, more developers and a library of parts we reuse everywhere.'
+		],
+		[
+			'2026',
+			'What comes next',
+			'Faster, calmer and more careful, with the same curiosity we started with.'
+		]
+	].map(([date, title, description], index) => ({
+		date,
+		title,
+		description,
+		image: { src: `/images/img-sample-${(index % 7) + 1}.jpg`, alt: title }
 	}));
 	const plans = [
 		{
@@ -468,6 +517,31 @@
 			nav
 			size="half"
 			placement="right"
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Scroll Timeline"
+		type="Section"
+		description="A timeline that advances as you scroll. The timeline pins while the section copy is still leaving the screen: a line from the first circle to the last, with a circle for each event. The active one grows, takes the brand color and slides to the middle. The `details` variant shows the event's title and text beneath. The `circle` variant shows the top of a large ring of the events' images, turned so the active card is at the top, with the event's details taking the place of the section copy. Circles are buttons that scroll to their event, and focusing one with the keyboard does the same, so its date is always in view. The circle variant shows the active card and two on each side, on an open arc rather than a full circle. Without JavaScript, or with reduced motion, it is a plain list of events."
+		props={scrollTimelineProps}
+	>
+		<ScrollTimeline
+			class="full"
+			eyebrowText="Our story"
+			title="How we got here"
+			description="Scroll to move through the years."
+			cta={{ primary: { text: 'Meet the team', url: '/' } }}
+			events={history}
+		/>
+		<ScrollTimeline
+			class="full"
+			variant="circle"
+			copyLayout="split"
+			eyebrowText="Our story"
+			title="A timeline on a circle"
+			description="Scroll to turn the circle to each year. The event takes the place of this copy."
+			events={history}
 		/>
 	</LibrarySection>
 

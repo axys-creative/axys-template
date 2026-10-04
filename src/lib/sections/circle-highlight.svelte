@@ -180,7 +180,7 @@
 		padding: 48px var(--body-padding);
 
 		@include mixins.max-lg {
-			--ring-size: min(84vw, 420px);
+			--ring-size: min(72vw, 420px);
 
 			flex-direction: column;
 			gap: 48px;
@@ -193,7 +193,7 @@
 		justify-content: center;
 
 		@include mixins.max-lg {
-			--ring-size: min(84vw, 420px);
+			--ring-size: min(72vw, 420px);
 		}
 	}
 

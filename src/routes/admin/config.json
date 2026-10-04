@@ -540,56 +540,10 @@
 			},
 			"files": [
 				{
-					"name": "header_simple",
-					"label": "Header",
-					"file": "src/lib/content/global/header-simple.json",
+					"name": "navigation",
+					"label": "Navigation",
+					"file": "src/lib/content/global/navigation.json",
 					"fields": [
-						{
-							"name": "float",
-							"label": "Floating",
-							"widget": "boolean",
-							"default": true,
-							"required": false,
-							"hint": "Inset, rounded bar with an outside gap."
-						},
-						{
-							"name": "glass",
-							"label": "Glass background",
-							"widget": "boolean",
-							"default": true,
-							"required": false,
-							"hint": "Frosted glass with refracting edges in Chrome. Other browsers get the blur."
-						},
-						{
-							"name": "blur",
-							"label": "Blur background",
-							"widget": "boolean",
-							"default": false,
-							"required": false,
-							"hint": "A plain translucent, blurred background. Ignored when Glass is on."
-						},
-						{
-							"name": "hideOnScroll",
-							"label": "Hide on scroll down",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showSkipLink",
-							"label": "Show skip to content link",
-							"widget": "boolean",
-							"default": true,
-							"required": false,
-							"hint": "Accessibility. Leave on."
-						},
-						{
-							"name": "linkPlacement",
-							"label": "Link placement",
-							"widget": "select",
-							"options": ["start", "center", "end"],
-							"default": "center"
-						},
 						{
 							"name": "links",
 							"label": "Navigation links",
@@ -725,43 +679,6 @@
 							]
 						},
 						{
-							"name": "navButton",
-							"label": "Mobile menu button",
-							"widget": "object",
-							"fields": [
-								{
-									"name": "symbol",
-									"label": "Symbol",
-									"widget": "select",
-									"options": ["burger", "chocolate", "kebab"],
-									"default": "burger",
-									"hint": "Burger is two lines, chocolate is nine dots, kebab is three vertical dots."
-								},
-								{
-									"name": "shape",
-									"label": "Shape",
-									"widget": "select",
-									"options": ["square", "round"],
-									"default": "square"
-								},
-								{
-									"name": "type",
-									"label": "Style",
-									"widget": "select",
-									"options": ["icon", "button"],
-									"default": "icon",
-									"hint": "Button puts the symbol in a bordered box."
-								},
-								{
-									"name": "text",
-									"label": "Text beside the symbol",
-									"widget": "string",
-									"required": false,
-									"hint": "Optional, e.g. menu."
-								}
-							]
-						},
-						{
 							"name": "navFooterLinks",
 							"label": "Mobile menu footer links",
 							"widget": "list",
@@ -798,10 +715,175 @@
 						},
 						{
 							"name": "adminLogin",
-							"label": "Show Admin Log In link in mobile menu",
+							"label": "Show Admin Log In link in the menu",
 							"widget": "boolean",
 							"default": true,
 							"required": false
+						}
+					]
+				},
+				{
+					"name": "header_simple",
+					"label": "Header (simple)",
+					"file": "src/lib/content/global/header-simple.json",
+					"fields": [
+						{
+							"name": "float",
+							"label": "Floating",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Inset, rounded bar with an outside gap."
+						},
+						{
+							"name": "glass",
+							"label": "Glass background",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Frosted glass with refracting edges in Chrome. Other browsers get the blur."
+						},
+						{
+							"name": "blur",
+							"label": "Blur background",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "A plain translucent, blurred background. Ignored when Glass is on."
+						},
+						{
+							"name": "hideOnScroll",
+							"label": "Hide on scroll down",
+							"widget": "boolean",
+							"default": true,
+							"required": false
+						},
+						{
+							"name": "showSkipLink",
+							"label": "Show skip to content link",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Accessibility. Leave on."
+						},
+						{
+							"name": "linkPlacement",
+							"label": "Link placement",
+							"widget": "select",
+							"options": ["start", "center", "end"],
+							"default": "center"
+						},
+						{
+							"name": "navButton",
+							"label": "Mobile menu button",
+							"widget": "object",
+							"fields": [
+								{
+									"name": "symbol",
+									"label": "Symbol",
+									"widget": "select",
+									"options": ["burger", "chocolate", "kebab"],
+									"default": "burger",
+									"hint": "Burger is two lines, chocolate is nine dots, kebab is three vertical dots."
+								},
+								{
+									"name": "shape",
+									"label": "Shape",
+									"widget": "select",
+									"options": ["square", "round"],
+									"default": "square"
+								},
+								{
+									"name": "type",
+									"label": "Style",
+									"widget": "select",
+									"options": ["icon", "button"],
+									"default": "icon",
+									"hint": "Button puts the symbol in a bordered box."
+								},
+								{
+									"name": "text",
+									"label": "Text beside the symbol",
+									"widget": "string",
+									"required": false,
+									"hint": "Optional, e.g. menu."
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "header_island",
+					"label": "Header (island)",
+					"file": "src/lib/content/global/header-island.json",
+					"fields": [
+						{
+							"name": "glass",
+							"label": "Glass background",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Frosted glass with refracting edges in Chrome. Other browsers get the blur."
+						},
+						{
+							"name": "blur",
+							"label": "Blur background",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "A plain translucent, blurred background. Ignored when Glass is on."
+						},
+						{
+							"name": "hideOnScroll",
+							"label": "Hide on scroll down",
+							"widget": "boolean",
+							"default": true,
+							"required": false
+						},
+						{
+							"name": "showSkipLink",
+							"label": "Show skip to content link",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Accessibility. Leave on."
+						},
+						{
+							"name": "navButton",
+							"label": "Menu button",
+							"widget": "object",
+							"fields": [
+								{
+									"name": "symbol",
+									"label": "Symbol",
+									"widget": "select",
+									"options": ["burger", "chocolate", "kebab"],
+									"default": "burger",
+									"hint": "Burger is two lines, chocolate is nine dots, kebab is three vertical dots."
+								},
+								{
+									"name": "shape",
+									"label": "Shape",
+									"widget": "select",
+									"options": ["square", "round"],
+									"default": "square"
+								},
+								{
+									"name": "type",
+									"label": "Style",
+									"widget": "select",
+									"options": ["icon", "button"],
+									"default": "icon",
+									"hint": "Button puts the symbol in a bordered box."
+								},
+								{
+									"name": "text",
+									"label": "Text beside the symbol",
+									"widget": "string",
+									"required": false,
+									"hint": "Optional, e.g. menu."
+								}
+							]
 						}
 					]
 				},
@@ -1305,6 +1387,23 @@
 							],
 							"default": "simple",
 							"hint": "Which footer the site uses. Each is edited in its own Footer entry under Global."
+						},
+						{
+							"name": "headerTemplate",
+							"label": "Header template",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Simple",
+									"value": "simple"
+								},
+								{
+									"label": "Island",
+									"value": "island"
+								}
+							],
+							"default": "simple",
+							"hint": "Which header the site uses. The links and buttons are shared, under Navigation. The look is edited in each header's own entry."
 						},
 						{
 							"name": "author",

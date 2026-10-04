@@ -37,6 +37,15 @@
 
 	const left = $derived(direction === 'left');
 
+	// Cards swing past the edge of the circle's square, so the stacked mobile box needs room above the ring. This is
+	// how far the ring's top edge sits above the box, as a percent of its width.
+	const lift = $derived.by(() => {
+		const total = Math.max(images.length, 2);
+		const width = circle?.itemWidth ?? 24;
+		const radius = ((circle?.gap ?? 1.15) * width) / (2 * Math.sin(Math.PI / total));
+		return Math.max(0, radius + width * 0.5 - 50 + 2);
+	});
+
 	// Spins a circle from one side of upright to the other as the section crosses the screen.
 	const spin =
 		(side: 1 | -1): Attachment<HTMLElement> =>
@@ -72,7 +81,11 @@
 		};
 </script>
 
-<section class="hero-image-circle {className ?? ''}" class:left style="--offset: {offset}%">
+<section
+	class="hero-image-circle {className ?? ''}"
+	class:left
+	style="--offset: {offset}%; --lift: {lift.toFixed(2)}"
+>
 	<div class="inner">
 		<div class="circle first">
 			<div class="spin" {@attach spin(-1)}>
@@ -128,8 +141,13 @@
 		margin-inline: auto;
 		padding: var(--body-padding-double) var(--body-padding);
 
+		// Stacked, the section is about a screen tall. The copy keeps its room at the top and the circle takes what is
+		// left, rather than the other way round, and sits at the bottom edge.
 		@include mixins.max-lg {
 			flex-direction: column;
+			justify-content: flex-start;
+			min-height: 100lvh;
+			padding-block-end: 0;
 		}
 	}
 
@@ -144,8 +162,11 @@
 			// Runs edge to edge, past the section's side padding.
 			width: calc(100% + var(--body-padding) * 2);
 			margin-inline: calc(var(--body-padding) * -1);
-			// The circle stays round and the box shows its top half.
-			aspect-ratio: 2 / 1;
+			// The circle stays round and the box shows its top half, plus the room the cards need above it.
+			aspect-ratio: 100 / calc(50 + var(--lift, 0));
+			// Never more than about half a screen, so a wide phone does not show a huge circle.
+			max-height: 55lvh;
+			margin-block-start: auto;
 			overflow: hidden;
 		}
 	}
@@ -189,6 +210,10 @@
 
 	.spin {
 		width: 100%;
+
+		@include mixins.max-lg {
+			margin-block-start: calc(var(--lift, 0) * 1%);
+		}
 		will-change: transform;
 	}
 </style>

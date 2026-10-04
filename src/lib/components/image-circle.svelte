@@ -15,6 +15,12 @@
 		bloom?: 'left' | 'right' | 'top';
 		/** Crops the cards that swing past the square. Turn off to let them bleed out of it. */
 		clip?: boolean;
+		/** How wide the cards are drawn, for choosing the file to download. Defaults to `160px`. */
+		sizes?: string;
+		/** Degrees between neighboring cards. Defaults to an even split of the full circle. Smaller than that leaves the ring open, as an arc. */
+		step?: number;
+		/** Holds the ring at this angle (degrees, clockwise) instead of spinning on its own, and eases between angles when it changes. */
+		rotation?: number;
 		class?: string;
 	};
 </script>
@@ -29,23 +35,31 @@
 		duration = 40,
 		bloom,
 		clip = true,
+		sizes = '160px',
+		step: stepOverride,
+		rotation,
 		class: className
 	}: ImageCircleProps = $props();
 
-	const step = $derived(360 / (images.length > 1 ? images.length : 2));
+	const step = $derived(stepOverride ?? 360 / (images.length > 1 ? images.length : 2));
 </script>
 
 <div
-	class="image-circle {direction} {clip ? 'clip' : ''} {bloom ? `bloom-${bloom}` : ''} {className ??
-		''}"
-	style="--step: {step}; --gap: {gap}; --item-width: {itemWidth}; --duration: {duration}s"
+	class="image-circle {direction} {clip ? 'clip' : ''} {bloom ? `bloom-${bloom}` : ''} {rotation !==
+	undefined
+		? 'held'
+		: ''} {className ?? ''}"
+	style="--step: {step}; --gap: {gap}; --item-width: {itemWidth}; --duration: {duration}s{rotation !==
+	undefined
+		? `; --rotate: ${rotation}deg`
+		: ''}"
 >
 	<div class="ring">
 		{#each images as image, index (index)}
 			<div class="item" style="--i: {index}">
 				<figure class="card">
 					<img
-						{...imageProps(image.src, { sizes: '160px' })}
+						{...imageProps(image.src, { sizes })}
 						alt={image.alt ?? ''}
 						width={image.width ?? 400}
 						height={image.height ?? 400}
@@ -100,6 +114,9 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
+		// The card sits in the middle of this square, so it stays on the circle's path however the ring is turned.
+		display: grid;
+		place-items: center;
 		width: var(--w);
 		aspect-ratio: 1;
 		transform: translate(-50%, -50%) translate(var(--x), var(--y));
@@ -128,6 +145,27 @@
 		object-fit: cover;
 		user-select: none;
 		-webkit-user-drag: none;
+	}
+
+	// Held at an angle: no spin. Cards turn against the ring to stay upright, unless a bloom turns them its own way.
+	.held {
+		.ring {
+			animation: none;
+			rotate: var(--rotate, 0deg);
+
+			@include mixins.mq-motion-allow {
+				transition: rotate 0.9s var(--ease);
+			}
+		}
+
+		.card {
+			animation: none;
+			rotate: calc(var(--rotate, 0deg) * -1);
+
+			@include mixins.mq-motion-allow {
+				transition: rotate 0.9s var(--ease);
+			}
+		}
 	}
 
 	.right {

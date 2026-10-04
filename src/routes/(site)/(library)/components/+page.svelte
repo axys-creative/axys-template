@@ -30,6 +30,7 @@
 		carouselProps,
 		counterProps,
 		footerScrollRevealProps,
+		headerIslandProps,
 		formProps,
 		imageCircleProps,
 		imageColumnsProps,
@@ -382,6 +383,13 @@
 			</div>
 		</LibrarySection>
 	</LibrarySection>
+
+	<LibrarySection
+		title="Header Island"
+		type="Component"
+		description="A header that floats over the page as a small rounded island, and takes no room in it. Its navigation is a dropdown at every screen size: the menu button grows the island downward to show the links (with their own dropdowns), the buttons, the social links and the small links. It closes with Escape, a press anywhere else, focus leaving it, or choosing a link. Choose it with Header template in Site Defaults. The content is shared with Header Simple, so switching is one setting."
+		props={headerIslandProps}
+	/>
 
 	<LibrarySection
 		title="Image Circle"

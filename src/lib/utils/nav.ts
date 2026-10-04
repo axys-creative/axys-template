@@ -1,5 +1,5 @@
 // LIBRARY: DELETE ME. Only the documentation pages use this lookup for their eyebrow icons.
-import header from '$lib/content/global/header-simple.json';
+import header from '$lib/content/global/navigation.json';
 
 type NavItem = { text: string; url?: string; iconStart?: string; links?: NavItem[] };
 
