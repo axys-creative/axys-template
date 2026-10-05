@@ -163,3 +163,59 @@ export function gnomonShape({ cutouts, depth, length, radius, angle }: GnomonOpt
 
 	return { stroke: path(1), clip: path(0.01), labels };
 }
+
+/**
+ * A rounded rectangle of the given size in px with one rectangular notch cut from its top right corner, as an SVG
+ * path (also valid in CSS `path()`). Unlike `gnomonShape`, which is square and stretches, this keeps its corners
+ * round at any width and height. The inner corner of the notch is rounded the other way.
+ */
+export function notchedBoxPath(
+	width: number,
+	height: number,
+	notchWidth: number,
+	notchHeight: number,
+	radius: number
+) {
+	const nw = Math.min(notchWidth, width - radius * 2);
+	const nh = Math.min(notchHeight, height - radius * 2);
+	const r = Math.max(0, Math.min(radius, width / 2, height / 2));
+	const inner = Math.min(r, nw / 2, nh / 2);
+	const x = width - nw;
+	const round = (value: number) => +value.toFixed(2);
+
+	return [
+		`M${round(r)} 0`,
+		`H${round(x - r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(x)} ${round(r)}`,
+		`V${round(nh - inner)}`,
+		`A${round(inner)} ${round(inner)} 0 0 0 ${round(x + inner)} ${round(nh)}`,
+		`H${round(width - r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(width)} ${round(nh + r)}`,
+		`V${round(height - r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(width - r)} ${round(height)}`,
+		`H${round(r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 0 ${round(height - r)}`,
+		`V${round(r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(r)} 0`,
+		'Z'
+	].join(' ');
+}
+
+/** A plain rounded rectangle of the given size in px, as an SVG path (also valid in CSS `path()`). */
+export function roundedBoxPath(width: number, height: number, radius: number) {
+	const r = Math.max(0, Math.min(radius, width / 2, height / 2));
+	const round = (value: number) => +value.toFixed(2);
+
+	return [
+		`M${round(r)} 0`,
+		`H${round(width - r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(width)} ${round(r)}`,
+		`V${round(height - r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(width - r)} ${round(height)}`,
+		`H${round(r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 0 ${round(height - r)}`,
+		`V${round(r)}`,
+		`A${round(r)} ${round(r)} 0 0 1 ${round(r)} 0`,
+		'Z'
+	].join(' ');
+}

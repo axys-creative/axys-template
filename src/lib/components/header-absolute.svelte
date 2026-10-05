@@ -96,6 +96,7 @@ so a link or button anywhere else on the page stays clickable, even right under 
 	class:hide={hideOnScroll}
 	class:blend
 	data-nav-open={open || undefined}
+	data-header-parts
 	{@attach position === 'fixed' ? watchScroll() : undefined}
 >
 	{#if showSkipLink}

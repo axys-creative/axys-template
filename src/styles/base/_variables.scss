@@ -39,6 +39,8 @@ $green: #a4d1a2;
 	--color-border: #{$grey-dark};
 	--color-accent: #{$coral};
 	--color-accent-text: #{$coral};
+	// Text and icons on an accent background are the same in both themes.
+	--color-on-accent: #{$white};
 	--color-secondary: #{$blue};
 	--color-tertiary: #{$green};
 	--color-error: #dc143c;

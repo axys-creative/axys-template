@@ -42,7 +42,8 @@
 		...(adminLogin ? [{ text: 'Admin Log In', url: '/admin' }] : [])
 	]);
 
-	const EXPAND_MS = 400;
+	// The dropdown starts while the island is still widening, so the two steps run into each other.
+	const OPEN_DELAY_MS = 250;
 	const COLLAPSE_MS = 250;
 
 	// `wide` is the island's first step (full content width), `open` the second (the dropdown).
@@ -58,7 +59,7 @@
 	const show = () => {
 		clearTimeout(timer);
 		wide = true;
-		if (staged()) timer = setTimeout(() => (open = true), EXPAND_MS);
+		if (staged()) timer = setTimeout(() => (open = true), OPEN_DELAY_MS);
 		else open = true;
 	};
 
@@ -217,7 +218,7 @@
 
 		&.wide {
 			--island-width: 560px;
-			--width-time: 0.4s;
+			--width-time: 0.55s;
 
 			@include mixins.min-md {
 				--island-width: min(calc(100% - var(--body-padding) * 2), var(--content-width));

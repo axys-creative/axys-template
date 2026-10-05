@@ -1,8 +1,8 @@
 {
 	"siteName": "axys template",
 	"url": "https://axys-template.netlify.app",
-	"headerTemplate": "island",
-	"footerTemplate": "simple",
+	"headerTemplate": "basic",
+	"footerTemplate": "gnomon",
 	"author": "Sample Author",
 	"contactEmail": "info@sample.com",
 	"themeColor": "#0a0a0a",

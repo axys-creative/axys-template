@@ -95,6 +95,9 @@
 	let duration = $state(0);
 	let trackWidth = $state(0);
 	let scrubbing = false;
+	// While dragging, the track follows the pointer; a paused video only reports its time once each seek lands.
+	let scrubTime = $state<number | null>(null);
+	const shownTime = $derived(scrubTime ?? currentTime);
 	let hovered = $state<number | null>(null);
 
 	// Heights in px by distance from the hovered tick; the ones past the list keep the resting height.
@@ -102,7 +105,7 @@
 	const tickHeight = (index: number) =>
 		hovered === null ? undefined : TICK_LIFT[Math.abs(index - hovered)];
 
-	const progress = $derived(duration ? Math.min(currentTime / duration, 1) : 0);
+	const progress = $derived(duration ? Math.min(shownTime / duration, 1) : 0);
 	const tickCount = $derived(Math.max(2, Math.floor(trackWidth / TICK_GAP)));
 	const playedTicks = $derived(Math.round(progress * tickCount));
 
@@ -121,7 +124,9 @@
 
 	const seek = (time: number) => {
 		if (!video || !duration) return;
-		video.currentTime = Math.min(Math.max(time, 0), duration);
+		const clamped = Math.min(Math.max(time, 0), duration);
+		if (scrubbing) scrubTime = clamped;
+		video.currentTime = clamped;
 	};
 
 	const seekTo = (event: PointerEvent) => {
@@ -141,7 +146,11 @@
 		}
 		if (scrubbing) seekTo(event);
 	};
-	const onPointerup = () => (scrubbing = false);
+	const onPointerup = () => {
+		scrubbing = false;
+		if (video?.seeking) video.addEventListener('seeked', () => (scrubTime = null), { once: true });
+		else scrubTime = null;
+	};
 
 	const onKeydown = (event: KeyboardEvent) => {
 		const steps: Record<string, number> = {
@@ -273,8 +282,8 @@
 				aria-label="Seek"
 				aria-valuemin={0}
 				aria-valuemax={Math.floor(duration) || 0}
-				aria-valuenow={Math.floor(currentTime)}
-				aria-valuetext="{format(currentTime)} of {format(duration)}"
+				aria-valuenow={Math.floor(shownTime)}
+				aria-valuetext="{format(shownTime)} of {format(duration)}"
 				style="--progress: {progress}"
 				bind:clientWidth={trackWidth}
 				onpointerdown={onPointerdown}
@@ -306,7 +315,7 @@
 				{/if}
 			</div>
 
-			<span class="time">{format(currentTime)}</span>
+			<span class="time">{format(shownTime)}</span>
 		</div>
 	{/if}
 </div>
@@ -317,7 +326,7 @@
 	.video-player {
 		--play-size: 80px;
 		--play-bg: var(--color-accent);
-		--play-color: var(--color-text);
+		--play-color: var(--color-on-accent);
 
 		width: 100%;
 
@@ -381,6 +390,7 @@
 
 		&.frosted {
 			background: var(--glass-tint, var(--color-glass));
+			color: var(--color-text);
 		}
 
 		&:focus-visible {
@@ -420,7 +430,7 @@
 		border: 0;
 		border-radius: 50%;
 		background: var(--color-accent);
-		color: var(--color-text);
+		color: var(--color-on-accent);
 		font-size: 20px;
 		cursor: pointer;
 
@@ -586,12 +596,13 @@
 		border: 0;
 		border-radius: 50%;
 		background: var(--color-accent);
-		color: var(--color-text);
+		color: var(--color-on-accent);
 		font-size: 22px;
 		cursor: pointer;
 
 		&.frosted {
 			background: var(--glass-tint, var(--color-glass));
+			color: var(--color-text);
 		}
 
 		&:focus-visible {
@@ -622,11 +633,16 @@
 
 		&.frosted {
 			background: var(--glass-tint, var(--color-glass));
+			color: var(--color-text);
 		}
 
 		.side-button {
 			flex-shrink: 0;
 			background: none;
+		}
+
+		&.frosted .side-button {
+			color: var(--color-text);
 		}
 
 		@include mixins.mq-motion-allow {

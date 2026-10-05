@@ -21,12 +21,17 @@
 		step?: number;
 		/** Holds the ring at this angle (degrees, clockwise) instead of spinning on its own, and eases between angles when it changes. */
 		rotation?: number;
+		/** A faint ring of thin ticks behind the cards, tracing the path they travel. */
+		ticks?: boolean;
 		class?: string;
 	};
 </script>
 
 <script lang="ts">
 	import { imageProps } from '$lib/utils/image';
+
+	const TICK_GAP = 8;
+
 	let {
 		images,
 		itemWidth = 24,
@@ -38,10 +43,19 @@
 		sizes = '160px',
 		step: stepOverride,
 		rotation,
+		ticks = true,
 		class: className
 	}: ImageCircleProps = $props();
 
+	let width = $state(0);
+
 	const step = $derived(stepOverride ?? 360 / (images.length > 1 ? images.length : 2));
+
+	// The same chord formula as the radius in the styles, in px, so the ticks sit TICK_GAP apart along the path.
+	const tickCount = $derived.by(() => {
+		const radius = (width * (itemWidth / 100) * gap) / (2 * Math.sin((step / 2) * (Math.PI / 180)));
+		return Math.max(24, Math.floor((2 * Math.PI * radius) / TICK_GAP));
+	});
 </script>
 
 <div
@@ -53,7 +67,16 @@
 	undefined
 		? `; --rotate: ${rotation}deg`
 		: ''}"
+	bind:clientWidth={width}
 >
+	{#if ticks && width}
+		<div class="ticks" aria-hidden="true">
+			{#each { length: tickCount }, index (index)}
+				<span class="tick" style="--tick-angle: {(index * 360) / tickCount}deg"></span>
+			{/each}
+		</div>
+	{/if}
+
 	<div class="ring">
 		{#each images as image, index (index)}
 			<div class="item" style="--i: {index}">
@@ -95,6 +118,22 @@
 
 	.clip {
 		overflow: hidden;
+	}
+
+	.ticks {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.tick {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 1px;
+		height: 16px;
+		background: var(--tick-color, var(--color-surface));
+		transform: translate(-50%, -50%) rotate(var(--tick-angle)) translateY(calc(var(--radius) * -1));
 	}
 
 	.ring {

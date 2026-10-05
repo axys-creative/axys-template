@@ -258,6 +258,9 @@
 					offset += sign * heading * speed * (elapsed / 1000);
 					scrolled += (scrollY * scrub - scrolled) * (1 - Math.exp(-elapsed / 120));
 					render(offset + sign * scrolled);
+				} else if (!visible) {
+					// Off screen it keeps up with the page, so it does not have to catch up when it comes into view.
+					scrolled = scrollY * scrub;
 				}
 				raf = requestAnimationFrame(tick);
 			};

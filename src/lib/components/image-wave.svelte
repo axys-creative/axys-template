@@ -93,6 +93,9 @@
 				track!.style.translate = `${-x}px 0`;
 				const clock = reverse ? bobClock : 0;
 				wave!.style.setProperty('--phase', `${clock + (offset / 1000) * duration}s`);
+			} else if (!visible) {
+				// Off screen the offset keeps up with the page, so it does not have to catch up when it comes into view.
+				offset = scrollY * scrub;
 			}
 			frame = requestAnimationFrame(tick);
 		};

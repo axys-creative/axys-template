@@ -151,7 +151,7 @@ export const sectionCopyProps = props(
 export const siteNavButtonProps = props(
 	[
 		'symbol',
-		'`burger | oreo | chocolate | kebab`. Two lines, two lines with rounded outer corners that twirl into the X, nine dots or three vertical dots. Defaults to `burger`.'
+		'`burger | oreo | stairs | chocolate | kebab`. Two lines, two lines with rounded outer corners that twirl into the X, three stepped lines (short, long, short) that form the X, nine dots or three vertical dots. Defaults to `burger`.'
 	],
 	['shape', '`square | round`. Defaults to `square`.'],
 	['type', '`icon | button`. `button` puts the symbol in a bordered box. Defaults to `icon`.'],
@@ -166,7 +166,11 @@ export const socialLinksProps = props(
 		'links',
 		'An array of `{ title, url, icon }`. The icon is a name from `static/icons` or an image path such as `/uploads/social-x.svg`. Required.'
 	],
-	['label', 'A string, the accessible name of the list. Defaults to `Social media`.']
+	['label', 'A string, the accessible name of the list. Defaults to `Social media`.'],
+	[
+		'solid',
+		'A boolean. Puts each icon in a box in the solid Button style: the accent color with the on-accent icon, emptying to an outline on hover. Defaults to `false`.'
+	]
 );
 
 export const tagProps = props(
@@ -400,6 +404,10 @@ export const imageCircleProps = props(
 		'bloom',
 		'`left | right | top`. Cards turn with the ring like petals instead of staying upright, with the left, right or top card upright. Off by default.'
 	],
+	[
+		'ticks',
+		'A boolean. A faint ring of thin surface-colored ticks behind the cards, tracing the path they travel. Set the color with `--tick-color`. Defaults to `true`.'
+	],
 	['class', 'A string of extra classes.'],
 	[
 		'clip',
@@ -580,7 +588,7 @@ export const marqueeProps = props(
 	['alternate', 'A boolean. Every other row moves the opposite way. Defaults to `true`.'],
 	[
 		'reverse',
-		'A boolean. The rows move backwards after the page scrolls up and forwards again after it scrolls down, turning around smoothly. Defaults to `false`.'
+		'A boolean. The rows move backwards after the page scrolls up and forwards again after it scrolls down, turning around smoothly. Anything inside the content with the class `marquee-flip` (an arrow, say) turns around with it, and in rows that run the other way. Defaults to `false`.'
 	],
 	[
 		'scrub',
@@ -654,9 +662,10 @@ export const avatarCycleProps = props(
 		'An array of three or more `{ src, alt, title, caption }`. Odd counts look the most balanced; with an even count, one side has an extra avatar. Required.'
 	],
 	['interval', 'A number, milliseconds between turns. Defaults to `4000`.'],
+	['autoplay', 'A boolean. Turns by itself. Defaults to `true`.'],
 	[
-		'autoplay',
-		'A boolean. Turns by itself, and pauses while the pointer or keyboard focus is on it. Defaults to `true`.'
+		'pauseOnHover',
+		'A boolean. Holds the turning while the pointer or keyboard focus is on the component, so a caption can be read. Defaults to `false`.'
 	],
 	[
 		'size',
@@ -1243,72 +1252,6 @@ export const heroSimpleProps = props(
 	['align', 'Defaults to `center`.']
 );
 
-export const footerScrollRevealProps = props(
-	['title', 'A string, the large heading on the left.'],
-	['cta', 'The buttons under the title: `{ primary, secondary }`, as in Cta Group.'],
-	['message', 'A string, a line of text beside the title.'],
-	[
-		'bigLink',
-		'`{ text, textDescription, url, newTab }`, a large underlined link, such as an email address.'
-	],
-	['socialLinks', 'The social links, from the global Social Media settings.'],
-	['showThemeToggle', 'A boolean. Shows the Theme Toggle. Defaults to `false`.'],
-	['copyright', 'A string. Defaults to the year, the site name and "All rights reserved."'],
-	['credit', '`{ text, linkText, url }`, a line such as "Made in collaboration with" and a link.'],
-	[
-		'parallax',
-		'A boolean. The content rises and grows into place as the footer is revealed. It is off when motion is reduced. Defaults to `true`.'
-	],
-	['class', 'A string of extra classes.']
-);
-
-export const headerAbsoluteProps = props(
-	[
-		'logo, links, ctas, socialLinks, navFooterLinks, adminLogin, showSkipLink, navButton',
-		'The content every header takes (`HeaderNavProps`), shared in `global/navigation.json`.'
-	],
-	[
-		'logoPlacement',
-		'`start | center | end`. Where the logo sits along the top. Defaults to `start`.'
-	],
-	[
-		'controlsPlacement',
-		'`start | center | end`. Where the buttons and the menu button sit. Pick a different side from the logo, or they overlap. Defaults to `end`.'
-	],
-	[
-		'position',
-		'`fixed | absolute`. `fixed` stays on screen while the page scrolls. `absolute` is part of the top of the page and scrolls away with it. Defaults to `fixed`.'
-	],
-	[
-		'hideOnScroll',
-		'A boolean. The logo and the menu button slide out of view while scrolling down and back as you scroll up, unless the menu is open or focus is inside. Only with `fixed`. Defaults to `false`. With the `links` layout the links always lift off the screen on the way down, and the strap slides right until only its loop and icon show, except on an ultra-wide screen where it stays whole.'
-	],
-	[
-		'blend',
-		'A boolean. Draws over the page in inverted colors (`mix-blend-mode: difference`), so the logo and buttons stay readable over any picture or color. Works best with text or underline buttons. Defaults to `false`.'
-	],
-	[
-		'desktopLayout',
-		'`links | controls`. `links` shows the navigation links in the middle from the `lg` breakpoint up, with a Strap of social links in the corner, and the menu button only on smaller screens. `controls` keeps the buttons and the menu button at every size. Defaults to `links`.'
-	],
-	[
-		'mobileNav',
-		'`slide | overlay`. The menu on small screens. `slide` is a panel from the right over about three quarters of the screen (all of it on the smallest), with rounded left corners, no backdrop, and the social links in a strap at its bottom right. A press beside it closes it. `overlay` fills the screen. Defaults to `slide`.'
-	],
-	[
-		'navSurface',
-		'`solid | blur | glass`. The background of the menu panel. `blur` is translucent and blurred, `glass` uses the glass attachment (refraction in Chrome, blur elsewhere). Defaults to `solid`.'
-	],
-	[
-		'strapIcon',
-		'A string, an icon name from `static/icons` for the Strap’s loop. A placeholder until a site picks its own. Defaults to `orbit`.'
-	],
-	[
-		'showCtas',
-		'A boolean. Shows the buttons beside the menu button from the `lg` breakpoint up. Only with the `controls` layout. Defaults to `true`.'
-	]
-);
-
 export const strapProps = props(
 	[
 		'icon',
@@ -1325,22 +1268,6 @@ export const strapProps = props(
 	],
 	['--strap-height', 'A CSS variable, the strap’s height. Defaults to `80px`.'],
 	['class', 'A string of extra classes.']
-);
-
-export const headerIslandProps = props(
-	[
-		'logo, links, ctas, socialLinks, navFooterLinks, adminLogin, showSkipLink, navButton',
-		'The content every header takes (`HeaderNavProps`). It lives in one shared file, `global/navigation.json`, edited under Navigation in the CMS, so swapping header templates never means retyping the links.'
-	],
-	[
-		'glass',
-		'A boolean. The glass attachment as the island’s background: refraction in Chrome, blur elsewhere. Wins over `blur`. Defaults to `false`.'
-	],
-	['blur', 'A boolean. A plain translucent, blurred background. Defaults to `false`.'],
-	[
-		'hideOnScroll',
-		'A boolean. The island slides up out of view while scrolling down, and back as you scroll up. It stays while it is open or focused. Defaults to `true`.'
-	]
 );
 
 export const colorTokens = props(

@@ -10,10 +10,16 @@
 		/** Small links along the bottom. */
 		footerLinks?: ButtonProps[];
 		socialLinks?: SocialLink[];
+		/** The social links in the solid Button style, a box each. */
+		socialSolid?: boolean;
+		/** Buttons under the links, for a header that hides them from its own bar on small screens. With `always` they only show below the `lg` breakpoint. */
+		ctas?: ButtonProps[];
 		/** Shows at every screen size. Without it, it is for small screens only (a header shows its own links above that). */
 		always?: boolean;
-		/** `overlay` fills the screen. `slide` is a panel that slides in from the right, over about three quarters of the screen (all of it on the smallest), with no backdrop, and the social links in a strap at its bottom right. */
-		variant?: 'overlay' | 'slide';
+		/** `center` fades in over the whole screen with the links centered in a column and the social links, under a small label, at the bottom. `overlay` fills the screen. `slide` is a panel that slides in from the right, over about three quarters of the screen (all of it on the smallest), with no backdrop, and the social links in a strap at its bottom right. */
+		variant?: 'overlay' | 'slide' | 'center';
+		/** The small label above the social links, for the `center` variant. */
+		socialLabel?: string;
 		/** The icon in the strap's loop, for the `slide` variant. */
 		strapIcon?: string;
 		/** The panel's background: a solid color, a translucent blur, or the glass attachment (refraction in Chrome, blur elsewhere). */
@@ -25,8 +31,11 @@
 
 <script lang="ts">
 	import { glass } from '$lib/attachments/glass';
+	import { scribble } from '$lib/attachments/scribble';
 	import { textRoll } from '$lib/attachments/text-roll';
+	import { imageProps } from '$lib/utils/image';
 	import Button from './button.svelte';
+	import Eyebrow from './eyebrow.svelte';
 	import MenuLinks from './menu-links.svelte';
 	import SocialLinks from './social-links.svelte';
 	import Strap from './strap.svelte';
@@ -37,9 +46,12 @@
 		links = [],
 		footerLinks = [],
 		socialLinks = [],
+		socialSolid = false,
+		ctas = [],
 		always = false,
 		variant = 'overlay',
 		strapIcon = 'orbit',
+		socialLabel = 'Connect with us',
 		surface = 'solid',
 		onlink
 	}: SiteNavProps = $props();
@@ -59,10 +71,30 @@
 		};
 	});
 
+	// The center variant shows the hovered link's pictures. They are put in the page, and so start loading, the first
+	// time the navigation opens, so each is already there to transition when its link is first pointed at.
+	let active = $state<number | null>(null);
+	let loaded = $state(false);
+
+	$effect(() => {
+		if (open) loaded = true;
+		else active = null;
+	});
+
 	const onclick = (event: MouseEvent) => {
 		if ((event.target as Element).closest('a')) onlink?.();
 	};
 </script>
+
+{#snippet buttons()}
+	{#if ctas.length}
+		<div class="ctas">
+			{#each ctas as cta (cta.url ?? cta.text)}
+				<Button {...cta} {@attach textRoll()} />
+			{/each}
+		</div>
+	{/if}
+{/snippet}
 
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <nav
@@ -86,6 +118,7 @@
 				direction="column"
 				landmark={false}
 			/>
+			{@render buttons()}
 		</div>
 
 		<!-- The strap runs past the panel's edge, which clips it, so only its loop end shows. -->
@@ -100,6 +133,46 @@
 
 			<Strap icon={strapIcon} bleed={40}><SocialLinks links={socialLinks} /></Strap>
 		</div>
+	{:else if variant === 'center'}
+		<div class="previews" aria-hidden="true">
+			{#each links as link, index (link.url ?? link.text)}
+				{#if loaded && link.images?.length}
+					<div class="preview" class:shown={active === index}>
+						{#each link.images.slice(0, 4) as image, picture (picture)}
+							<img
+								class="picture picture-{picture + 1}"
+								style="--order: {picture}"
+								{...imageProps(image.src, { sizes: '240px' })}
+								alt=""
+								draggable="false"
+							/>
+						{/each}
+					</div>
+				{/if}
+			{/each}
+		</div>
+
+		<div class="middle">
+			<div class="middle-links">
+				<MenuLinks
+					class="site-nav-links"
+					{links}
+					label="Primary"
+					direction="column"
+					landmark={false}
+					onactive={(index) => (active = index)}
+					linkAttach={scribble({ curve: 'random', hover: true })}
+				/>
+				{@render buttons()}
+			</div>
+
+			{#if socialLinks.length}
+				<div class="connect">
+					<Eyebrow text={socialLabel} />
+					<SocialLinks links={socialLinks} solid={socialSolid} />
+				</div>
+			{/if}
+		</div>
 	{:else}
 		<div class="constraint">
 			<MenuLinks
@@ -109,6 +182,7 @@
 				direction="column"
 				landmark={false}
 			/>
+			{@render buttons()}
 
 			<div class="footer">
 				{#if footerLinks.length}
@@ -193,6 +267,140 @@
 		}
 	}
 
+	// The pictures of the hovered link stagger in on either side of the links, two a side, tilted opposite ways. Only
+	// where there is a mouse and room.
+	.previews {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		display: none;
+		pointer-events: none;
+
+		@include mixins.min-lg {
+			@media (hover: hover) {
+				display: block;
+			}
+		}
+	}
+
+	.preview {
+		position: absolute;
+		inset: 0;
+	}
+
+	.picture {
+		--tilt: 0deg;
+		--side: 12%;
+		--top: 24%;
+
+		position: absolute;
+		top: var(--top);
+		width: clamp(140px, 15vw, 240px);
+		aspect-ratio: 4 / 5;
+		border-radius: var(--radius-card, 8px);
+		object-fit: cover;
+		opacity: 0;
+		rotate: var(--tilt);
+		scale: 0.7;
+
+		@include mixins.mq-motion-allow {
+			transition:
+				opacity 0.2s ease,
+				scale 0.2s ease;
+		}
+	}
+
+	.picture-1,
+	.picture-2 {
+		left: var(--side);
+	}
+
+	.picture-3,
+	.picture-4 {
+		right: var(--side);
+	}
+
+	.picture-1 {
+		--tilt: -7deg;
+	}
+
+	.picture-2 {
+		--tilt: 6deg;
+		--side: 20%;
+		--top: 56%;
+	}
+
+	.picture-3 {
+		--tilt: 7deg;
+		--top: 20%;
+	}
+
+	.picture-4 {
+		--tilt: -6deg;
+		--side: 20%;
+		--top: 54%;
+	}
+
+	.shown .picture {
+		opacity: 1;
+		scale: 1;
+
+		@include mixins.mq-motion-allow {
+			transition:
+				opacity 0.5s var(--ease) calc(var(--order) * 0.08s),
+				scale 0.7s var(--ease) calc(var(--order) * 0.08s);
+		}
+	}
+
+	// The center variant: the links sit in the middle of the screen, and the social links rest at the bottom.
+	.middle {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		min-height: 520px;
+		padding: 112px var(--body-padding) var(--body-padding);
+
+		@include mixins.max-md {
+			padding-inline: 24px;
+		}
+	}
+
+	.middle-links {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 40px;
+		text-align: center;
+	}
+
+	.site-nav :global(.middle-links .site-nav-links) {
+		--btn-font-size: 32px;
+
+		margin-block: 0;
+
+		@include mixins.max-sm {
+			--btn-font-size: 24px;
+		}
+	}
+
+	.middle-links :global(.menu-links) {
+		align-items: center;
+	}
+
+	.connect {
+		display: flex;
+		flex: none;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
+	}
+
 	.footer {
 		display: flex;
 		flex-direction: column;
@@ -204,6 +412,19 @@
 			flex-direction: row;
 			align-items: center;
 			justify-content: space-between;
+		}
+	}
+
+	.ctas {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.always .ctas {
+		@include mixins.min-lg {
+			display: none;
 		}
 	}
 

@@ -35,9 +35,6 @@
 		cardGnomonProps,
 		carouselProps,
 		counterProps,
-		footerScrollRevealProps,
-		headerAbsoluteProps,
-		headerIslandProps,
 		formProps,
 		imageCircleProps,
 		imageColumnsProps,
@@ -232,7 +229,7 @@
 	<LibrarySection
 		title="Avatar Cycle"
 		type="Component"
-		description="A row of round avatars with a caption card below. The one in the middle is the largest and the ones further out are smaller, overlapping a little, with the middle on top. It turns by itself, the middle moving to the left as the next one comes in. The ring around each avatar matches the background, so each looks as if it cuts into its neighbors. The caption cards stack behind the front one, showing their tops, and turn in step. Clicking an avatar brings it to the middle. It holds while hovered or focused."
+		description="A row of round avatars with a caption card below. The one in the middle is the largest and the ones further out are smaller, overlapping a little, with the middle on top. It turns by itself, the middle moving to the left as the next one comes in. The ring around each avatar matches the background, so each looks as if it cuts into its neighbors. The caption cards stack behind the front one, showing their tops, and turn in step. Clicking an avatar brings it to the middle. It can hold while hovered or focused, with `pauseOnHover`."
 		props={avatarCycleProps}
 	>
 		<h3 class="plain">Three avatars</h3>
@@ -373,13 +370,6 @@
 	</LibrarySection>
 
 	<LibrarySection
-		title="Footer Scroll Reveal"
-		type="Component"
-		description="A footer that sits fixed to the bottom of the screen, behind the page. The page slides away as you reach its end and uncovers it, whatever the page is made of: it needs no background color on the content, so background effects still show. The footer is clipped to a box at the end of the page that is exactly as tall as it is, which also keeps it from covering anything. Choose it with Footer template in Site Defaults, and edit it under Global in the CMS. Without JavaScript it is an ordinary footer at the end of the page."
-		props={footerScrollRevealProps}
-	/>
-
-	<LibrarySection
 		title="Form"
 		type="Component"
 		description="A contact form with two behaviors. Forms need Netlify set up: a page with a form must be prerendered so Netlify can find it, and the form is only sent in production (locally the feedback form shows its alert and the redirect form goes to the next page, without sending). Fields are floating labels, a honeypot catches bots, and `showRecaptcha` adds Netlify's reCAPTCHA."
@@ -404,20 +394,6 @@
 			</div>
 		</LibrarySection>
 	</LibrarySection>
-
-	<LibrarySection
-		title="Header Absolute"
-		type="Component"
-		description="A header with no bar: the logo and the buttons float free at the top, and nothing between them catches the pointer, so links and buttons in the page stay clickable right under it. The menu button opens a full-screen navigation at every screen size. Place the logo and the buttons along the top, choose whether it stays on screen or scrolls away with the page, hide it on scroll, or invert its colors so it reads over any picture. Choose it with Header template in Site Defaults. The content is shared with the other headers."
-		props={headerAbsoluteProps}
-	/>
-
-	<LibrarySection
-		title="Header Island"
-		type="Component"
-		description="A header that floats over the page as a small rounded island, and takes no room in it. Its navigation is a dropdown at every screen size: the menu button grows the island downward to show the links (with their own dropdowns), the buttons, the social links and the small links. It closes with Escape, a press anywhere else, focus leaving it, or choosing a link. Choose it with Header template in Site Defaults. The content is shared with Header Simple, so switching is one setting."
-		props={headerIslandProps}
-	/>
 
 	<LibrarySection
 		title="Image Circle"
@@ -454,7 +430,7 @@
 			start="top center"
 			startOffset="64px"
 		/>
-		<h3 class="plain">As gnomon cards</h3>
+		<h3 class="plain apart">As gnomon cards</h3>
 		<ImageColumns
 			images={[
 				{ ...galleryImages(10)[0], caption: 'One' },
@@ -471,7 +447,7 @@
 	<LibrarySection
 		title="Image Comparison"
 		type="Component"
-		description="Two images with a divider between them: the position of the divider decides how much of each shows. It works by dragging, by hovering, and with the keyboard (arrow keys, Home and End), and it announces its position to screen readers."
+		description="Two images with a divider between them: the position of the divider decides how much of each shows. It works by dragging, by hovering, and with the keyboard (arrow keys move 5%, Shift with an arrow 1%, Page Up and Page Down 20%), and it announces its position to screen readers."
 		props={imageComparisonProps}
 	>
 		<h3 class="plain">Drag</h3>
@@ -507,8 +483,6 @@
 			stack="pyramid"
 			animateIn
 		/>
-		<h3 class="plain">Semicircle, a valley</h3>
-		<ImageFan images={galleryImages(7)} arc={180} gap={0.7} direction="down" itemWidth={18} />
 		<h3 class="plain">Closed ring that rises in</h3>
 		<ImageFan images={galleryImages(8)} closed gap={0.9} itemWidth={16} animateIn />
 	</LibrarySection>
@@ -551,7 +525,9 @@
 			text="• Sample marquee • Sometimes known as a ticker • Use the text prop to control the content"
 		/>
 		<h3 class="plain">Two rows that turn around with the scroll direction</h3>
-		<Marquee class="full" text="This one is more configured → " rows={2} speed={80} reverse />
+		<Marquee class="full" label="This one is more configured" rows={2} speed={80} reverse>
+			This one is more configured <span class="marquee-flip">→</span>
+		</Marquee>
 		<h3 class="plain">Images, pushed along by scrolling</h3>
 		<Marquee class="full" images={galleryImages(7)} rows={2} speed={40} scrub={0.5} pauseOnHover />
 	</LibrarySection>
@@ -562,13 +538,13 @@
 		description="Text that runs along a curve you draw. In the curve tool, drag the points until the shape is right, copy the cubic Bézier it gives you, and paste it into `curve` as it is. The text is centered on the curve, and an optional band with edge lines follows the same curve, so the background and both borders stay parallel to the text however much it bends. It repeats to fill the curve, moves the same speed at every screen size, holds still while off screen, and is still when motion is reduced."
 		props={marqueeCurveProps}
 	>
-		<h3 class="plain">The curve exactly as the tool draws it</h3>
-		<div class="curve-demo">
-			<MarqueeCurve
-				text="Marquee with a twist (literally) using the marquee curve component! Recommended to use a mono spaced font!"
-				curve="cubic-bezier(0.35, -0.05, 0.48, 1.12)"
-			/>
-		</div>
+		<h3 class="plain">The curve as the tool draws it, edge to edge</h3>
+		<MarqueeCurve
+			class="full"
+			text="Marquee with a twist (literally) using the marquee curve component! Recommended to use a mono spaced font!"
+			curve="cubic-bezier(0.35, -0.05, 0.48, 1.12)"
+			aspect={1.6}
+		/>
 		<h3 class="plain">Full width, a band with edge lines, and scroll reversing</h3>
 		<MarqueeCurve
 			class="full"
@@ -771,10 +747,6 @@
 		gap: 16px;
 	}
 
-	.curve-demo {
-		width: min(640px, 100%);
-	}
-
 	.avatar-demo {
 		width: min(760px, 100%);
 	}
@@ -803,6 +775,12 @@
 			opacity: 1;
 			scale: 1;
 		}
+	}
+
+	// Image Columns start pushed down and slide up as you scroll, spilling about 450px past their box before they
+	// settle, so the next demo needs more room than that.
+	.apart {
+		margin-block-start: max(560px, 44vw);
 	}
 
 	.back-to-top-demo {

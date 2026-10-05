@@ -940,26 +940,156 @@
 	<LibrarySection
 		title="Scribble"
 		type="Attachment"
-		description="Draws a hand-drawn SVG scribble on any element. The scribble is stretched to the element's size, so any similar SVG works. It takes its color from `--scribble-color` (the accent by default); `--scribble-size` and `--scribble-offset` adjust the underline."
+		description="Draws a hand-drawn scribble on an element, like a line made with a dry brush: an `underline` under it, or a `circle` drawn around it. Shown from the start by default, on a word, a button or a whole paragraph, or drawn in on hover and focus with `hover`, or when it scrolls into view with `scroll`. The underline follows a cubic Bézier from the left edge to the right at mid-height, thickest in the middle and tapering to a point at both ends, with rough, chipped edges and dry streaks inside, different for every element unless you give it a `seed`. Pick a preset, or paste a curve from the same curve tool the Marquee Curve uses, to get a dip and a rise of your own. On a Button it replaces the underline. The Header Basic menu uses it, with `random`, on its links."
 		props={[
 			{
 				name: 'type',
 				description:
-					"A string, the kind of scribble. Currently only `'underline'`, which is the default."
+					"`'underline'` or `'circle'`. The circle is an uneven oval drawn around the element in one quick pass that overshoots its start and ends in a tail that does not meet the beginning. On hover it is drawn in along its path. Defaults to `'underline'`."
 			},
 			{
-				name: 'src',
+				name: 'padding',
 				description:
-					'A string, the path to a custom SVG used instead of the built-in one. Only its shape is used; the color comes from `--scribble-color`.'
+					'A number, how far the circle sits out from the element, in em. Defaults to `0.4`.'
+			},
+			{
+				name: 'curve',
+				description:
+					"For an underline: a preset, or a `cubic-bezier(x1, y1, x2, y2)`, or the four numbers. The smooth presets are `'swoosh'` (the default), `'wave'`, `'dip'` and `'flat'`. `'zigzag'` (straight, then one or two there-and-backs, then straight) and `'notch'` (a single V dip) are made of straight lines. `'random'` picks one of them for each element, so every one gets a different line. The line runs from the left edge to the right at mid-height; the two points pull it, and a `y` of 1 is the top and 0 the bottom."
+			},
+			{
+				name: 'hover',
+				description:
+					'A boolean. Draws the scribble in on hover and keyboard focus instead of showing it from the start. Defaults to `false`.'
+			},
+			{
+				name: 'scroll',
+				description:
+					'A boolean. Draws the scribble in when the element scrolls into view instead of showing it from the start. Loads GSAP ScrollTrigger only when used, and with reduced motion it just shows. Defaults to `false`.'
+			},
+			{
+				name: 'start',
+				description:
+					"For `scroll`: a ScrollTrigger-style start, the element's point then the viewport's, such as `'top 85%'` (the default) or `'bottom center'`."
+			},
+			{
+				name: 'end',
+				description:
+					"For `scroll`: a ScrollTrigger-style end. With `once: false` the scribble resets past it. Defaults to `'bottom 2%'`."
+			},
+			{
+				name: 'once',
+				description:
+					'For `scroll`: `true` draws it the first time only (the default). `false` draws it each time it scrolls into view and resets when it leaves.'
+			},
+			{
+				name: 'trigger',
+				description:
+					'For `scroll`: a selector or element to watch for scrolling instead of this element, such as a whole section.'
+			},
+			{
+				name: 'markers',
+				description:
+					"For `scroll`: a boolean that shows GSAP's start and end markers for debugging. Defaults to `false`."
+			},
+			{
+				name: 'thickness',
+				description:
+					'A number from 0 to 1, the widest point as a share of the box height. Thins or thickens the line without changing its curve. Defaults to `0.35`.'
+			},
+			{
+				name: 'rough',
+				description:
+					'A number from 0 to 1. How ragged the edges are: they wobble and get chipped in places, like spray paint or a dry brush. `0` is smooth. Defaults to `0.5`.'
+			},
+			{
+				name: 'streaks',
+				description:
+					'A number, how many thin dry streaks are left bare inside the line, like bristles that ran out of paint. `0` is solid. Defaults to `3`.'
+			},
+			{
+				name: 'seed',
+				description:
+					'A number. The same seed draws the same line every time. Without one, every line is different.'
+			},
+			{
+				name: 'color',
+				description:
+					'A string, any CSS color. Defaults to the accent. Also set with `--scribble-color`.'
+			},
+			{
+				name: 'height',
+				description:
+					'A string, the height of the box the line is drawn in. A shorter box makes the whole line slimmer and flattens its curve too. Defaults to `0.7em`.'
+			},
+			{
+				name: 'offset',
+				description: 'A string, how far the box sits below the element. Defaults to `-0.4em`.'
 			}
 		]}
 		propsLabel="options"
 	>
+		<h3 class="plain">Shown from the start</h3>
 		<p>
-			A <span {@attach scribble()}>hand-drawn underline</span> on a span nested in a sentence.
+			A scribble under <span {@attach scribble()}>a few words</span> of a sentence, and another in a
+			<span {@attach scribble({ curve: 'zigzag', color: 'var(--color-secondary)' })}>different</span
+			>
+			color and shape.
 		</p>
-		<p class="scribble-block" {@attach scribble()}>
-			On a block element the scribble spans the whole element.
+		<p class="scribble-block" {@attach scribble({ curve: 'random' })}>
+			On a whole paragraph the scribble spans the element, under its last line. This one picks a
+			random shape, so reloading the page draws it differently.
+		</p>
+		<p>
+			A circle around <span {@attach scribble({ type: 'circle' })}>a few words</span> in the middle
+			of a sentence, and
+			<span {@attach scribble({ type: 'circle', color: 'var(--color-secondary)' })}>one more</span>.
+		</p>
+		<h3 class="plain">On hover and focus</h3>
+		<div class="row">
+			<Button text="Swoosh" type="text" {@attach scribble({ hover: true })} />
+			<Button
+				text="Zigzag"
+				type="text"
+				{@attach scribble({ curve: 'zigzag', hover: true, color: 'var(--color-secondary)' })}
+			/>
+			<Button
+				text="Notch"
+				type="text"
+				{@attach scribble({ curve: 'notch', hover: true, color: 'var(--color-tertiary)' })}
+			/>
+			<Button text="Random" type="text" {@attach scribble({ curve: 'random', hover: true })} />
+			<Button
+				text="Custom curve"
+				type="text"
+				{@attach scribble({ curve: 'cubic-bezier(0.2, 1.1, 0.8, -0.1)', hover: true })}
+			/>
+			<Button text="Circle" type="text" {@attach scribble({ type: 'circle', hover: true })} />
+			<Button
+				text="Circle, thicker"
+				type="text"
+				{@attach scribble({
+					type: 'circle',
+					hover: true,
+					thickness: 0.5,
+					color: 'var(--color-tertiary)'
+				})}
+			/>
+		</div>
+		<h3 class="plain">Drawn in on scroll</h3>
+		<p>
+			Scroll these into view and they are drawn in:
+			<span {@attach scribble({ scroll: true, curve: 'random' })}>an underline</span>,
+			<span {@attach scribble({ scroll: true, type: 'circle', color: 'var(--color-secondary)' })}
+				>a circle</span
+			>, and a paragraph below that resets and draws again every time it re-enters.
+		</p>
+		<p
+			class="scribble-block"
+			{@attach scribble({ scroll: true, once: false, start: 'top 75%', curve: 'zigzag' })}
+		>
+			This paragraph starts its scribble when its top reaches 75% of the screen, and draws it again
+			each time it scrolls back into view.
 		</p>
 	</LibrarySection>
 
@@ -1868,15 +1998,16 @@
 		}
 	}
 
+	.scribble-block {
+		max-width: var(--max-width-text);
+		padding-block-end: 0.4em;
+	}
+
 	.row {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 16px;
-	}
-
-	.scribble-block {
-		max-width: var(--max-width-text);
 	}
 
 	.parallax-frame {

@@ -2,8 +2,8 @@
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
 	export type SiteNavButtonProps = {
-		/** `burger` is two lines, `oreo` is two lines with the outer corners rounded that twirl into the X, `chocolate` is nine dots, `kebab` is three vertical dots. */
-		symbol?: 'burger' | 'oreo' | 'chocolate' | 'kebab';
+		/** `burger` is two lines, `oreo` is two lines with the outer corners rounded that twirl into the X, `stairs` is three stepped lines (short, long, short) that form the X, `chocolate` is nine dots, `kebab` is three vertical dots. */
+		symbol?: 'burger' | 'oreo' | 'stairs' | 'chocolate' | 'kebab';
 		shape?: 'square' | 'round';
 		/** `button` puts the symbol in a bordered box. */
 		type?: 'icon' | 'button';
@@ -28,8 +28,14 @@
 		...rest
 	}: SiteNavButtonProps = $props();
 
-	const strokes = $derived({ burger: 2, oreo: 2, chocolate: 9, kebab: 3 }[symbol]);
+	const strokes = $derived({ burger: 2, oreo: 2, stairs: 3, chocolate: 9, kebab: 3 }[symbol]);
 </script>
+
+{#snippet lines()}
+	{#each Array.from({ length: strokes }, (_, i) => i + 1) as number (number)}
+		<span class="stroke stroke-{number}"></span>
+	{/each}
+{/snippet}
 
 <button
 	{...rest}
@@ -51,9 +57,11 @@
 			returnEase: 'cubic-bezier(0, 1.64, 0.63, 1.92)'
 		})}
 	>
-		{#each Array.from({ length: strokes }, (_, i) => i + 1) as number (number)}
-			<span class="stroke stroke-{number}"></span>
-		{/each}
+		{#if symbol === 'stairs'}
+			<span class="lines">{@render lines()}</span>
+		{:else}
+			{@render lines()}
+		{/if}
 	</span>
 </button>
 
@@ -211,6 +219,79 @@
 		}
 	}
 
+	// Three lines stepped like stairs: the top one short on the left, the middle one full, the bottom one short on the
+	// right. Open, the button turns a quarter (its lines turn back the other way, so only the background seems to), then the lines follow one after another: the top and bottom lines lie
+	// end to end on one diagonal (together as long as the line they cross) and the middle one crosses them at a right
+	// angle, which makes the X. Lengths are in px so the lines can be moved along the diagonal.
+	.stairs {
+		--full: 20px;
+		--inset: 0px;
+		--short: calc(var(--full) * 0.6);
+		// How far each short line sits from the center, in x and y, to lie end to end on a 45deg line: half the
+		// difference in length, times cos(45deg).
+		--along: calc((var(--full) - var(--short)) / 2 * 0.7071);
+
+		position: relative;
+		width: 20px;
+
+		@include mixins.mq-motion-allow {
+			transition:
+				0.24s ease,
+				rotate 0.5s var(--ease);
+		}
+
+		// The lines sit in a layer that turns the opposite way to the button, so only the background seems to turn.
+		.lines {
+			position: absolute;
+			inset: 0;
+
+			@include mixins.mq-motion-allow {
+				transition: rotate 0.5s var(--ease);
+			}
+		}
+
+		.stroke {
+			position: absolute;
+			top: 50%;
+			left: var(--inset);
+			width: var(--short);
+			height: 2px;
+			translate: 0 -50%;
+
+			@include mixins.mq-motion-allow {
+				transition: 0.5s var(--ease);
+			}
+		}
+
+		// The same stagger plays both ways, opening and closing, a beat after the button starts to turn.
+		@include mixins.mq-motion-allow {
+			.stroke-1 {
+				transition-delay: 0.08s;
+			}
+
+			.stroke-2 {
+				transition-delay: 0.15s;
+			}
+
+			.stroke-3 {
+				transition-delay: 0.22s;
+			}
+		}
+
+		.stroke-1 {
+			translate: 0 calc(-50% - 6px);
+		}
+
+		.stroke-2 {
+			width: var(--full);
+		}
+
+		.stroke-3 {
+			left: calc(var(--inset) + var(--full) - var(--short));
+			translate: 0 calc(-50% + 6px);
+		}
+	}
+
 	// Open state: the burger crosses into an X, the chocolate keeps its corners and center.
 	[aria-expanded='true'] {
 		.burger .stroke {
@@ -223,6 +304,33 @@
 
 		.burger .stroke-2 {
 			rotate: -45deg;
+		}
+
+		.stairs {
+			rotate: 90deg;
+
+			.lines {
+				rotate: -90deg;
+			}
+
+			.stroke-1 {
+				left: calc(var(--inset) + (var(--full) - var(--short)) / 2 - var(--along));
+				translate: 0 calc(-50% - var(--along));
+				rotate: 45deg;
+			}
+
+			.stroke-2 {
+				left: var(--inset);
+				width: var(--full);
+				translate: 0 -50%;
+				rotate: -45deg;
+			}
+
+			.stroke-3 {
+				left: calc(var(--inset) + (var(--full) - var(--short)) / 2 + var(--along));
+				translate: 0 calc(-50% + var(--along));
+				rotate: 45deg;
+			}
 		}
 
 		.oreo {
@@ -265,10 +373,21 @@
 		background: var(--color-accent);
 	}
 
+	// The box has the accent color in both themes, so its lines are a fixed dark color too.
+	.type-button .stroke {
+		background: var(--color-on-accent);
+	}
+
 	// The lines are as wide as the space inside that padding, whatever the padding is set to.
 	.type-button .burger .stroke,
 	.type-button .oreo .stroke {
 		width: calc(100% - var(--symbol-gap) * 1.5);
+	}
+
+	// The lines are positioned inside the button's padding box: its 40px less the 1px border on each side.
+	.type-button .stairs {
+		--full: calc(38px - var(--symbol-gap) * 1.5);
+		--inset: calc(var(--symbol-gap) * 0.75);
 	}
 
 	.type-button .kebab,

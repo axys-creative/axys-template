@@ -11,8 +11,10 @@
 		items: AvatarCycleItem[];
 		/** Milliseconds between turns. */
 		interval?: number;
-		/** Turns by itself. Pauses on hover and focus. */
+		/** Turns by itself. */
 		autoplay?: boolean;
+		/** Holds the turning while the pointer or keyboard focus is on the component, so a caption can be read. */
+		pauseOnHover?: boolean;
 		/** The most the middle avatar's width can be, in px. It shrinks to fit a narrow container. */
 		size?: number;
 		/** The width of the caption card in px. By default it is a little wider than the whole row of avatars. The card is wider than it is tall. */
@@ -30,12 +32,14 @@
 	const SHRINK = 0.2;
 	const OVERLAP = 0.82;
 	const CARD_MARGIN = 1.1;
-	const VISIBLE_CARDS = 3;
+	const SHRINK_MS = 280;
+	const GROW_MS = 520;
 
 	let {
 		items,
 		interval = 4000,
 		autoplay = true,
+		pauseOnHover = false,
 		size = 120,
 		cardSize,
 		ringColor = 'var(--color-bg)',
@@ -48,6 +52,8 @@
 
 	let active = $state(0);
 	let jumping = $state<number[]>([]);
+	// Avatars that wrap around keep their old place while they shrink away, then reappear at the far side.
+	let held = $state<Record<number, number>>({});
 	let paused = $state(false);
 	let visible = $state(true);
 	let root = $state<HTMLElement>();
@@ -79,19 +85,47 @@
 		const target = ((next % count) + count) % count;
 		if (target === active) return;
 		const before = active;
-		// An avatar that wraps from one end to the other reappears at the far side instead of sliding across.
 		const wrapping = items
 			.map((_, index) => index)
 			.filter((index) => Math.abs(offsetOf(index, target) - offsetOf(index, before)) > 1);
-		jumping = wrapping;
+		const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		if (calm) {
+			jumping = wrapping;
+			active = target;
+			await tick();
+			setTimeout(() => (jumping = []), 40);
+			return;
+		}
+
+		held = Object.fromEntries(wrapping.map((index) => [index, offsetOf(index, before)]));
 		active = target;
 		await tick();
-		wrapping.forEach((index) =>
-			avatars[index]?.animate([{ opacity: 0 }, { opacity: 1 }], {
-				duration: 500,
-				easing: 'ease-out'
-			})
+
+		// The one leaving shrinks away where it is, then grows from nothing at the other end.
+		await Promise.all(
+			wrapping.map(
+				(index) =>
+					avatars[index]?.animate([{ scale: 0 }], {
+						duration: SHRINK_MS,
+						easing: 'ease-in',
+						fill: 'forwards'
+					}).finished
+			)
 		);
+		jumping = wrapping;
+		held = {};
+		await tick();
+		wrapping.forEach((index) => {
+			const avatar = avatars[index];
+			if (!avatar) return;
+			avatar.getAnimations().forEach((animation) => animation.cancel());
+			// Both ends are spelled out: a lone keyframe would run toward it, not from it.
+			avatar.animate([{ scale: 0 }, { scale: getComputedStyle(avatar).scale }], {
+				duration: GROW_MS,
+				easing: 'ease-out'
+			});
+		});
 		setTimeout(() => (jumping = []), 40);
 	};
 
@@ -110,7 +144,6 @@
 	});
 </script>
 
-<!-- Hovering or focusing the avatars holds the turning, so a caption can be read. -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	bind:this={root}
@@ -118,14 +151,14 @@
 	style="--total: {total}; --size: {size}px; --card-margin: {CARD_MARGIN}; --ring: {ringColor}; --shift: {shift}{cardSize
 		? `; --card: ${cardSize}px`
 		: ''}"
-	onpointerenter={() => (paused = true)}
-	onpointerleave={() => (paused = false)}
-	onfocusin={() => (paused = true)}
-	onfocusout={() => (paused = false)}
+	onpointerenter={pauseOnHover ? () => (paused = true) : undefined}
+	onpointerleave={pauseOnHover ? () => (paused = false) : undefined}
+	onfocusin={pauseOnHover ? () => (paused = true) : undefined}
+	onfocusout={pauseOnHover ? () => (paused = false) : undefined}
 >
 	<div class="avatars">
 		{#each items as item, index (index)}
-			{@const steps = offsetOf(index)}
+			{@const steps = held[index] ?? offsetOf(index)}
 			{@const distance = Math.abs(steps)}
 			<button
 				bind:this={avatars[index]}
@@ -150,8 +183,7 @@
 			<div
 				class="card"
 				class:front={rank === 0}
-				style="--rank: {Math.min(rank, VISIBLE_CARDS - 1)}; z-index: {count -
-					rank}; opacity: {rank < VISIBLE_CARDS ? 1 : 0}"
+				class:leaving={rank === count - 1}
 				aria-hidden={rank === 0 ? undefined : 'true'}
 				inert={rank !== 0}
 			>
@@ -177,7 +209,8 @@
 	// The middle avatar's width, capped by `size` and shrunk if the row would not fit the container.
 	.avatar-cycle {
 		--glide: cubic-bezier(0.4, 0, 0.2, 1);
-		--duration: 1s;
+		--duration: 0.6s;
+		--card-lift: 12px;
 	}
 
 	.avatars,
@@ -233,13 +266,26 @@
 		}
 	}
 
-	// The captions stack like a deck: the front card, with the tops of the next ones peeking out above it.
+	// One card is in view. The next one waits just below it, and the one that left drifts up and scales back, fading
+	// out quickly, so the change reads as the old card handing over to the new one. A second card edge peeks out above the front one.
 	.cards {
 		position: relative;
+		isolation: isolate;
 		// A little wider than the row of avatars above it, whatever their count or size.
 		width: min(100%, var(--card, calc(var(--total) * var(--diameter) * var(--card-margin))));
 		aspect-ratio: 16 / 10;
 		margin-block-start: 28px;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0 7%;
+			z-index: -1;
+			border: 1px solid var(--color-border);
+			border-radius: 24px;
+			background: var(--color-surface);
+			translate: 0 -8px;
+		}
 	}
 
 	.card {
@@ -253,15 +299,29 @@
 		border: 1px solid var(--color-border);
 		border-radius: 24px;
 		background: var(--color-surface);
-		transform-origin: center top;
-		translate: 0 calc(var(--rank) * -14px);
-		scale: calc(1 - var(--rank) * 0.06);
+		opacity: 0;
+		translate: 0 var(--card-lift);
+		scale: 0.96;
+		visibility: hidden;
 
 		@include mixins.mq-motion-allow {
 			transition:
 				translate var(--duration) var(--glide),
 				scale var(--duration) var(--glide),
-				opacity var(--duration) var(--glide);
+				opacity 0.25s var(--glide),
+				visibility var(--duration);
+		}
+
+		&.leaving {
+			translate: 0 calc(var(--card-lift) * -1);
+			scale: 0.94;
+		}
+
+		&.front {
+			opacity: 1;
+			translate: 0 0;
+			scale: 1;
+			visibility: visible;
 		}
 
 		h3 {

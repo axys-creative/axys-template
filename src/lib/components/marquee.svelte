@@ -53,6 +53,7 @@
 	let still = $state(false);
 	let held = $state(false);
 	let visible = $state(true);
+	let turned = $state(false);
 
 	const name = $derived(label ?? text);
 	const duration = $derived(halfWidth && speed > 0 ? halfWidth / speed : 0);
@@ -101,6 +102,7 @@
 				if (reverse) {
 					const moved = scrollY - lastY;
 					if (Math.abs(moved) > 0.5) direction = moved > 0 ? 1 : -1;
+					if (turned !== direction < 0) turned = direction < 0;
 					lastY = scrollY;
 					heading += (direction - heading) * (1 - Math.exp(-elapsed / 250));
 				}
@@ -113,6 +115,9 @@
 						const x = ((((idle + offset) * sign) % halfWidth) + halfWidth) % halfWidth;
 						track.style.translate = `${-x}px 0`;
 					});
+				} else if (!visible) {
+					// Off screen the offset keeps up with the page, so it does not have to catch up when it comes into view.
+					offset = scrollY * scrub;
 				}
 				frame = requestAnimationFrame(tick);
 			};
@@ -149,6 +154,7 @@
 	class="marquee {className ?? ''}"
 	class:images={!!images && !text && !children}
 	class:driven
+	class:turned
 	class:still
 	class:paused={!visible || (pauseOnHover && held)}
 	role="region"
@@ -246,6 +252,30 @@
 
 	.track.backwards {
 		animation-direction: reverse;
+	}
+
+	// Anything marked `marquee-flip` (a right arrow, say) points the way its row travels: a forward row moves left, so
+	// it starts turned, and it turns around with the scroll direction and in backwards rows.
+	.marquee :global(.marquee-flip) {
+		display: inline-block;
+
+		@include mixins.mq-motion-allow {
+			transition: scale 0.4s var(--ease);
+		}
+	}
+
+	.marquee :global(.marquee-flip),
+	.turned .backwards :global(.marquee-flip) {
+		scale: -1 1;
+	}
+
+	.turned :global(.marquee-flip),
+	.backwards :global(.marquee-flip) {
+		scale: 1;
+	}
+
+	.turned .backwards :global(.marquee-flip) {
+		scale: -1 1;
 	}
 
 	.driven .track {

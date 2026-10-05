@@ -36,6 +36,23 @@
 
 	let frame = $state<HTMLElement>();
 
+	const KEY_STEPS: Record<string, number> = {
+		ArrowLeft: -5,
+		ArrowDown: -5,
+		ArrowRight: 5,
+		ArrowUp: 5,
+		PageDown: -20,
+		PageUp: 20
+	};
+
+	// The native range would move 0.1 per press, which is the right step for dragging but too fine for a keyboard.
+	const onKeydown = (event: KeyboardEvent) => {
+		const step = KEY_STEPS[event.key];
+		if (step === undefined) return;
+		event.preventDefault();
+		position = Math.min(100, Math.max(0, position + (event.shiftKey ? step / 5 : step)));
+	};
+
 	const follow = (event: PointerEvent) => {
 		if (mode !== 'hover' || event.pointerType !== 'mouse' || !frame) return;
 		const rect = frame.getBoundingClientRect();
@@ -88,6 +105,7 @@
 		aria-label="Comparison slider: drag to reveal either image"
 		aria-valuetext="{Math.round(position)}% of the first image shown"
 		bind:value={position}
+		onkeydown={onKeydown}
 	/>
 </div>
 

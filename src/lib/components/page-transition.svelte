@@ -61,16 +61,44 @@
 		mix-blend-mode: normal;
 	}
 
-	:global(html[data-keep-header] header.header:not(:has(.island))),
+	/* A bar with no size captures nothing, so the island, or the logo, links, strap and controls, are named instead. */
+	:global(html[data-keep-header] header.header:not(:has(.island)):not([data-header-parts])) {
+		view-transition-name: site-header;
+	}
+
 	:global(html[data-keep-header] header.header .island) {
 		view-transition-name: site-header;
 	}
 
-	:global(::view-transition-old(site-header)) {
+	:global(html[data-keep-header] header[data-header-parts] > .logo) {
+		view-transition-name: site-header-logo;
+	}
+
+	:global(html[data-keep-header] header[data-header-parts] > .links) {
+		view-transition-name: site-header-links;
+	}
+
+	:global(html[data-keep-header] header[data-header-parts] > .strap) {
+		view-transition-name: site-header-strap;
+	}
+
+	:global(html[data-keep-header] header[data-header-parts] > .controls) {
+		view-transition-name: site-header-controls;
+	}
+
+	:global(::view-transition-old(site-header)),
+	:global(::view-transition-old(site-header-logo)),
+	:global(::view-transition-old(site-header-links)),
+	:global(::view-transition-old(site-header-strap)),
+	:global(::view-transition-old(site-header-controls)) {
 		display: none;
 	}
 
-	:global(::view-transition-new(site-header)) {
+	:global(::view-transition-new(site-header)),
+	:global(::view-transition-new(site-header-logo)),
+	:global(::view-transition-new(site-header-links)),
+	:global(::view-transition-new(site-header-strap)),
+	:global(::view-transition-new(site-header-controls)) {
 		animation: none;
 	}
 </style>

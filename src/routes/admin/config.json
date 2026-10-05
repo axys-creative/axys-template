@@ -619,6 +619,29 @@
 											"hint": "Icon file name without .svg (e.g. palette). See /style-guide for examples."
 										}
 									]
+								},
+								{
+									"name": "images",
+									"label": "Hover pictures",
+									"label_singular": "Picture",
+									"widget": "list",
+									"required": false,
+									"max": 4,
+									"summary": "{{fields.alt}}",
+									"hint": "Up to four. They fade in beside the links when the link is hovered in the Header Basic menu.",
+									"fields": [
+										{
+											"name": "src",
+											"label": "Image",
+											"widget": "image"
+										},
+										{
+											"name": "alt",
+											"label": "Description",
+											"widget": "string",
+											"required": false
+										}
+									]
 								}
 							]
 						},
@@ -782,9 +805,9 @@
 									"name": "symbol",
 									"label": "Symbol",
 									"widget": "select",
-									"options": ["burger", "oreo", "chocolate", "kebab"],
+									"options": ["burger", "oreo", "stairs", "chocolate", "kebab"],
 									"default": "burger",
-									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, stairs is three stepped lines (short, long, short) that form the X, chocolate is nine dots, kebab is three vertical dots."
 								},
 								{
 									"name": "shape",
@@ -857,9 +880,9 @@
 									"name": "symbol",
 									"label": "Symbol",
 									"widget": "select",
-									"options": ["burger", "oreo", "chocolate", "kebab"],
+									"options": ["burger", "oreo", "stairs", "chocolate", "kebab"],
 									"default": "burger",
-									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, stairs is three stepped lines (short, long, short) that form the X, chocolate is nine dots, kebab is three vertical dots."
 								},
 								{
 									"name": "shape",
@@ -1028,9 +1051,122 @@
 									"name": "symbol",
 									"label": "Symbol",
 									"widget": "select",
-									"options": ["burger", "oreo", "chocolate", "kebab"],
+									"options": ["burger", "oreo", "stairs", "chocolate", "kebab"],
 									"default": "burger",
-									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, stairs is three stepped lines (short, long, short) that form the X, chocolate is nine dots, kebab is three vertical dots."
+								},
+								{
+									"name": "shape",
+									"label": "Shape",
+									"widget": "select",
+									"options": ["square", "round"],
+									"default": "square"
+								},
+								{
+									"name": "type",
+									"label": "Style",
+									"widget": "select",
+									"options": ["icon", "button"],
+									"default": "icon",
+									"hint": "Button puts the symbol in a bordered box."
+								},
+								{
+									"name": "text",
+									"label": "Text beside the symbol",
+									"widget": "string",
+									"required": false,
+									"hint": "Optional, e.g. menu."
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "header_basic",
+					"label": "Header (basic)",
+					"file": "src/lib/content/global/header-basic.json",
+					"fields": [
+						{
+							"name": "position",
+							"label": "Position",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Fixed (stays on screen)",
+									"value": "fixed"
+								},
+								{
+									"label": "Absolute (scrolls away with the page)",
+									"value": "absolute"
+								}
+							],
+							"default": "fixed"
+						},
+						{
+							"name": "hideOnScroll",
+							"label": "Hide on scroll down",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Only with Fixed."
+						},
+						{
+							"name": "blend",
+							"label": "Invert colors over the page",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Keeps the logo and buttons readable over any picture or color. Works best with text or underline buttons."
+						},
+						{
+							"name": "navSurface",
+							"label": "Menu background",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Solid",
+									"value": "solid"
+								},
+								{
+									"label": "Blur",
+									"value": "blur"
+								},
+								{
+									"label": "Glass",
+									"value": "glass"
+								}
+							],
+							"default": "solid",
+							"hint": "Solid is the page color. Blur is translucent and blurred. Glass adds refracting edges in Chrome, and blur elsewhere."
+						},
+						{
+							"name": "socialSolid",
+							"label": "Social links as buttons",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Puts each social icon in a box in the solid button style."
+						},
+						{
+							"name": "showSkipLink",
+							"label": "Show skip to content link",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Accessibility. Leave on."
+						},
+						{
+							"name": "navButton",
+							"label": "Menu button",
+							"widget": "object",
+							"fields": [
+								{
+									"name": "symbol",
+									"label": "Symbol",
+									"widget": "select",
+									"options": ["burger", "oreo", "stairs", "chocolate", "kebab"],
+									"default": "burger",
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, stairs is three stepped lines (short, long, short) that form the X, chocolate is nine dots, kebab is three vertical dots."
 								},
 								{
 									"name": "shape",
@@ -1431,6 +1567,153 @@
 					]
 				},
 				{
+					"name": "footer_gnomon",
+					"label": "Footer (gnomon)",
+					"file": "src/lib/content/global/footer-gnomon.json",
+					"fields": [
+						{
+							"name": "title",
+							"label": "Title",
+							"widget": "string",
+							"required": false,
+							"hint": "The heading at the top left."
+						},
+						{
+							"name": "level",
+							"label": "Heading level",
+							"widget": "select",
+							"options": [
+								{
+									"label": "H2",
+									"value": 2
+								},
+								{
+									"label": "H3",
+									"value": 3
+								}
+							],
+							"default": 2,
+							"value_type": "int",
+							"required": false
+						},
+						{
+							"name": "cta",
+							"label": "Button",
+							"widget": "object",
+							"required": false,
+							"fields": [
+								{
+									"name": "text",
+									"label": "Text",
+									"widget": "string"
+								},
+								{
+									"name": "url",
+									"label": "URL",
+									"widget": "string",
+									"required": false,
+									"hint": "Page path (/about), anchor (#contact), or full URL."
+								},
+								{
+									"name": "newTab",
+									"label": "Open in new tab",
+									"widget": "boolean",
+									"default": false,
+									"required": false
+								},
+								{
+									"name": "textDescription",
+									"label": "Accessible description",
+									"widget": "string",
+									"required": false
+								},
+								{
+									"name": "type",
+									"label": "Style",
+									"widget": "select",
+									"options": ["solid", "outline", "underline", "text"],
+									"default": "outline",
+									"required": false
+								}
+							]
+						},
+						{
+							"name": "linksets",
+							"label": "Link columns",
+							"widget": "list",
+							"label_singular": "Column",
+							"summary": "{{fields.title}}",
+							"fields": [
+								{
+									"name": "title",
+									"label": "Title",
+									"widget": "string",
+									"required": false
+								},
+								{
+									"name": "links",
+									"label": "Links",
+									"widget": "list",
+									"label_singular": "Link",
+									"summary": "{{fields.text}}",
+									"fields": [
+										{
+											"name": "text",
+											"label": "Text",
+											"widget": "string"
+										},
+										{
+											"name": "url",
+											"label": "URL",
+											"widget": "string",
+											"hint": "Page path (/about), anchor (#contact), or full URL."
+										},
+										{
+											"name": "newTab",
+											"label": "Open in new tab",
+											"widget": "boolean",
+											"default": false,
+											"required": false
+										},
+										{
+											"name": "textDescription",
+											"label": "Accessible description",
+											"widget": "string",
+											"required": false,
+											"hint": "Optional aria-label for screen readers"
+										}
+									]
+								}
+							],
+							"max": 3,
+							"min": 1,
+							"hint": "Up to three columns of links, each with its own title."
+						},
+						{
+							"name": "socialSolid",
+							"label": "Social links as buttons",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Puts each social icon in a box in the solid button style."
+						},
+						{
+							"name": "copyright",
+							"label": "Copyright",
+							"widget": "string",
+							"required": false,
+							"hint": "Leave empty for the year, the site name and \"All rights reserved.\""
+						},
+						{
+							"name": "fullScreen",
+							"label": "Full screen height",
+							"widget": "boolean",
+							"default": false,
+							"required": false
+						}
+					]
+				},
+				{
 					"name": "logo",
 					"label": "Logo",
 					"file": "src/lib/content/global/logo.json",
@@ -1554,6 +1837,10 @@
 								{
 									"label": "Scroll reveal",
 									"value": "scroll-reveal"
+								},
+								{
+									"label": "Gnomon",
+									"value": "gnomon"
 								}
 							],
 							"default": "simple",
@@ -1575,6 +1862,10 @@
 								{
 									"label": "Absolute",
 									"value": "absolute"
+								},
+								{
+									"label": "Basic",
+									"value": "basic"
 								}
 							],
 							"default": "simple",

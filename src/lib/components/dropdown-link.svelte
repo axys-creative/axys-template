@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Attachment } from 'svelte/attachments';
 	import { glass } from '$lib/attachments/glass';
 	import { textRoll } from '$lib/attachments/text-roll';
 	import Button, { type ButtonProps } from './button.svelte';
@@ -10,9 +11,18 @@
 		mode?: 'popover' | 'accordion';
 		/** The popover's background: the glass attachment, a plain blur, or a solid color. */
 		surface?: 'glass' | 'blur' | 'solid';
+		/** An attachment for the button that opens it, such as a hover effect. */
+		triggerAttach?: Attachment<HTMLElement>;
 	};
 
-	let { text, links, type = 'underline', mode = 'popover', surface = 'glass' }: Props = $props();
+	let {
+		text,
+		links,
+		type = 'underline',
+		mode = 'popover',
+		surface = 'glass',
+		triggerAttach
+	}: Props = $props();
 
 	const id = $props.id();
 	let root = $state<HTMLElement>();
@@ -80,6 +90,7 @@
 		controls={id}
 		onclick={toggle}
 		{@attach textRoll()}
+		{@attach triggerAttach}
 	/>
 
 	<div

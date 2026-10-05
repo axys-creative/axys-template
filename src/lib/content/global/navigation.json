@@ -3,7 +3,25 @@
 		{
 			"text": "Home",
 			"url": "/",
-			"newTab": false
+			"newTab": false,
+			"images": [
+				{
+					"src": "/images/img-sample-1.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-2.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-3.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-4.jpg",
+					"alt": ""
+				}
+			]
 		},
 		{
 			"text": "Resources",
@@ -56,28 +74,57 @@
 					"newTab": true,
 					"iconStart": "inventory"
 				}
+			],
+			"images": [
+				{
+					"src": "/images/img-sample-5.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-6.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-7.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-1.jpg",
+					"alt": ""
+				}
 			]
 		},
 		{
 			"text": "Blog",
 			"url": "/blog",
-			"newTab": false
+			"newTab": false,
+			"images": [
+				{
+					"src": "/images/img-sample-3.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-6.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-2.jpg",
+					"alt": ""
+				},
+				{
+					"src": "/images/img-sample-7.jpg",
+					"alt": ""
+				}
+			]
 		}
 	],
 	"ctas": [
 		{
-			"text": "Log In",
-			"url": "/admin",
-			"newTab": true,
-			"type": "underline"
-		},
-		{
-			"text": "Get Started",
-			"textDescription": "Get started with AXYS Creative",
+			"text": "Join",
+			"textDescription": "Join AXYS Creative",
 			"url": "https://axyscreative.com",
 			"newTab": true,
-			"type": "outline",
-			"iconEnd": "chevron-right"
+			"type": "outline"
 		}
 	],
 	"navFooterLinks": [

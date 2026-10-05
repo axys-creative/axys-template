@@ -104,6 +104,7 @@
 	const symbols: NonNullable<SiteNavButtonProps['symbol']>[] = [
 		'burger',
 		'oreo',
+		'stairs',
 		'chocolate',
 		'kebab'
 	];
@@ -538,6 +539,7 @@
 		props={socialLinksProps}
 	>
 		<SocialLinks links={social.links} />
+		<SocialLinks links={social.links} solid />
 	</LibrarySection>
 
 	<LibrarySection
