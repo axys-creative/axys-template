@@ -83,7 +83,7 @@
 	.site {
 		display: flex;
 		flex-direction: column;
-		min-height: 100dvh;
+		min-height: 100lvh;
 	}
 
 	main {

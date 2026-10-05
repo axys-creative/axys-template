@@ -140,7 +140,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		min-height: 100dvh;
+		min-height: 100lvh;
 
 		.inner {
 			width: 100%;

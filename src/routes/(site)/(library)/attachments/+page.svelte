@@ -236,6 +236,15 @@
 			{ name: 'iconSize', description: '`sm | md | lg`. Defaults to `sm`.' },
 			{ name: 'iconColor', description: 'Any CSS color for the icon.' },
 			{
+				name: 'image',
+				description: 'A picture path shown inside the cursor, e.g. `/images/img-sample-1.jpg`.'
+			},
+			{
+				name: 'imageLayer',
+				description:
+					"`front | behind`. Whether the picture sits over the cursor's message and icon or under them. Defaults to `behind`."
+			},
+			{
 				name: 'iconSwap',
 				description:
 					'A second icon name the cursor swaps to each time the element is clicked, e.g. play and pause.'
@@ -247,12 +256,23 @@
 			{
 				name: 'tilt',
 				description:
-					'A boolean or tilt options (`max`, `reverse`, `velocityMax`, `inSpeed`, `outSpeed`, `idleMs`) to tilt the cursor by how fast the mouse moves.'
+					'A boolean or tilt options (`max`, `reverse`, `velocityMax`, `inSpeed`, `outSpeed`, `idleMs`) to tilt the cursor by how fast the mouse moves. A picture tilts slightly by default; pass `false` to stop it.'
 			}
 		]}
 		propsLabel="options"
 	>
 		<p class="underlined" {@attach cursorContent({ icon: true })}>Basic example on text.</p>
+		<p class="cursor-paragraph">
+			Good design rewards a closer look, so hover over
+			<span class="underlined" {@attach cursorContent({ image: '/images/img-sample-1.jpg' })}>
+				this phrase
+			</span>
+			and the cursor opens into
+			<span class="underlined" {@attach cursorContent({ image: '/images/img-sample-2.jpg' })}
+				>a picture that follows the mouse
+			</span>
+			until it leaves the words.
+		</p>
 		<div class="cursor-boxes">
 			<div
 				class="cursor-box"
@@ -1789,6 +1809,10 @@
 
 	.underlined {
 		text-decoration: underline;
+	}
+
+	.cursor-paragraph {
+		max-width: 40rem;
 	}
 
 	.cursor-boxes {

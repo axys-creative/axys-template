@@ -4,6 +4,7 @@
 	import { damp } from '$lib/utils/easing';
 	import { createFollower, followEase, type Ease } from '$lib/utils/follow';
 	import { hasMouse, pointer, trackPointer } from '$lib/utils/pointer';
+	import { imageProps } from '$lib/utils/image';
 	import { createVelocityTilt, type VelocityTiltOptions } from '$lib/utils/velocity-tilt';
 
 	type Props = {
@@ -32,9 +33,13 @@
 
 	let el = $state<HTMLElement>();
 	let body = $state<HTMLElement>();
+	let layer = $state<HTMLElement>();
+	let layerBody = $state<HTMLElement>();
 	let shape = $state<HTMLElement>();
 	let visible = $state(false);
 	let lastIcon = $state('bolt');
+	let lastImage = $state('');
+	let lastLayer = $state<'front' | 'behind'>('behind');
 	let controls = $state.raw<{ sync: (snapped: boolean) => void }>();
 
 	const variant = $derived(variants[cursor.variant ?? ''] ?? {});
@@ -43,6 +48,13 @@
 
 	$effect(() => {
 		if (iconName) lastIcon = iconName;
+	});
+
+	$effect(() => {
+		if (content?.image) {
+			lastImage = content.image;
+			lastLayer = content.imageLayer ?? 'behind';
+		}
 	});
 
 	// When a snap target is claimed or released, wake the loop or glide back to the mouse.
@@ -96,7 +108,9 @@
 					follower.moveTo(snapped.x, snapped.y);
 				}
 
-				el!.style.transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), 0)`;
+				const transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), 0)`;
+				el!.style.transform = transform;
+				if (layer) layer.style.transform = transform;
 
 				const elasticOn = elastic && variant.elastic !== false;
 				if (shape) {
@@ -130,7 +144,9 @@
 				}
 				const activeTilt = claimTilt ?? mainTilt;
 				const tiltAngle = activeTilt ? activeTilt.update(targetX, targetY) : 0;
-				body!.style.rotate = activeTilt ? `${tiltAngle}deg` : '';
+				const rotate = activeTilt ? `${tiltAngle}deg` : '';
+				body!.style.rotate = rotate;
+				if (layerBody) layerBody.style.rotate = rotate;
 
 				return Math.abs(scale) >= 0.001 || Math.abs(tiltAngle) >= 0.001 || !!cursor.target;
 			}
@@ -166,6 +182,7 @@
 	popover="manual"
 	class:visible
 	class:hidden={cursor.hidden}
+	class:has-image={!!content?.image}
 	aria-hidden="true"
 	{style}
 >
@@ -173,6 +190,14 @@
 	<div class="body" bind:this={body}>
 		<div class="shape" bind:this={shape}></div>
 		{#if content?.message}<span class="message">{content.message}</span>{/if}
+		{#if lastImage && lastLayer === 'front'}
+			<img
+				class="image"
+				class:show={!!content?.image}
+				{...imageProps(lastImage, { sizes: '240px' })}
+				alt=""
+			/>
+		{/if}
 		<span
 			class="icon {content?.iconSize ?? 'sm'}"
 			class:show={!!iconName}
@@ -181,6 +206,19 @@
 		></span>
 	</div>
 </div>
+
+{#if lastImage && lastLayer === 'behind'}
+	<div bind:this={layer} class="cursor-layer" class:visible aria-hidden="true">
+		<div class="body" bind:this={layerBody}>
+			<img
+				class="image"
+				class:show={!!content?.image}
+				{...imageProps(lastImage, { sizes: '240px' })}
+				alt=""
+			/>
+		</div>
+	</div>
+{/if}
 
 <style lang="scss">
 	@use 'base/mixins';
@@ -195,6 +233,28 @@
 		background: none;
 		overflow: visible;
 		color: var(--color-text);
+		opacity: 0;
+		pointer-events: none;
+		will-change: transform;
+		transition: opacity 0.3s ease 0.2s;
+
+		@include mixins.mq-touch {
+			display: none;
+		}
+
+		@include mixins.mq-motion-reduce {
+			display: none;
+		}
+
+		&.visible {
+			opacity: 1;
+		}
+	}
+
+	.cursor-layer {
+		position: fixed;
+		inset: 0 auto auto 0;
+		z-index: var(--z-cursor-behind);
 		opacity: 0;
 		pointer-events: none;
 		will-change: transform;
@@ -233,14 +293,16 @@
 		);
 	}
 
-	.hidden .shape {
+	.hidden .shape,
+	.has-image .shape {
 		width: 0;
 		height: 0;
 		opacity: 0;
 	}
 
 	.message,
-	.icon {
+	.icon,
+	.image {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -252,6 +314,20 @@
 		font-size: 14px;
 		text-align: center;
 		white-space: nowrap;
+	}
+
+	.image {
+		width: 15rem;
+		aspect-ratio: 4 / 3;
+		border-radius: 0.75rem;
+		max-width: none;
+		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.24s ease;
+
+		&.show {
+			opacity: 1;
+		}
 	}
 
 	.icon {

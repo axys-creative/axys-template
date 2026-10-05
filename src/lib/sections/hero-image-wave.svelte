@@ -50,7 +50,7 @@
 	.full-screen {
 		display: flex;
 		flex-direction: column;
-		min-height: 100dvh;
+		min-height: 100lvh;
 
 		.inner {
 			flex: 1;

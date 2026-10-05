@@ -18,17 +18,17 @@
 	.hero-simple {
 		display: grid;
 		place-items: center;
-		min-height: 80dvh;
+		min-height: 80lvh;
 		padding: var(--body-padding-double) var(--body-padding);
 	}
 
 	.compact {
-		min-height: 40dvh;
+		min-height: 40lvh;
 	}
 
 	// At least the screen's height: short content is centered, and long content still grows past it.
 	.full-screen {
-		min-height: 100dvh;
+		min-height: 100lvh;
 	}
 
 	.inner {

@@ -77,7 +77,7 @@
 	.full-screen {
 		display: grid;
 		align-items: center;
-		min-height: 100dvh;
+		min-height: 100lvh;
 	}
 
 	.inner {

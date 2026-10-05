@@ -21,7 +21,7 @@ html {
 
 body {
 	@include mixins.body;
-	min-height: 100dvh;
+	min-height: 100lvh;
 	background: var(--color-bg);
 	color: var(--color-text);
 	-webkit-font-smoothing: antialiased;

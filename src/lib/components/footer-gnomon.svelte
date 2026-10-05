@@ -156,7 +156,7 @@
 	}
 
 	.full-screen {
-		min-height: 100dvh;
+		min-height: 100lvh;
 		align-content: end;
 	}
 

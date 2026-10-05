@@ -25,9 +25,19 @@
 	let bar = $state<HTMLElement>();
 	let track = $state<HTMLElement>();
 
+	let probe: HTMLElement | undefined;
+
+	// Mobile toolbars resize innerHeight while scrolling, so the large viewport is measured instead.
+	const viewportHeight = () => probe?.offsetHeight || innerHeight;
+
 	onMount(() => {
+		probe = document.createElement('div');
+		probe.style.cssText =
+			'position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none';
+		document.body.append(probe);
+
 		const update = () => {
-			const scrollable = document.documentElement.scrollHeight - innerHeight;
+			const scrollable = document.documentElement.scrollHeight - viewportHeight();
 			const progress = scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0;
 			bar!.style.setProperty('--progress', String(progress));
 		};
@@ -38,6 +48,7 @@
 		return () => {
 			removeEventListener('scroll', update);
 			removeEventListener('resize', update);
+			probe?.remove();
 		};
 	});
 
@@ -48,17 +59,29 @@
 	});
 
 	// Scrolls to the point that was clicked, measured along the bar.
-	const seek = (event: MouseEvent) => {
+	const seek = (event: PointerEvent, behavior: ScrollBehavior) => {
 		const rect = track!.getBoundingClientRect();
 		const fraction =
 			placement === 'bottom'
 				? (event.clientX - rect.left) / rect.width
 				: (event.clientY - rect.top) / rect.height;
-		const scrollable = document.documentElement.scrollHeight - innerHeight;
+		const scrollable = document.documentElement.scrollHeight - viewportHeight();
 		scrollTo({
 			top: scrollable * Math.min(1, Math.max(0, fraction)),
-			behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+			behavior:
+				behavior === 'smooth' && !matchMedia('(prefers-reduced-motion: reduce)').matches
+					? 'smooth'
+					: 'auto'
 		});
+	};
+
+	const onpointerdown = (event: PointerEvent) => {
+		track!.setPointerCapture(event.pointerId);
+		seek(event, 'smooth');
+	};
+
+	const onpointermove = (event: PointerEvent) => {
+		if (track!.hasPointerCapture(event.pointerId)) seek(event, 'auto');
 	};
 </script>
 
@@ -68,7 +91,8 @@
 	class="scroll-progress {placement} {className ?? ''}"
 	class:clickable={allowClick}
 	aria-hidden="true"
-	onclick={allowClick ? seek : undefined}
+	onpointerdown={allowClick ? onpointerdown : undefined}
+	onpointermove={allowClick ? onpointermove : undefined}
 	{@attach watchScroll({ idle: 500 })}
 	{@attach allowClick ? cursorHide() : undefined}
 >
@@ -90,10 +114,10 @@
 	.scroll-progress {
 		position: fixed;
 		z-index: var(--z-scroll-progress, 5);
-		overflow: hidden;
 		border-radius: 24px;
 		background: var(--color-surface);
 		pointer-events: none;
+		touch-action: none;
 
 		@include mixins.mq-motion-allow {
 			transition:
@@ -115,6 +139,16 @@
 	.clickable {
 		cursor: pointer;
 		pointer-events: auto;
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: -12px;
+
+			@media (pointer: coarse) {
+				inset: -20px;
+			}
+		}
 	}
 
 	.bar {
@@ -123,10 +157,14 @@
 		width: 100%;
 		height: 100%;
 		background: var(--color-accent);
-		transform-origin: left top;
+		pointer-events: none;
 
 		@include mixins.mq-motion-allow {
-			transition: transform 0.25s ease-out;
+			transition: clip-path 0.25s ease-out;
+
+			@media (pointer: coarse) {
+				transition: none;
+			}
 		}
 	}
 
@@ -138,7 +176,7 @@
 		translate: -50% 0;
 
 		.bar {
-			transform: scaleX(var(--progress));
+			clip-path: inset(0 calc((1 - var(--progress)) * 100%) 0 0 round 24px);
 		}
 
 		&.clickable:hover {
@@ -148,13 +186,13 @@
 
 	.right,
 	.left {
-		top: 50%;
+		top: 50svh;
 		width: 4px;
 		height: 128px;
 		translate: 0 -50%;
 
 		.bar {
-			transform: scaleY(var(--progress));
+			clip-path: inset(0 0 calc((1 - var(--progress)) * 100%) 0 round 24px);
 		}
 
 		&.clickable:hover {

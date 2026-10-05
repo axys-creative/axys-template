@@ -438,8 +438,8 @@
 				...galleryImages(10).slice(2)
 			]}
 			columns={[2, 3, 2, 3]}
-			columnsMd={[4, 3, 3]}
-			columnsSm={[5, 5]}
+			columnsMd={[4, 3, 4]}
+			columnsSm={[4, 5]}
 			gnomon={{ depth: 12, length: 36, radius: 4, angle: 80 }}
 		/>
 	</LibrarySection>
@@ -490,7 +490,7 @@
 	<LibrarySection
 		title="Image Shuffle"
 		type="Component"
-		description="A grid of logos for a credibility section. Cells swap to a different image: the new one rolls up from below, or crossfades, one cell at a time or several together. The choice is random, but not truly: it prefers an image that is not on screen, never puts the same image beside itself, and never makes every cell match. Hovering or focusing the grid holds the shuffling, and it stops while off screen. Give it more images than cells (eight by default) for the most variety; with fewer, some repeat, but never side by side. Logos made for white backgrounds can use the `light` tiles."
+		description="A grid of logos for a credibility section. Cells swap to a different image: the new one rolls up from below, or crossfades, one cell at a time or several together. The choice is random, but not truly: it prefers an image that is not on screen, never puts the same image beside itself, and never makes every cell match. It keeps shuffling under the mouse (`pauseOnHover` holds it), pauses while a cell has focus, and stops while off screen. Below `md` it drops to two columns. Give it more images than cells (eight by default) for the most variety; with fewer, some repeat, but never side by side. Logos made for white backgrounds can use the `light` tiles."
 		props={imageShuffleProps}
 	>
 		<h3 class="plain">Roll, one at a time, on light tiles</h3>

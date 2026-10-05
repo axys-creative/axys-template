@@ -617,8 +617,12 @@ export const imageShuffleProps = props(
 		'interval',
 		'A number, milliseconds between swaps. One cell changes each time. Defaults to `3000`.'
 	],
-	['columns', 'A number. Defaults to `4`.'],
+	['columns', 'A number. Below `md` the grid is always two columns wide. Defaults to `4`.'],
 	['rows', 'A number. Defaults to `2`.'],
+	[
+		'pauseOnHover',
+		'A boolean. Holds the shuffling while the pointer is over the grid; by default it keeps playing. A focused cell always holds it. Defaults to `false`.'
+	],
 	[
 		'tiles',
 		"`surface | light`. `surface` draws the cells in the theme's surface color; `light` draws them on a light tile in both themes, which suits logos made for white backgrounds. Defaults to `surface`."
@@ -1177,6 +1181,30 @@ export const planSelectionProps = props(
 	],
 	['defaultBilling', '`monthly | quarterly`. Which one starts selected. Defaults to `monthly`.'],
 	['class', 'A string of extra classes.']
+);
+
+export const heroCarouselProps = props(
+	[
+		'...SectionCopy props',
+		'Takes the layout props of Section Copy (see the Style Guide): `level`, `titleStyle`, `layout`, `align` and `rowAlign`. The eyebrow and buttons are left off to make room for the arrows, so the copy comes from each slide.'
+	],
+	[
+		'slides',
+		'An array of `{ image, title, description }`, where `image` is `{ src, alt }`. The arrows move through them and wrap around; changing the slide fades the background and the copy. Required.'
+	],
+	[
+		'float',
+		'A boolean. Drops the full width: the hero is held to the content width, inset from the screen edges, with a border and rounded corners, the way the floating header and footer sit. Defaults to `false`.'
+	],
+	[
+		'autoplay',
+		'A number of milliseconds between slides. `0` turns autoplay off, so the visitor changes slides with the arrows. It pauses while the hero is hovered or focused, and stays off when motion is reduced. Defaults to `0`.'
+	],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the copy at the bottom. Taller content still grows past it. Defaults to `true`; pass `fullScreen={false}` for a shorter hero.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
 );
 
 export const heroImageWaveProps = props(

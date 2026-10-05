@@ -20,6 +20,8 @@
 		rows?: number;
 		/** `light` draws every cell on a light tile in both themes, for logos made for white backgrounds; `surface` follows the theme, for white or transparent logos. */
 		tiles?: 'light' | 'surface';
+		/** Holds the shuffling while the pointer is over the grid. It always holds while a cell has focus. */
+		pauseOnHover?: boolean;
 		class?: string;
 	};
 </script>
@@ -40,12 +42,16 @@
 		columns = 4,
 		rows = 2,
 		tiles = 'surface',
+		pauseOnHover = false,
 		class: className
 	}: ImageShuffleProps = $props();
 
 	type Layer = { key: number; image: number };
 
+	let compact = $state(false);
 	const cells = $derived(columns * rows);
+	const columnCount = $derived(compact ? 2 : columns);
+	const rowCount = $derived(Math.ceil(cells / columnCount));
 	const random = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
 	const shuffled = (count: number) => {
 		const order = Array.from({ length: count }, (_, index) => index);
@@ -58,13 +64,13 @@
 
 	// The cells next to one, so a swap can avoid putting the same image beside itself.
 	const neighbours = (cell: number) => {
-		const row = Math.floor(cell / columns);
-		const column = cell % columns;
+		const row = Math.floor(cell / columnCount);
+		const column = cell % columnCount;
 		return [
 			column > 0 && cell - 1,
-			column < columns - 1 && cell + 1,
-			row > 0 && cell - columns,
-			row < rows - 1 && cell + columns
+			column < columnCount - 1 && cell + 1 < cells && cell + 1,
+			row > 0 && cell - columnCount,
+			row < rowCount - 1 && cell + columnCount < cells && cell + columnCount
 		].filter((value): value is number => value !== false);
 	};
 
@@ -167,6 +173,11 @@
 	let visible = true;
 
 	onMount(() => {
+		const query = matchMedia('(max-width: 767px)');
+		const onQuery = () => (compact = query.matches);
+		onQuery();
+		query.addEventListener('change', onQuery);
+
 		slots = arrange().map((image) => [{ key: ++counter, image }]);
 
 		const tickSwap = () => {
@@ -189,20 +200,21 @@
 
 		return () => {
 			clearInterval(timer);
+			query.removeEventListener('change', onQuery);
 			observer.disconnect();
 			document.removeEventListener('visibilitychange', onVisibility);
 		};
 	});
 </script>
 
-<!-- Hovering or focusing the grid holds the shuffling, so a logo can be read or clicked. -->
+<!-- Focusing the grid (and hovering it, with `pauseOnHover`) holds the shuffling, so a logo can be read or clicked. -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	bind:this={root}
 	class="image-shuffle {type} {tiles} {className ?? ''}"
 	style="--columns: {columns}; --rows: {rows}"
-	onpointerenter={() => (paused = true)}
-	onpointerleave={() => (paused = false)}
+	onpointerenter={() => pauseOnHover && (paused = true)}
+	onpointerleave={() => pauseOnHover && (paused = false)}
 	onfocusin={() => (paused = true)}
 	onfocusout={() => (paused = false)}
 >
@@ -218,7 +230,7 @@
 					{#if image.url}
 						<a href={image.url} target="_blank" rel="noopener noreferrer">
 							<img
-								{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 25vw' })}
+								{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 50vw' })}
 								alt={image.alt}
 								width={image.width}
 								height={image.height}
@@ -226,7 +238,7 @@
 						</a>
 					{:else}
 						<img
-							{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 25vw' })}
+							{...imageProps(image.src, { sizes: '(min-width: 1024px) 280px, 50vw' })}
 							alt={image.alt}
 							width={image.width}
 							height={image.height}
@@ -249,6 +261,8 @@
 		width: 100%;
 
 		@include mixins.max-md {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: none;
 			gap: 8px;
 		}
 	}

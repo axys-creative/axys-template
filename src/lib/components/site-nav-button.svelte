@@ -230,6 +230,12 @@
 		// How far each short line sits from the center, in x and y, to lie end to end on a 45deg line: half the
 		// difference in length, times cos(45deg).
 		--along: calc((var(--full) - var(--short)) / 2 * 0.7071);
+		--lines-ease: var(--ease);
+
+		// The front-loaded desktop curve reads as instant on touch screens.
+		@media (hover: none), (pointer: coarse) {
+			--lines-ease: cubic-bezier(0.45, 0, 0.25, 1);
+		}
 
 		position: relative;
 		width: 20px;
@@ -259,7 +265,9 @@
 			translate: 0 -50%;
 
 			@include mixins.mq-motion-allow {
-				transition: 0.5s var(--ease);
+				transition:
+					translate 0.5s var(--lines-ease),
+					rotate 0.5s var(--lines-ease);
 			}
 		}
 
@@ -287,8 +295,7 @@
 		}
 
 		.stroke-3 {
-			left: calc(var(--inset) + var(--full) - var(--short));
-			translate: 0 calc(-50% + 6px);
+			translate: calc(var(--full) - var(--short)) calc(-50% + 6px);
 		}
 	}
 
@@ -314,21 +321,17 @@
 			}
 
 			.stroke-1 {
-				left: calc(var(--inset) + (var(--full) - var(--short)) / 2 - var(--along));
-				translate: 0 calc(-50% - var(--along));
+				translate: calc((var(--full) - var(--short)) / 2 - var(--along)) calc(-50% - var(--along));
 				rotate: 45deg;
 			}
 
 			.stroke-2 {
-				left: var(--inset);
-				width: var(--full);
 				translate: 0 -50%;
 				rotate: -45deg;
 			}
 
 			.stroke-3 {
-				left: calc(var(--inset) + (var(--full) - var(--short)) / 2 + var(--along));
-				translate: 0 calc(-50% + var(--along));
+				translate: calc((var(--full) - var(--short)) / 2 + var(--along)) calc(-50% + var(--along));
 				rotate: 45deg;
 			}
 		}

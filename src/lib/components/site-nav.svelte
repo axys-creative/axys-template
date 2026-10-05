@@ -31,6 +31,7 @@
 
 <script lang="ts">
 	import { glass } from '$lib/attachments/glass';
+	import { push } from '$lib/attachments/push';
 	import { scribble } from '$lib/attachments/scribble';
 	import { textRoll } from '$lib/attachments/text-roll';
 	import { imageProps } from '$lib/utils/image';
@@ -139,13 +140,18 @@
 				{#if loaded && link.images?.length}
 					<div class="preview" class:shown={active === index}>
 						{#each link.images.slice(0, 4) as image, picture (picture)}
-							<img
+							<div
 								class="picture picture-{picture + 1}"
 								style="--order: {picture}"
-								{...imageProps(image.src, { sizes: '240px' })}
-								alt=""
-								draggable="false"
-							/>
+								{@attach push()}
+							>
+								<img
+									class="image"
+									{...imageProps(image.src, { sizes: '240px' })}
+									alt=""
+									draggable="false"
+								/>
+							</div>
 						{/each}
 					</div>
 				{/if}
@@ -160,7 +166,9 @@
 					label="Primary"
 					direction="column"
 					landmark={false}
-					onactive={(index) => (active = index)}
+					onactive={(index) => {
+						if (index !== null) active = index;
+					}}
 					linkAttach={scribble({ curve: 'random', hover: true })}
 				/>
 				{@render buttons()}
@@ -297,6 +305,13 @@
 		top: var(--top);
 		width: clamp(140px, 15vw, 240px);
 		aspect-ratio: 4 / 5;
+		pointer-events: none;
+	}
+
+	.image {
+		display: block;
+		width: 100%;
+		height: 100%;
 		border-radius: var(--radius-card, 8px);
 		object-fit: cover;
 		opacity: 0;
@@ -305,8 +320,8 @@
 
 		@include mixins.mq-motion-allow {
 			transition:
-				opacity 0.2s ease,
-				scale 0.2s ease;
+				opacity 0.3s ease,
+				scale 0.3s ease;
 		}
 	}
 
@@ -342,13 +357,17 @@
 	}
 
 	.shown .picture {
+		pointer-events: auto;
+	}
+
+	.shown .image {
 		opacity: 1;
 		scale: 1;
 
 		@include mixins.mq-motion-allow {
 			transition:
-				opacity 0.5s var(--ease) calc(var(--order) * 0.08s),
-				scale 0.7s var(--ease) calc(var(--order) * 0.08s);
+				opacity 0.5s var(--ease) calc(0.35s + var(--order) * 0.08s),
+				scale 0.7s var(--ease) calc(0.35s + var(--order) * 0.08s);
 		}
 	}
 
@@ -362,6 +381,8 @@
 		align-items: center;
 		width: 100%;
 		min-height: 520px;
+		// Lets the pointer reach the pictures behind; what is interactive turns it back on.
+		pointer-events: none;
 		padding: 112px var(--body-padding) var(--body-padding);
 
 		@include mixins.max-md {
@@ -391,6 +412,12 @@
 
 	.middle-links :global(.menu-links) {
 		align-items: center;
+	}
+
+	.middle-links :global(.menu-links),
+	.middle-links .ctas,
+	.connect {
+		pointer-events: auto;
 	}
 
 	.connect {

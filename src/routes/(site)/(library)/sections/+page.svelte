@@ -8,6 +8,7 @@
 		galleryHorizontalProps,
 		headlineProps,
 		heroImageCircleProps,
+		heroCarouselProps,
 		heroImageWaveProps,
 		heroSimpleProps,
 		planSelectionProps,
@@ -22,6 +23,7 @@
 	import CarouselTunnel from '$lib/sections/carousel-tunnel.svelte';
 	import GalleryHorizontal from '$lib/sections/gallery-horizontal.svelte';
 	import Headline from '$lib/sections/headline.svelte';
+	import HeroCarousel from '$lib/sections/hero-carousel.svelte';
 	import HeroImageCircle from '$lib/sections/hero-image-circle.svelte';
 	import HeroImageWave from '$lib/sections/hero-image-wave.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
@@ -409,6 +411,37 @@
 				role: 'Founder, Example Co.',
 				image: { src: '/images/img-sample-3.jpg', alt: 'Portrait of Jamie Rivera' }
 			}}
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Hero Carousel"
+		type="Section"
+		description="A hero whose background is a full-screen picture. The arrows move through the slides, and each one changes the picture and the copy together. With `float` it sits inset from the screen edges, like the floating header and footer."
+		props={heroCarouselProps}
+	>
+		<HeroCarousel
+			class="full"
+			slides={[
+				{
+					image: images[0],
+					title: 'Hero Carousel',
+					description:
+						'A full-screen picture with the copy at the bottom and arrows to move between slides.'
+				},
+				{
+					image: images[1],
+					title: 'Second slide',
+					description: 'The background and the copy both change with the slide.'
+				},
+				{
+					image: images[2],
+					title: 'Third slide',
+					description: 'Reaching the end wraps back around to the first.'
+				}
+			]}
+			float
+			autoplay={6000}
 		/>
 	</LibrarySection>
 

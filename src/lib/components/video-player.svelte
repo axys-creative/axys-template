@@ -84,8 +84,14 @@
 		muted ? 'volume-off' : volume === 0 ? 'volume-mute' : volume < 0.5 ? 'volume-down' : 'volume-up'
 	);
 
-	const toggleFullscreen = () =>
-		document.fullscreenElement ? document.exitFullscreen() : player?.requestFullscreen();
+	// iPhone Safari has no element fullscreen, only the video's own native player.
+	const toggleFullscreen = () => {
+		if (document.fullscreenElement) return document.exitFullscreen();
+		if (player?.requestFullscreen) return player.requestFullscreen().catch(() => {});
+		(
+			video as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | undefined
+		)?.webkitEnterFullscreen?.();
+	};
 
 	// The button follows the video's own state, so it is right however playback started: the button, the native
 	// controls, the keyboard or autoplay.

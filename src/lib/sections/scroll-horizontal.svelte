@@ -97,7 +97,7 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 64px;
-		height: calc(100dvh - var(--body-padding-double));
+		height: calc(100lvh - var(--body-padding-double));
 		min-height: 850px;
 
 		@include mixins.max-xxl {

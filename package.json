@@ -22,7 +22,7 @@
 	},
 	"private": true,
 	"scripts": {
-		"dev": "BROWSER='Google Chrome' vite dev --open",
+		"dev": "BROWSER='Google Chrome' vite dev --host --open",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",

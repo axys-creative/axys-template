@@ -8,11 +8,6 @@
 	"local_backend": true,
 	"media_folder": "static/uploads",
 	"public_folder": "/uploads",
-	"media_library": {
-		"config": {
-			"max_file_size": 8000000
-		}
-	},
 	"site_url": "https://axys-template.netlify.app",
 	"display_url": "https://axys-template.netlify.app",
 	"logo_url": "/images/admin/admin-logo.svg",
