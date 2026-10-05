@@ -124,7 +124,7 @@
 			{#if logo}<div class="bar-logo"><Logo {...logo} url="/" /></div>{/if}
 			{#if ctas.length}
 				<div class="bar-ctas">
-					{#each ctas as cta (cta.url ?? cta.text)}
+					{#each ctas as cta (`${cta.url}|${cta.text}`)}
 						<Button {...cta} {@attach textRoll()} />
 					{/each}
 				</div>
@@ -153,7 +153,7 @@
 
 					{#if ctas.length}
 						<div class="ctas">
-							{#each ctas as cta (cta.url ?? cta.text)}
+							{#each ctas as cta (`${cta.url}|${cta.text}`)}
 								<Button {...cta} {@attach textRoll()} />
 							{/each}
 						</div>
@@ -163,7 +163,7 @@
 				<div class="footer">
 					{#if footerLinks.length}
 						<ul class="footer-links">
-							{#each footerLinks as link (link.url ?? link.text)}
+							{#each footerLinks as link (`${link.url}|${link.text}`)}
 								<li><Button {...link} type="underline" size="sm" {@attach textRoll()} /></li>
 							{/each}
 						</ul>

@@ -93,7 +93,7 @@
 
 		{#if ctas.length}
 			<div class="ctas">
-				{#each ctas as cta (cta.url ?? cta.text)}
+				{#each ctas as cta (`${cta.url}|${cta.text}`)}
 					<Button {...cta} {@attach textRoll()} />
 				{/each}
 			</div>
