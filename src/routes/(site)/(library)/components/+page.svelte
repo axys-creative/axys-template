@@ -8,6 +8,9 @@
 	import ImageCircle from '$lib/components/image-circle.svelte';
 	import ImageWave from '$lib/components/image-wave.svelte';
 	import ImageComparison from '$lib/components/image-comparison.svelte';
+	import social from '$lib/content/global/social-media.json';
+	import SocialLinks from '$lib/components/social-links.svelte';
+	import Strap from '$lib/components/strap.svelte';
 	import SolarSystem from '$lib/components/solar-system.svelte';
 	import ScrollProgress from '$lib/components/scroll-progress.svelte';
 	import Form from '$lib/components/form.svelte';
@@ -17,6 +20,8 @@
 	import AvatarCycle from '$lib/components/avatar-cycle.svelte';
 	import Accordion from '$lib/components/accordion.svelte';
 	import AccordionTable from '$lib/components/accordion-table.svelte';
+	import { watchScroll } from '$lib/attachments/watch-scroll';
+	import BackToTop from '$lib/components/back-to-top.svelte';
 	import Button from '$lib/components/button.svelte';
 	import PostCard from '$lib/components/post-card.svelte';
 	import ThemeToggle from '$lib/components/theme-toggle.svelte';
@@ -26,10 +31,12 @@
 		accordionProps,
 		accordionTableProps,
 		avatarCycleProps,
+		backToTopProps,
 		cardGnomonProps,
 		carouselProps,
 		counterProps,
 		footerScrollRevealProps,
+		headerAbsoluteProps,
 		headerIslandProps,
 		formProps,
 		imageCircleProps,
@@ -44,6 +51,7 @@
 		postCardProps,
 		scrollProgressProps,
 		solarSystemProps,
+		strapProps,
 		videoOverlayProps,
 		videoPlayerProps
 	} from '$lib/library/component-props';
@@ -238,6 +246,19 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Back To Top"
+		type="Component"
+		description="A Button that glides the page back to the top. It is a link to `#`, so it needs no script of its own: Smooth Scroll turns it into a smooth glide, and without it the browser jumps to the top. The footer's return link is this component. Everything else is a Button prop, so it takes the same types, sizes and attachments."
+		props={backToTopProps}
+	>
+		<div class="back-to-top-demo">
+			<BackToTop />
+			<BackToTop type="solid" text="Top" />
+			<BackToTop type="outline" text="" textDescription="Back to top" />
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Card Gnomon"
 		type="Component"
 		description="A square card with one or more rectangular notches cut from its corners or sides (a gnomon). The border is an SVG stroke, so its color can transition on hover, and the image is clipped to the exact same shape."
@@ -383,6 +404,13 @@
 			</div>
 		</LibrarySection>
 	</LibrarySection>
+
+	<LibrarySection
+		title="Header Absolute"
+		type="Component"
+		description="A header with no bar: the logo and the buttons float free at the top, and nothing between them catches the pointer, so links and buttons in the page stay clickable right under it. The menu button opens a full-screen navigation at every screen size. Place the logo and the buttons along the top, choose whether it stays on screen or scrolls away with the page, hide it on scroll, or invert its colors so it reads over any picture. Choose it with Header template in Site Defaults. The content is shared with the other headers."
+		props={headerAbsoluteProps}
+	/>
 
 	<LibrarySection
 		title="Header Island"
@@ -657,6 +685,17 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Strap"
+		type="Component"
+		description="A pill with a round hole through it, like the loop on a lanyard. The strap has no background of its own: the loop is a transparent circle with an enormous box-shadow, and that shadow is the strap's color everywhere outside the circle. The strap clips it to its rounded shape, so the page shows through the loop. Anything can sit beside the loop, such as social links. Header Absolute uses it in the corner."
+		props={strapProps}
+	>
+		<div class="strap-demo">
+			<Strap icon="orbit"><SocialLinks links={social.links} /></Strap>
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Theme Toggle"
 		type="Component"
 		description="Switches between system, light and dark, and remembers the choice. It takes no props; an inline script in `app.html` applies the saved theme before the page paints."
@@ -682,20 +721,36 @@
 	<LibrarySection
 		title="Video Player"
 		type="Component"
-		description="A plain `<video>` with its native controls, plus a play button of your own resting on top while it is not playing. The button is only the circle, so the controls along the bottom stay clickable, and it follows the video's own state, so it fades out however playback starts. It is a simple way to style the video tag: pass the icon, the frame shape and the button's colors and size, and any video attribute goes straight through. For a video in a popup, use the Video Overlay."
+		description="A plain `<video>` with custom controls under it (a play/pause button, a seek track and the time) and a play button of your own resting on top while it is not playing. The track comes in three looks: `solid`, `ticks` and `glass`. Pass `controls` to use the browser's own controls instead. The button follows the video's own state, so it fades out however playback starts. It is a simple way to style the video tag: pass the icon, the frame shape and the button's colors and size, and any video attribute goes straight through. For a video in a popup, use the Video Overlay."
 		props={videoPlayerProps}
 	>
 		<div class="video-demo">
-			<VideoPlayer
-				src="https://www.dropbox.com/scl/fi/6sh06eo6b3x84qo823qcq/sample-video-1.mp4?rlkey=0v6dqkra2wk7de0rz849ufm7o&st=0705ulra&raw=1"
-				poster="/images/img-sample-1.jpg"
-				title="Sample video"
-			/>
+			{#each ['solid', 'ticks', 'glass'] as const as track (track)}
+				<VideoPlayer
+					src="https://www.dropbox.com/scl/fi/6sh06eo6b3x84qo823qcq/sample-video-1.mp4?rlkey=0v6dqkra2wk7de0rz849ufm7o&st=0705ulra&raw=1"
+					poster="/images/img-sample-1.jpg"
+					title="Sample video"
+					{track}
+					playButton={track !== 'ticks'}
+					followCursor={track === 'glass'}
+					sideControls={track === 'glass'
+						? { side: 'left', volume: true, fullscreen: true }
+						: track === 'solid'
+							? { volume: true, fullscreen: true }
+							: undefined}
+				/>
+			{/each}
 		</div>
 	</LibrarySection>
 </div>
 
+<div class="back-to-top-float" {@attach watchScroll({ awayFromTop: 400 })}>
+	<BackToTop type="solid" text="" textDescription="Back to top" />
+</div>
+
 <style lang="scss">
+	@use 'base/mixins';
+
 	/* LIBRARY: DELETE ME */
 	.components {
 		row-gap: 128px;
@@ -724,12 +779,58 @@
 		width: min(760px, 100%);
 	}
 
+	// Pops in once the page has scrolled a while, and steps aside near the footer.
+	.back-to-top-float {
+		@include mixins.right-spacing;
+
+		position: fixed;
+		bottom: var(--body-padding);
+		z-index: var(--z-nav);
+		visibility: hidden;
+		opacity: 0;
+		scale: 0.25;
+
+		@include mixins.mq-motion-allow {
+			transition:
+				opacity var(--duration) var(--ease),
+				scale var(--duration) var(--ease),
+				visibility var(--duration);
+		}
+
+		&:global([data-scroll-away]:not([data-scroll-bottom])),
+		&:focus-within {
+			visibility: visible;
+			opacity: 1;
+			scale: 1;
+		}
+	}
+
+	.back-to-top-demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 24px;
+	}
+
 	.video-demo {
 		width: min(760px, 100%);
+
+		display: flex;
+		flex-direction: column;
+		gap: 64px;
 	}
 
 	.solar-demo {
 		width: min(720px, 100%);
+	}
+
+	.strap-demo {
+		display: flex;
+		justify-content: center;
+		width: min(560px, 100%);
+		padding: 48px 24px;
+		border-radius: var(--radius);
+		background: url('/images/img-sample-3.jpg') center / cover;
 	}
 
 	.circle-demo {

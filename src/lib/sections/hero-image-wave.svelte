@@ -7,6 +7,8 @@
 		accent?: string;
 		/** Image Wave props: `repeat`, `speed`, `duration`, `amplitude`, `waves`, `scrub` and `reverse`. */
 		wave?: Omit<ImageWaveProps, 'images' | 'class'>;
+		/** At least the height of the screen: the copy is centered above the wave. Taller content still grows past it. */
+		fullScreen?: boolean;
 		class?: string;
 	};
 </script>
@@ -15,10 +17,17 @@
 	import ImageWave from '$lib/components/image-wave.svelte';
 	import SectionCopy, { type SectionCopyProps } from '$lib/components/section-copy.svelte';
 
-	let { images, accent, wave, class: className, ...copy }: HeroImageWaveProps = $props();
+	let {
+		images,
+		accent,
+		wave,
+		fullScreen = true,
+		class: className,
+		...copy
+	}: HeroImageWaveProps = $props();
 </script>
 
-<section class="hero-image-wave {className ?? ''}">
+<section class="hero-image-wave {className ?? ''}" class:full-screen={fullScreen}>
 	<div class="inner">
 		<div class="copy">
 			{#if accent}<span class="accent" aria-hidden="true">{accent}</span>{/if}
@@ -36,6 +45,18 @@
 	.hero-image-wave {
 		overflow-x: clip;
 		padding-block-end: var(--body-padding-double);
+	}
+
+	.full-screen {
+		display: flex;
+		flex-direction: column;
+		min-height: 100dvh;
+
+		.inner {
+			flex: 1;
+			align-items: center;
+			width: 100%;
+		}
 	}
 
 	.inner {

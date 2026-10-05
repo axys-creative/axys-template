@@ -1,4 +1,5 @@
 <script module lang="ts">
+	import type { BackToTopProps } from './back-to-top.svelte';
 	import type { ButtonProps } from './button.svelte';
 	import type { LogoProps } from './logo.svelte';
 	import type { SocialLink } from './social-links.svelte';
@@ -10,7 +11,7 @@
 		/** Up to three columns of links. */
 		linksets?: { title?: string; links: ButtonProps[] }[];
 		legalLinks?: ButtonProps[];
-		returnToTop?: ButtonProps;
+		returnToTop?: BackToTopProps;
 		copyright?: string;
 		showThemeToggle?: boolean;
 		includeTop?: boolean;
@@ -28,7 +29,7 @@
 	import { glass as glassEffect } from '$lib/attachments/glass';
 	import { textRoll } from '$lib/attachments/text-roll';
 	import site from '$lib/content/meta/site.json';
-	import Button from './button.svelte';
+	import BackToTop from './back-to-top.svelte';
 	import Logo from './logo.svelte';
 	import MenuLinks from './menu-links.svelte';
 	import SocialLinks from './social-links.svelte';
@@ -57,7 +58,7 @@
 </script>
 
 <footer
-	class="footer"
+	class="footer page-grid"
 	class:float
 	class:blur={blur && !glass}
 	{@attach glass ? glassEffect() : undefined}
@@ -89,7 +90,7 @@
 		{#if includeBottom}
 			<div class="bottom">
 				<div class="bottom-start">
-					{#if returnToTop}<Button {...returnToTop} {@attach textRoll()} />{/if}
+					{#if returnToTop}<BackToTop {...returnToTop} {@attach textRoll()} />{/if}
 				</div>
 				<p class="copyright">{copyrightText}</p>
 				<div class="bottom-end">
@@ -114,6 +115,7 @@
 		width: calc(100% - var(--float-offset) * 2);
 		max-width: var(--content-width);
 		margin: auto auto var(--float-offset);
+		display: block;
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
 	}
@@ -123,9 +125,11 @@
 	}
 
 	.inner {
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: 48px var(--body-padding);
+		padding-block: 48px;
+	}
+
+	.float .inner {
+		padding-inline: var(--body-padding);
 	}
 
 	.top {

@@ -1,4 +1,4 @@
-/** Fades the old page out as the new one fades in. */
+/** Fades the old page out, then fades the new one in. */
 export type CrossName = 'fade';
 /** Covers the page with an overlay, swaps the page underneath, then uncovers it. */
 export type CoverName = 'tiles';
@@ -22,6 +22,8 @@ export type TilesOptions = {
 };
 
 export type PageTransitionOptions = TilesOptions & {
+	/** Keeps the header in place and on top while the page changes. */
+	preserveHeader?: boolean;
 	/** Milliseconds, for transitions that are not tile based. */
 	duration?: number;
 };
@@ -44,9 +46,19 @@ export const crossTransitions: Record<CrossName, CrossSpec> = {
 			{ opacity: 0, translate: '0 12px' },
 			{ opacity: 1, translate: '0 0' }
 		],
-		duration: 400,
+		duration: 600,
 		easing: 'cubic-bezier(0.18, 0.97, 0.47, 1)'
 	}
+};
+
+/** The leaving and arriving halves of a cross transition: the arriving one waits for the leaving one to finish. */
+const phases = (spec: CrossSpec, duration = spec.duration) => {
+	const half = duration / 2;
+	const base = { easing: spec.easing, fill: 'both' } as const;
+	return {
+		out: { ...base, duration: half },
+		in: { ...base, duration: half, delay: half }
+	};
 };
 
 export const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -59,33 +71,25 @@ export async function playTransition(
 	duration?: number
 ) {
 	const spec = crossTransitions[name];
-	const options = {
-		duration: duration ?? spec.duration,
-		easing: spec.easing,
-		fill: 'both'
-	} as const;
+	const timing = phases(spec, duration);
 
 	await Promise.all([
-		leaving.animate(spec.out, options).finished,
-		arriving.animate(spec.in, options).finished
+		leaving.animate(spec.out, timing.out).finished,
+		arriving.animate(spec.in, timing.in).finished
 	]);
 }
 
 /** Plays a cross transition on the page itself, using the View Transitions pseudo-elements. */
 export function playViewTransition(name: CrossName, duration?: number) {
 	const spec = crossTransitions[name];
-	const options = {
-		duration: duration ?? spec.duration,
-		easing: spec.easing,
-		fill: 'both'
-	} as const;
+	const timing = phases(spec, duration);
 
 	document.documentElement.animate(spec.out, {
-		...options,
+		...timing.out,
 		pseudoElement: '::view-transition-old(root)'
 	});
 	document.documentElement.animate(spec.in, {
-		...options,
+		...timing.in,
 		pseudoElement: '::view-transition-new(root)'
 	});
 }
@@ -134,8 +138,9 @@ export async function playTiles(
 		sequence = 'linear',
 		duration = 200,
 		spread = 600,
-		color = 'var(--color-surface)'
-	}: TilesOptions = {},
+		color = 'var(--color-surface)',
+		preserveHeader = false
+	}: TilesOptions & { preserveHeader?: boolean } = {},
 	fixed = false
 ) {
 	const width = fixed ? innerWidth : container.clientWidth;
@@ -146,7 +151,7 @@ export async function playTiles(
 
 	const overlay = document.createElement('div');
 	overlay.setAttribute('aria-hidden', 'true');
-	overlay.style.cssText = `position:${fixed ? 'fixed' : 'absolute'};inset:0;z-index:100;display:grid;grid-template-columns:repeat(${columns},1fr);grid-template-rows:repeat(${rows},1fr);`;
+	overlay.style.cssText = `position:${fixed ? 'fixed' : 'absolute'};inset:0;z-index:${preserveHeader ? 'calc(var(--z-header) - 1)' : 100};display:grid;grid-template-columns:repeat(${columns},1fr);grid-template-rows:repeat(${rows},1fr);`;
 
 	const tiles = delays.map(() => {
 		const tile = document.createElement('div');

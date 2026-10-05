@@ -14,6 +14,8 @@
 		offset?: number;
 		/** Image Circle props for both circles, such as `itemWidth`, `gap` or `duration`. */
 		circle?: Omit<ImageCircleProps, 'images' | 'direction' | 'bloom' | 'clip' | 'class'>;
+		/** At least the height of the screen, with the copy centered. Taller content still grows past it. */
+		fullScreen?: boolean;
 		class?: string;
 	};
 </script>
@@ -31,6 +33,7 @@
 		scrub = 0,
 		offset = 30,
 		circle,
+		fullScreen = true,
 		class: className,
 		...copy
 	}: HeroImageCircleProps = $props();
@@ -84,6 +87,7 @@
 <section
 	class="hero-image-circle {className ?? ''}"
 	class:left
+	class:full-screen={fullScreen}
 	style="--offset: {offset}%; --lift: {lift.toFixed(2)}"
 >
 	<div class="inner">
@@ -129,6 +133,17 @@
 
 		@include mixins.max-lg {
 			overflow: clip;
+		}
+	}
+
+	.full-screen {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 100dvh;
+
+		.inner {
+			width: 100%;
 		}
 	}
 

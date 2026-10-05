@@ -182,3 +182,15 @@ $breakpoints: (
 	background: var(--color-glass);
 	backdrop-filter: blur(8px);
 }
+
+// Anchors an absolutely or fixed positioned element to the left or right edge of the content, not the screen. On a
+// screen narrower than `--content-width` that is the body padding. On a wider one the element stays lined up with the
+// content (and the sections' copy) instead of drifting to the far edge of an ultra-wide monitor. The element's
+// containing block must be as wide as the screen.
+@mixin left-spacing {
+	left: calc(50% - min(var(--content-width), 100% - var(--body-padding) * 2) / 2);
+}
+
+@mixin right-spacing {
+	right: calc(50% - min(var(--content-width), 100% - var(--body-padding) * 2) / 2);
+}

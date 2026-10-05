@@ -7,6 +7,8 @@
 		eyebrowIcon?: string;
 		/** With a `name` the headline is wrapped in quotes and credited beneath. */
 		quote?: { name: string; role?: string; image?: { src: string; alt?: string } };
+		/** At least the height of the screen, with the statement centered. Taller content still grows past it. */
+		fullScreen?: boolean;
 		class?: string;
 	};
 </script>
@@ -16,7 +18,14 @@
 	import Eyebrow from '$lib/components/eyebrow.svelte';
 	import { textFlip } from '$lib/attachments/text-flip';
 
-	let { text, eyebrowText, eyebrowIcon, quote, class: className }: HeadlineProps = $props();
+	let {
+		text,
+		eyebrowText,
+		eyebrowIcon,
+		quote,
+		fullScreen = false,
+		class: className
+	}: HeadlineProps = $props();
 
 	const quoted = $derived(!!quote?.name);
 	const flip = textFlip({
@@ -35,7 +44,7 @@
 	</p>
 {/snippet}
 
-<section class="headline {className ?? ''}">
+<section class="headline {className ?? ''}" class:full-screen={fullScreen}>
 	<div class="inner">
 		<Eyebrow text={eyebrowText} icon={eyebrowIcon} />
 
@@ -65,6 +74,12 @@
 </section>
 
 <style lang="scss">
+	.full-screen {
+		display: grid;
+		align-items: center;
+		min-height: 100dvh;
+	}
+
 	.inner {
 		display: flex;
 		flex-direction: column;

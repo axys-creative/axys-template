@@ -782,9 +782,9 @@
 									"name": "symbol",
 									"label": "Symbol",
 									"widget": "select",
-									"options": ["burger", "chocolate", "kebab"],
+									"options": ["burger", "oreo", "chocolate", "kebab"],
 									"default": "burger",
-									"hint": "Burger is two lines, chocolate is nine dots, kebab is three vertical dots."
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
 								},
 								{
 									"name": "shape",
@@ -857,9 +857,180 @@
 									"name": "symbol",
 									"label": "Symbol",
 									"widget": "select",
-									"options": ["burger", "chocolate", "kebab"],
+									"options": ["burger", "oreo", "chocolate", "kebab"],
 									"default": "burger",
-									"hint": "Burger is two lines, chocolate is nine dots, kebab is three vertical dots."
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
+								},
+								{
+									"name": "shape",
+									"label": "Shape",
+									"widget": "select",
+									"options": ["square", "round"],
+									"default": "square"
+								},
+								{
+									"name": "type",
+									"label": "Style",
+									"widget": "select",
+									"options": ["icon", "button"],
+									"default": "icon",
+									"hint": "Button puts the symbol in a bordered box."
+								},
+								{
+									"name": "text",
+									"label": "Text beside the symbol",
+									"widget": "string",
+									"required": false,
+									"hint": "Optional, e.g. menu."
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "header_absolute",
+					"label": "Header (absolute)",
+					"file": "src/lib/content/global/header-absolute.json",
+					"fields": [
+						{
+							"name": "logoPlacement",
+							"label": "Logo placement",
+							"widget": "select",
+							"options": ["start", "center", "end"],
+							"default": "start",
+							"hint": "Where the logo sits along the top."
+						},
+						{
+							"name": "controlsPlacement",
+							"label": "Buttons placement",
+							"widget": "select",
+							"options": ["start", "center", "end"],
+							"default": "end",
+							"hint": "Where the buttons and menu button sit. Not the same side as the logo, or they overlap."
+						},
+						{
+							"name": "position",
+							"label": "Position",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Fixed (stays on screen)",
+									"value": "fixed"
+								},
+								{
+									"label": "Absolute (scrolls away with the page)",
+									"value": "absolute"
+								}
+							],
+							"default": "fixed"
+						},
+						{
+							"name": "hideOnScroll",
+							"label": "Hide on scroll down",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Only with Fixed."
+						},
+						{
+							"name": "blend",
+							"label": "Invert colors over the page",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Keeps the logo and buttons readable over any picture or color. Works best with text or underline buttons."
+						},
+						{
+							"name": "desktopLayout",
+							"label": "Large screen layout",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Links in the middle, with a strap",
+									"value": "links"
+								},
+								{
+									"label": "Buttons and menu button",
+									"value": "controls"
+								}
+							],
+							"default": "links",
+							"hint": "Links shows the navigation in the middle and a strap of social links in the corner, and the menu button only on small screens."
+						},
+						{
+							"name": "mobileNav",
+							"label": "Small screen menu",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Slide-out panel from the right",
+									"value": "slide"
+								},
+								{
+									"label": "Full-screen overlay",
+									"value": "overlay"
+								}
+							],
+							"default": "slide",
+							"hint": "The slide-out covers about three quarters of the screen, with no backdrop, and all of it on the smallest screens."
+						},
+						{
+							"name": "navSurface",
+							"label": "Menu background",
+							"widget": "select",
+							"options": [
+								{
+									"label": "Solid",
+									"value": "solid"
+								},
+								{
+									"label": "Blur",
+									"value": "blur"
+								},
+								{
+									"label": "Glass",
+									"value": "glass"
+								}
+							],
+							"default": "solid",
+							"hint": "Solid is the page color. Blur is translucent and blurred. Glass adds refracting edges in Chrome, and blur elsewhere."
+						},
+						{
+							"name": "strapIcon",
+							"label": "Strap icon",
+							"widget": "string",
+							"required": false,
+							"default": "orbit",
+							"hint": "An icon name from the icons folder. A placeholder for now. Leave empty for none."
+						},
+						{
+							"name": "showCtas",
+							"label": "Show buttons beside the menu button",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "From the large breakpoint up. Only with the Buttons and menu button layout."
+						},
+						{
+							"name": "showSkipLink",
+							"label": "Show skip to content link",
+							"widget": "boolean",
+							"default": true,
+							"required": false,
+							"hint": "Accessibility. Leave on."
+						},
+						{
+							"name": "navButton",
+							"label": "Menu button",
+							"widget": "object",
+							"fields": [
+								{
+									"name": "symbol",
+									"label": "Symbol",
+									"widget": "select",
+									"options": ["burger", "oreo", "chocolate", "kebab"],
+									"default": "burger",
+									"hint": "Burger is two lines, oreo is two lines with rounded outer corners that twirl into the X, chocolate is nine dots, kebab is three vertical dots."
 								},
 								{
 									"name": "shape",
@@ -1400,6 +1571,10 @@
 								{
 									"label": "Island",
 									"value": "island"
+								},
+								{
+									"label": "Absolute",
+									"value": "absolute"
 								}
 							],
 							"default": "simple",

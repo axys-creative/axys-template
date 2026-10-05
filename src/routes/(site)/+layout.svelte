@@ -8,6 +8,7 @@
 	import PageTransition from '$lib/components/page-transition.svelte';
 	import ScrollProgress from '$lib/components/scroll-progress.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
+	import HeaderAbsolute, { type HeaderAbsoluteProps } from '$lib/components/header-absolute.svelte';
 	import HeaderIsland, { type HeaderIslandProps } from '$lib/components/header-island.svelte';
 	import HeaderSimple, { type HeaderSimpleProps } from '$lib/components/header-simple.svelte';
 	import logo from '$lib/content/global/logo.json';
@@ -16,6 +17,7 @@
 	import footerScrollReveal from '$lib/content/global/footer-scroll-reveal.json';
 	import site from '$lib/content/meta/site.json';
 	import header from '$lib/content/global/header-simple.json';
+	import headerAbsolute from '$lib/content/global/header-absolute.json';
 	import headerIsland from '$lib/content/global/header-island.json';
 	import navigation from '$lib/content/global/navigation.json';
 
@@ -23,10 +25,17 @@
 </script>
 
 <SmoothScroll />
-<PageTransition name="fade" />
+<PageTransition name="fade" preserveHeader />
 
 <div class="site">
-	{#if site.headerTemplate === 'island'}
+	{#if site.headerTemplate === 'absolute'}
+		<HeaderAbsolute
+			{...navigation as HeaderAbsoluteProps}
+			{...headerAbsolute as HeaderAbsoluteProps}
+			{logo}
+			socialLinks={social.links}
+		/>
+	{:else if site.headerTemplate === 'island'}
 		<HeaderIsland
 			{...navigation as HeaderIslandProps}
 			{...headerIsland as HeaderIslandProps}

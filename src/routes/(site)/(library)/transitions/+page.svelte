@@ -19,15 +19,21 @@
 	<LibrarySection
 		title="Fade"
 		type="Transition"
-		description="The page you leave drifts up and fades out as the new one rises into place and fades in. To use it on the site, mount `<PageTransition />` once in `routes/(site)/+layout.svelte`. It wraps every in-app navigation in a view transition, so browsers without them simply change pages as normal, and it is off with reduced motion. To remove it, delete the tag, `components/page-transition.svelte` and `utils/page-transition.ts`."
+		description="The page you leave drifts up and fades out, then the new one rises into place and fades in. To use it on the site, mount `<PageTransition />` once in `routes/(site)/+layout.svelte`. It wraps every in-app navigation in a view transition, so browsers without them simply change pages as normal, and it is off with reduced motion. To remove it, delete the tag, `components/page-transition.svelte` and `utils/page-transition.ts`."
 		props={[
 			{
 				name: 'name',
 				description: "`'fade'`. Which transition plays between pages. Defaults to `fade`."
 			},
 			{
+				name: 'preserveHeader',
+				description:
+					'A boolean. Keeps the header in place and on top while the page changes, for every transition. Defaults to `false`.'
+			},
+			{
 				name: 'duration',
-				description: 'A number, milliseconds. Defaults to `400` for fade.'
+				description:
+					'A number, milliseconds. The total for both halves. Defaults to `600` for fade.'
 			}
 		]}
 		propsLabel="props"
@@ -39,6 +45,11 @@
 		type="Transition"
 		description="A grid of tiles fades in over the whole screen, the page changes underneath, then the tiles fade away in the same order. The page is divided into as many tiles as fit `tileSize`, so a bigger screen has more. It is off with reduced motion. Mount it like Fade: `<PageTransition name=&quot;tiles&quot; />`."
 		props={[
+			{
+				name: 'preserveHeader',
+				description:
+					'A boolean. Keeps the header in place and on top while the page changes, for every transition. Defaults to `false`.'
+			},
 			{
 				name: 'tileSize',
 				description:

@@ -102,10 +102,14 @@
 				if (shape) {
 					if (elasticOn) {
 						const perFrame = 1 / 60 / Math.max(seconds, 1 / 240);
-						const dx = (targetX - previousX) * perFrame;
-						const dy = (targetY - previousY) * perFrame;
+						const dx = (x - previousX) * perFrame;
+						const dy = (y - previousY) * perFrame;
 						const velocity = Math.min(Math.hypot(dx, dy) * 4, 150);
-						if (velocity > 20) angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+						if (velocity > 20) {
+							const heading = (Math.atan2(dy, dx) * 180) / Math.PI;
+							const turn = ((((heading - angle) % 360) + 540) % 360) - 180;
+							angle += turn * damp(0.5, seconds);
+						}
 						scale += ((velocity / 150) * 0.5 - scale) * damp(0.075, seconds);
 						shape.style.rotate = `${angle}deg`;
 						shape.style.scale = `${1 + scale} ${1 - scale}`;
@@ -115,8 +119,8 @@
 						shape.style.scale = '';
 					}
 				}
-				previousX = targetX;
-				previousY = targetY;
+				previousX = x;
+				previousY = y;
 
 				const claimed = cursor.tilt;
 				const key = claimed ? JSON.stringify(claimed) : '';

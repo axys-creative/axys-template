@@ -4,9 +4,9 @@
 	"hideOnScroll": true,
 	"showSkipLink": true,
 	"navButton": {
-		"text": "menu",
-		"symbol": "burger",
+		"text": "",
+		"symbol": "oreo",
 		"shape": "square",
-		"type": "icon"
+		"type": "button"
 	}
 }

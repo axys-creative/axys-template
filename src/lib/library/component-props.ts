@@ -151,7 +151,7 @@ export const sectionCopyProps = props(
 export const siteNavButtonProps = props(
 	[
 		'symbol',
-		'`burger | chocolate | kebab`. Two lines, nine dots or three vertical dots. Defaults to `burger`.'
+		'`burger | oreo | chocolate | kebab`. Two lines, two lines with rounded outer corners that twirl into the X, nine dots or three vertical dots. Defaults to `burger`.'
 	],
 	['shape', '`square | round`. Defaults to `square`.'],
 	['type', '`icon | button`. `button` puts the symbol in a bordered box. Defaults to `icon`.'],
@@ -210,7 +210,32 @@ export const videoPlayerProps = props(
 	],
 	['playLabel', "A string, the play button's accessible name. Defaults to `Play video`."],
 	['aspect', 'A string, the shape of the frame as a CSS aspect ratio. Defaults to `16 / 9`.'],
-	['controls', 'A boolean. The native controls along the bottom. Defaults to `true`.'],
+	[
+		'track',
+		'`solid | ticks | glass`. The look of the custom track under the video, between the play/pause button and the timestamp. Defaults to `solid`.'
+	],
+	[
+		'glass',
+		'A boolean. Gives the big play button and the side buttons the glass background. Defaults to `true` when `track` is `glass`, otherwise `false`.'
+	],
+	[
+		'followCursor',
+		'A boolean, or an object of `cursor-field` options (`ease`, `followSpeed`, `returnSpeed`, `bounce`, `tilt`). The big play button glides toward the mouse while it is over the video. Defaults to `false`.'
+	],
+	[
+		'playButton',
+		'A boolean. The big play button resting on the video while it is not playing. Defaults to `true`.'
+	],
+	[
+		'sideControls',
+		'An object of round buttons that straddle the video edge and stay in view while it scrolls past: `{ side?: "left" | "right", volume?: boolean, fullscreen?: boolean }`. `volume` is a mute button over a vertical volume slider. `side` defaults to `right`.'
+	],
+	['pauseIcon', 'A string, the icon on the pause button. Defaults to `pause`.'],
+	['pauseLabel', "A string, the pause button's accessible name. Defaults to `Pause video`."],
+	[
+		'controls',
+		"A boolean. Shows the browser's own controls instead of the custom ones. Defaults to `false`."
+	],
 	[
 		'preload',
 		'`none | metadata | auto`. How much of the video loads up front. Defaults to `metadata`.'
@@ -607,6 +632,19 @@ export const imageComparisonProps = props(
 	['beforeLabel', 'A string, a Tag in the top left.'],
 	['afterLabel', 'A string, a Tag in the top right.'],
 	['aspectRatio', 'A string, the CSS aspect ratio of the frame. Defaults to `16 / 9`.'],
+	['class', 'A string of extra classes.']
+);
+
+export const backToTopProps = props(
+	['text', 'A string, the label. Defaults to `Back to top`. An empty string makes it icon only.'],
+	['iconEnd', 'An icon name from `static/icons`, after the label. Defaults to `chevron-up`.'],
+	['iconStart', 'An icon name from `static/icons`, before the label.'],
+	['type', '`solid | outline | underline | text`. A Button type. Defaults to `underline`.'],
+	['size', '`sm | md | lg`. Defaults to `md`.'],
+	[
+		'textDescription',
+		"A string, the button's accessible name when it is icon only. Without a label, set it."
+	],
 	['class', 'A string of extra classes.']
 );
 
@@ -1104,6 +1142,10 @@ export const headlineProps = props(
 		'quote',
 		'An object of `{ name, role, image }`, where `image` is `{ src, alt }`. With a `name` the statement is wrapped in quotes and credited beneath, with the image, name and role. Leave it out for a plain headline.'
 	],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the statement centered. Taller content still grows past it. Defaults to `false`.'
+	],
 	['class', 'A string of extra classes.']
 );
 
@@ -1135,6 +1177,11 @@ export const heroImageWaveProps = props(
 	],
 	['images', 'An array of `{ src, alt }` for the wave. Required.'],
 	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the copy centered above the wave. Taller content still grows past it. Defaults to `true`; pass `fullScreen={false}` for the natural height.'
+	],
+
+	[
 		'accent',
 		'A string, decorative handwritten text pinned beside the copy. Hidden below the `lg` breakpoint. Leave it out for none.'
 	],
@@ -1151,6 +1198,11 @@ export const heroImageCircleProps = props(
 		'Takes every prop of Section Copy (see the Style Guide): `eyebrowText`, `eyebrowIcon`, `title`, `description`, `cta` and the rest. `level` defaults to `1`.'
 	],
 	['images', 'An array of `{ src, alt }` for the first circle. Required.'],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the copy centered. Below the `lg` breakpoint the hero is already about a screen tall. Taller content still grows past it. Defaults to `true`; pass `fullScreen={false}` for the natural height.'
+	],
+
 	[
 		'imagesEnd',
 		'An array of `{ src, alt }` for the second circle. Defaults to the same images as the first.'
@@ -1181,7 +1233,11 @@ export const heroSimpleProps = props(
 	],
 	[
 		'compact',
-		'A boolean. A shorter hero (40% of the screen instead of 80%), e.g. above a list. Defaults to `false`.'
+		'A boolean. A shorter hero (40% of the screen), e.g. above a list. Turns off `fullScreen`. Defaults to `false`.'
+	],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, so short copy is centered in a full-screen hero. Long copy, or a short screen, still grows past it instead of being cut off. `compact` turns it off. Defaults to `true`.'
 	],
 	['level', 'Defaults to `1`, since a hero is the page title.'],
 	['align', 'Defaults to `center`.']
@@ -1203,6 +1259,71 @@ export const footerScrollRevealProps = props(
 		'parallax',
 		'A boolean. The content rises and grows into place as the footer is revealed. It is off when motion is reduced. Defaults to `true`.'
 	],
+	['class', 'A string of extra classes.']
+);
+
+export const headerAbsoluteProps = props(
+	[
+		'logo, links, ctas, socialLinks, navFooterLinks, adminLogin, showSkipLink, navButton',
+		'The content every header takes (`HeaderNavProps`), shared in `global/navigation.json`.'
+	],
+	[
+		'logoPlacement',
+		'`start | center | end`. Where the logo sits along the top. Defaults to `start`.'
+	],
+	[
+		'controlsPlacement',
+		'`start | center | end`. Where the buttons and the menu button sit. Pick a different side from the logo, or they overlap. Defaults to `end`.'
+	],
+	[
+		'position',
+		'`fixed | absolute`. `fixed` stays on screen while the page scrolls. `absolute` is part of the top of the page and scrolls away with it. Defaults to `fixed`.'
+	],
+	[
+		'hideOnScroll',
+		'A boolean. The logo and the menu button slide out of view while scrolling down and back as you scroll up, unless the menu is open or focus is inside. Only with `fixed`. Defaults to `false`. With the `links` layout the links always lift off the screen on the way down, and the strap slides right until only its loop and icon show, except on an ultra-wide screen where it stays whole.'
+	],
+	[
+		'blend',
+		'A boolean. Draws over the page in inverted colors (`mix-blend-mode: difference`), so the logo and buttons stay readable over any picture or color. Works best with text or underline buttons. Defaults to `false`.'
+	],
+	[
+		'desktopLayout',
+		'`links | controls`. `links` shows the navigation links in the middle from the `lg` breakpoint up, with a Strap of social links in the corner, and the menu button only on smaller screens. `controls` keeps the buttons and the menu button at every size. Defaults to `links`.'
+	],
+	[
+		'mobileNav',
+		'`slide | overlay`. The menu on small screens. `slide` is a panel from the right over about three quarters of the screen (all of it on the smallest), with rounded left corners, no backdrop, and the social links in a strap at its bottom right. A press beside it closes it. `overlay` fills the screen. Defaults to `slide`.'
+	],
+	[
+		'navSurface',
+		'`solid | blur | glass`. The background of the menu panel. `blur` is translucent and blurred, `glass` uses the glass attachment (refraction in Chrome, blur elsewhere). Defaults to `solid`.'
+	],
+	[
+		'strapIcon',
+		'A string, an icon name from `static/icons` for the Strap’s loop. A placeholder until a site picks its own. Defaults to `orbit`.'
+	],
+	[
+		'showCtas',
+		'A boolean. Shows the buttons beside the menu button from the `lg` breakpoint up. Only with the `controls` layout. Defaults to `true`.'
+	]
+);
+
+export const strapProps = props(
+	[
+		'icon',
+		'A string, an icon name from `static/icons` (or a path to a single-color SVG), centered in the loop.'
+	],
+	['children', 'A snippet, what sits beside the loop, such as the social links.'],
+	[
+		'bleed',
+		'A number, px. How far the right end runs past the edge the strap is placed against, so its curve is not seen. The padding on the right grows by the same amount, so the content stays in view. Defaults to `0`.'
+	],
+	[
+		'--strap-color',
+		'A CSS variable, the strap’s color, which is also the loop’s shadow. Defaults to `--color-accent`, the brand color.'
+	],
+	['--strap-height', 'A CSS variable, the strap’s height. Defaults to `80px`.'],
 	['class', 'A string of extra classes.']
 );
 

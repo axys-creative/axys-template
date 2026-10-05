@@ -78,7 +78,6 @@
 						scrollTrigger: { trigger: section, start: 'top top', end: '+=100%', scrub }
 					});
 					gsap[tween](media, {
-						rotate: '0deg',
 						filter: 'brightness(1)',
 						scrollTrigger: { trigger: pin, start: 'top top', end: '+=100%', scrub }
 					});
@@ -169,6 +168,7 @@
 		justify-content: center;
 		width: 100%;
 		height: var(--section-height);
+		container-type: inline-size;
 	}
 
 	.clip {
@@ -177,14 +177,15 @@
 		border-radius: var(--clip-radius) var(--clip-radius) 0 0;
 	}
 
+	// The media keeps the section's full width whatever the clip's, so the clip only crops it and never resizes it.
 	.media {
 		display: block;
-		width: 100%;
+		width: 100cqw;
+		max-width: none;
 		height: var(--section-height);
+		margin-inline: calc((100% - 100cqw) / 2);
 		object-fit: cover;
 		filter: brightness(1);
-		// Hides the edges when the media is rotated.
-		scale: 1.125;
 	}
 
 	// The text sits on a dark fade that runs the full width of the section.
@@ -240,6 +241,7 @@
 			justify-content: center;
 			width: 100%;
 			height: 100svh;
+			container-type: size;
 		}
 
 		.clip {
@@ -254,9 +256,9 @@
 			top: 50%;
 			left: 50%;
 			z-index: -1;
-			width: 100%;
-			height: 90svh;
-			translate: -50% -50%;
+			width: 100cqw;
+			height: 100cqh;
+			margin: calc(-50cqh) 0 0 calc(-50cqw);
 			filter: brightness(0.75);
 		}
 	}

@@ -1,10 +1,14 @@
 <script lang="ts">
 	import SectionCopy, { type SectionCopyProps } from '$lib/components/section-copy.svelte';
 
-	let { compact = false, ...props }: SectionCopyProps & { compact?: boolean } = $props();
+	let {
+		compact = false,
+		fullScreen = true,
+		...props
+	}: SectionCopyProps & { compact?: boolean; fullScreen?: boolean } = $props();
 </script>
 
-<section class="hero-simple" class:compact>
+<section class="hero-simple" class:compact class:full-screen={fullScreen && !compact}>
 	<div class="inner">
 		<SectionCopy level={1} align="center" {...props} />
 	</div>
@@ -20,6 +24,11 @@
 
 	.compact {
 		min-height: 40dvh;
+	}
+
+	// At least the screen's height: short content is centered, and long content still grows past it.
+	.full-screen {
+		min-height: 100dvh;
 	}
 
 	.inner {

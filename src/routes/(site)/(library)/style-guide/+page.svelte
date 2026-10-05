@@ -101,7 +101,12 @@
 	];
 
 	const sizes = ['sm', 'md', 'lg'] as const;
-	const symbols: NonNullable<SiteNavButtonProps['symbol']>[] = ['burger', 'chocolate', 'kebab'];
+	const symbols: NonNullable<SiteNavButtonProps['symbol']>[] = [
+		'burger',
+		'oreo',
+		'chocolate',
+		'kebab'
+	];
 	const shapes: NonNullable<SiteNavButtonProps['shape']>[] = ['square', 'round'];
 	let navOpen = $state(false);
 	let show = $state({ eyebrow: true, title: true, description: true, cta: true });

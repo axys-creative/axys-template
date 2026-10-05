@@ -42,23 +42,46 @@
 		...(adminLogin ? [{ text: 'Admin Log In', url: '/admin' }] : [])
 	]);
 
+	const EXPAND_MS = 400;
+	const COLLAPSE_MS = 250;
+
+	// `wide` is the island's first step (full content width), `open` the second (the dropdown).
+	let wide = $state(false);
 	let open = $state(false);
 	let island = $state<HTMLElement>();
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
-	const close = () => (open = false);
+	const staged = () =>
+		matchMedia('(min-width: 768px)').matches &&
+		!matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	const show = () => {
+		clearTimeout(timer);
+		wide = true;
+		if (staged()) timer = setTimeout(() => (open = true), EXPAND_MS);
+		else open = true;
+	};
+
+	const close = () => {
+		clearTimeout(timer);
+		open = false;
+		if (!wide) return;
+		if (staged()) timer = setTimeout(() => (wide = false), COLLAPSE_MS);
+		else wide = false;
+	};
 
 	const onKeydown = (event: KeyboardEvent) => {
-		if (event.key !== 'Escape' || !open) return;
+		if (event.key !== 'Escape' || !wide) return;
 		close();
 		island?.querySelector<HTMLElement>('.bar button')?.focus();
 	};
 
 	// A press anywhere else, or focus moving out of the island, closes it.
 	const onPointerdown = (event: PointerEvent) => {
-		if (open && island && !island.contains(event.target as Node)) close();
+		if (wide && island && !island.contains(event.target as Node)) close();
 	};
 	const onFocusout = (event: FocusEvent) => {
-		if (open && island && !island.contains(event.relatedTarget as Node | null)) close();
+		if (wide && island && !island.contains(event.relatedTarget as Node | null)) close();
 	};
 
 	const onPanelClick = (event: MouseEvent) => {
@@ -72,7 +95,7 @@
 
 <header
 	class="header"
-	data-nav-open={open || undefined}
+	data-nav-open={wide || undefined}
 	{@attach hideOnScroll ? watchScroll() : undefined}
 >
 	{#if showSkipLink}
@@ -81,6 +104,7 @@
 
 	<div
 		class="island"
+		class:wide
 		class:open
 		class:blur={blur && !glass}
 		class:has-glass={glass}
@@ -90,13 +114,20 @@
 		{#if glass}<div class="glass-layer" aria-hidden="true" {@attach glassEffect()}></div>{/if}
 
 		<div class="bar">
-			{#if logo}<Logo {...logo} url="/" />{/if}
 			<SiteNavButton
 				{...navButton}
-				expanded={open}
+				expanded={wide}
 				controls={panelId}
-				onclick={() => (open = !open)}
+				onclick={() => (wide ? close() : show())}
 			/>
+			{#if logo}<div class="bar-logo"><Logo {...logo} url="/" /></div>{/if}
+			{#if ctas.length}
+				<div class="bar-ctas">
+					{#each ctas as cta (cta.url ?? cta.text)}
+						<Button {...cta} {@attach textRoll()} />
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		<!-- The panel is a grid that grows from no height, so the island opens downward. -->
@@ -157,6 +188,13 @@
 	.island {
 		--island-width: 420px;
 		--island-padding: 8px;
+		// Collapsing is quicker than expanding: each step uses the time of the state it is moving to.
+		--width-time: 0.25s;
+		--panel-time: 0.25s;
+
+		@include mixins.min-md {
+			--island-width: 760px;
+		}
 
 		position: absolute;
 		top: var(--float-offset);
@@ -173,12 +211,17 @@
 
 		@include mixins.mq-motion-allow {
 			transition:
-				width 0.4s var(--ease),
+				width var(--width-time) var(--ease),
 				translate var(--duration) var(--ease);
 		}
 
-		&.open {
+		&.wide {
 			--island-width: 560px;
+			--width-time: 0.4s;
+
+			@include mixins.min-md {
+				--island-width: min(calc(100% - var(--body-padding) * 2), var(--content-width));
+			}
 		}
 	}
 
@@ -210,11 +253,33 @@
 	}
 
 	.bar {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 24px;
+		padding: 8px 12px;
+
+		> :global(:first-child) {
+			justify-self: start;
+		}
+	}
+
+	.bar-logo {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 24px;
-		padding: 8px 12px 8px 24px;
+		grid-column: 2;
+	}
+
+	.bar-ctas {
+		display: none;
+		grid-column: 3;
+		align-items: center;
+		justify-self: end;
+		gap: 16px;
+
+		@include mixins.min-md {
+			display: flex;
+		}
 	}
 
 	.panel {
@@ -225,9 +290,13 @@
 
 		@include mixins.mq-motion-allow {
 			transition:
-				grid-template-rows 0.4s var(--ease),
-				visibility 0.4s;
+				grid-template-rows var(--panel-time) var(--ease),
+				visibility var(--panel-time);
 		}
+	}
+
+	.open {
+		--panel-time: 0.4s;
 	}
 
 	.open .panel {
@@ -247,8 +316,8 @@
 
 		@include mixins.mq-motion-allow {
 			transition:
-				padding 0.4s var(--ease),
-				opacity var(--duration) var(--ease);
+				padding var(--panel-time) var(--ease),
+				opacity calc(var(--panel-time) * 0.75) var(--ease);
 		}
 	}
 
@@ -282,8 +351,7 @@
 		gap: 16px;
 
 		@include mixins.min-md {
-			flex-direction: column;
-			align-items: flex-end;
+			display: none;
 		}
 	}
 

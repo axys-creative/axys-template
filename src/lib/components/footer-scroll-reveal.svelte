@@ -102,7 +102,7 @@
 	style:height={armed && height ? `${height}px` : undefined}
 	bind:this={reveal}
 >
-	<footer class="footer" bind:clientHeight={height}>
+	<footer class="footer page-grid" bind:clientHeight={height}>
 		<div class="inner" bind:this={inner}>
 			<div class="top-left">
 				{#if title}<h2>{title}</h2>{/if}
@@ -166,9 +166,7 @@
 	.inner {
 		display: flex;
 		flex-wrap: wrap;
-		max-width: var(--content-width);
-		margin-inline: auto;
-		padding: var(--body-padding);
+		padding-block: var(--body-padding);
 
 		@include mixins.max-lg {
 			gap: 48px;
