@@ -1,4 +1,4 @@
-# svelte-template
+# axys-template
 
 SvelteKit + SCSS + JSON content, edited through Decap CMS and hosted on Netlify.
 
