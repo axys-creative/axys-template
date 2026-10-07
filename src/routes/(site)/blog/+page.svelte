@@ -6,7 +6,7 @@
 	let { data } = $props();
 </script>
 
-<HeroSimple {...hero} />
+<HeroSimple id="hero" {...hero} />
 
 <section class="posts">
 	{#each data.posts as post, index (post.slug)}

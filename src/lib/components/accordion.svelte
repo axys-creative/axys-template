@@ -27,6 +27,7 @@
 	import { createDisclosure, startingOpen } from '$lib/utils/disclosure.svelte';
 	import Button from './button.svelte';
 	import Icon from './icon.svelte';
+	import RichText from './rich-text.svelte';
 
 	let {
 		items,
@@ -93,8 +94,7 @@
 				inert={!open}
 			>
 				<div class="inner">
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-					<p>{@html item.content}</p>
+					<p><RichText text={item.content} /></p>
 				</div>
 			</div>
 		</div>

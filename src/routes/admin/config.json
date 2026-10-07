@@ -93,12 +93,13 @@
 		},
 		{
 			"name": "page_home",
-			"label": "Home Page",
+			"label": "Page - Home",
 			"files": [
 				{
 					"name": "hero_simple",
 					"label": "Hero",
 					"file": "src/lib/content/page_home/hero-simple.json",
+					"preview_path": "#hero",
 					"fields": [
 						{
 							"name": "eyebrowText",
@@ -109,20 +110,22 @@
 						{
 							"name": "eyebrowIcon",
 							"label": "Eyebrow icon",
-							"widget": "string",
+							"widget": "image",
 							"required": false,
-							"hint": "Icon file name without .svg (e.g. bolt). See /style-guide for examples."
+							"hint": "An SVG icon; it takes the eyebrow color."
 						},
 						{
 							"name": "title",
 							"label": "Title",
-							"widget": "string"
+							"widget": "string",
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "description",
 							"label": "Description",
 							"widget": "text",
-							"required": false
+							"required": false,
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "cta",
@@ -229,34 +232,6 @@
 							"options": ["start", "center"],
 							"default": "center",
 							"required": false
-						},
-						{
-							"name": "showEyebrow",
-							"label": "Show eyebrow",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showTitle",
-							"label": "Show title",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showDescription",
-							"label": "Show description",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showCta",
-							"label": "Show buttons",
-							"widget": "boolean",
-							"default": true,
-							"required": false
 						}
 					]
 				}
@@ -264,13 +239,13 @@
 		},
 		{
 			"name": "page_blog",
-			"label": "Blog Page",
+			"label": "Page - Blog",
 			"files": [
 				{
 					"name": "hero_simple",
 					"label": "Hero",
 					"file": "src/lib/content/page_blog/hero-simple.json",
-					"preview_path": "blog",
+					"preview_path": "blog#hero",
 					"fields": [
 						{
 							"name": "eyebrowText",
@@ -281,13 +256,15 @@
 						{
 							"name": "title",
 							"label": "Title",
-							"widget": "string"
+							"widget": "string",
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "description",
 							"label": "Description",
 							"widget": "text",
-							"required": false
+							"required": false,
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						}
 					]
 				}
@@ -295,23 +272,26 @@
 		},
 		{
 			"name": "page_form_submit",
-			"label": "Form Submitted Page",
+			"label": "Page - Form Submitted",
 			"files": [
 				{
 					"name": "hero_simple",
 					"label": "Hero",
 					"file": "src/lib/content/page_form_submit/hero-simple.json",
+					"preview_path": "form-submit#hero",
 					"fields": [
 						{
 							"name": "title",
 							"label": "Title",
-							"widget": "string"
+							"widget": "string",
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "description",
 							"label": "Description",
 							"widget": "text",
-							"required": false
+							"required": false,
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "cta",
@@ -377,34 +357,6 @@
 							"options": ["start", "center"],
 							"default": "center",
 							"required": false
-						},
-						{
-							"name": "showEyebrow",
-							"label": "Show eyebrow",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showTitle",
-							"label": "Show title",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showDescription",
-							"label": "Show description",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showCta",
-							"label": "Show buttons",
-							"widget": "boolean",
-							"default": true,
-							"required": false
 						}
 					]
 				}
@@ -412,7 +364,7 @@
 		},
 		{
 			"name": "page_404",
-			"label": "404 Page",
+			"label": "Page - 404",
 			"files": [
 				{
 					"name": "hero_simple",
@@ -422,13 +374,15 @@
 						{
 							"name": "title",
 							"label": "Title",
-							"widget": "string"
+							"widget": "string",
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "description",
 							"label": "Description",
 							"widget": "text",
-							"required": false
+							"required": false,
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
 						},
 						{
 							"name": "cta",
@@ -493,34 +447,6 @@
 							"widget": "select",
 							"options": ["start", "center"],
 							"default": "center",
-							"required": false
-						},
-						{
-							"name": "showEyebrow",
-							"label": "Show eyebrow",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showTitle",
-							"label": "Show title",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showDescription",
-							"label": "Show description",
-							"widget": "boolean",
-							"default": true,
-							"required": false
-						},
-						{
-							"name": "showCta",
-							"label": "Show buttons",
-							"widget": "boolean",
-							"default": true,
 							"required": false
 						}
 					]

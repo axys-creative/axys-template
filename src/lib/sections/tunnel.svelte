@@ -18,6 +18,8 @@
 			/** Seconds the motion takes to catch up with the scroll. `0` plays it once, when it is reached. */
 			scrub?: number;
 		};
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -36,6 +38,7 @@
 		centered = false,
 		reversed = false,
 		parallax,
+		id,
 		class: className
 	}: TunnelProps = $props();
 
@@ -133,6 +136,7 @@
 {/snippet}
 
 <section
+	{id}
 	class="tunnel {className ?? ''}"
 	class:extended
 	class:centered

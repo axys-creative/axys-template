@@ -44,6 +44,10 @@
 		config?: CarouselTunnelConfig;
 		/** The carousel's accessible name. */
 		label?: string;
+		/** Skips the scroll-driven zoom and autoplay, so everything shows and the arrows still work. For previews. */
+		static?: boolean;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -70,6 +74,8 @@
 		pagination = 'arrows',
 		config,
 		label = 'Featured work',
+		static: still = false,
+		id,
 		class: className
 	}: CarouselTunnelProps = $props();
 
@@ -136,7 +142,7 @@
 
 	// Slides are placed in the track's own pixels, so the zoom (on the scaler around it) never moves the active one.
 	function goTo(to: number, animate = true) {
-		if (!gsap || !track || !viewport) return;
+		if (!gsap || !track || !viewport || !track.children.length) return;
 		if (animate && animating) return;
 
 		const slideWidth = (track.children[0] as HTMLElement).offsetWidth;
@@ -235,7 +241,7 @@
 		let cancelled = false;
 		let cleanups: (() => void)[] = [];
 
-		const motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const motion = !still && !matchMedia('(prefers-reduced-motion: reduce)').matches;
 		calm = !motion;
 
 		(async () => {
@@ -326,6 +332,7 @@
 
 <!-- Hovering or focusing the carousel holds autoplay, so a slide can be looked at. -->
 <section
+	{id}
 	class="carousel-tunnel {className ?? ''}"
 	class:armed
 	class:revealed

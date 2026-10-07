@@ -30,6 +30,7 @@
 <script lang="ts">
 	import Eyebrow from './eyebrow.svelte';
 	import CtaGroupComponent from './cta-group.svelte';
+	import RichText from './rich-text.svelte';
 
 	let {
 		eyebrowText,
@@ -52,7 +53,7 @@
 	const hasEyebrow = $derived(showEyebrow && !!(eyebrowText || eyebrowIcon));
 	const hasTitle = $derived(showTitle && !!title);
 	const hasDescription = $derived(showDescription && !!description);
-	const hasCta = $derived(showCta && !!cta);
+	const hasCta = $derived(showCta && !!cta?.primary?.text);
 </script>
 
 {#if hasEyebrow || hasTitle || hasDescription || hasCta}
@@ -63,7 +64,9 @@
 					<Eyebrow text={eyebrowText} icon={eyebrowIcon} direction={eyebrowDirection} />
 				{/if}
 				{#if hasTitle}
-					<svelte:element this={`h${level}`} class={titleStyle}>{title}</svelte:element>
+					<svelte:element this={`h${level}`} class={titleStyle}
+						><RichText text={title ?? ''} /></svelte:element
+					>
 				{/if}
 			</div>
 		{/if}
@@ -72,13 +75,17 @@
 			<div class="body">
 				{#if hasDescription}
 					{#if typeof description === 'string'}
-						<p class="description">{description}</p>
+						<p class="description"><RichText text={description} /></p>
 					{:else if description}
 						<div class="description">{@render description()}</div>
 					{/if}
 				{/if}
 				{#if hasCta && cta}
-					<CtaGroupComponent {...cta} justify={align} />
+					<CtaGroupComponent
+						{...cta}
+						secondary={cta.secondary?.text ? cta.secondary : undefined}
+						justify={align}
+					/>
 				{/if}
 			</div>
 		{/if}

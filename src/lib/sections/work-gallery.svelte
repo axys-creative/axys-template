@@ -16,6 +16,8 @@
 		items: WorkGalleryItem[];
 		/** `default` is two columns. `alternate` is three, where the images take turns being two columns wide. */
 		grid?: 'default' | 'alternate';
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -28,7 +30,7 @@
 	import { cursorContent } from '$lib/attachments/cursor-content';
 	import { glitchTarget } from '$lib/attachments/glitch-target';
 
-	let { items, grid = 'alternate', class: className, ...copy }: WorkGalleryProps = $props();
+	let { items, grid = 'alternate', id, class: className, ...copy }: WorkGalleryProps = $props();
 
 	const hasCopy = $derived(Object.values(copy).some(Boolean));
 	const external = (url: string) => /^https?:\/\//.test(url);
@@ -49,7 +51,7 @@
 	</div>
 {/snippet}
 
-<section class="work-gallery {className ?? ''}">
+<section {id} class="work-gallery {className ?? ''}">
 	<div class="inner">
 		{#if hasCopy}
 			<header class="header">

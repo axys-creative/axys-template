@@ -399,7 +399,7 @@
 			class="full"
 			eyebrowText="Our Philosophy"
 			eyebrowIcon="bolt"
-			text="We believe good design should feel effortless, the kind you only notice once it's gone."
+			text={"[We believe]{.secondary} good design should feel effortless, the kind you only notice once it's gone."}
 		/>
 		<Headline
 			class="full"

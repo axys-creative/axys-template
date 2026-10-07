@@ -22,6 +22,8 @@
 		orientation?: 'default' | 'tilted';
 		/** Sits in the hole and shows until the section pins. A Logo's props, so it can change with the theme. */
 		image?: Pick<LogoProps, 'src' | 'srcLight' | 'srcDark' | 'alt'>;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -48,6 +50,7 @@
 		captionPlacement = 'outside',
 		orientation = 'default',
 		image,
+		id,
 		class: className,
 		...copy
 	}: CircleHighlightProps = $props();
@@ -109,6 +112,7 @@
 </script>
 
 <section
+	{id}
 	class="circle-highlight {className ?? ''}"
 	class:armed
 	class:started

@@ -13,6 +13,8 @@
 </script>
 
 <script lang="ts">
+	import { isCurrentPage, onCurrentPageClick } from '$lib/utils/current-page';
+
 	let { src, srcLight, srcDark, text, alt = '', url, tint = false }: LogoProps = $props();
 
 	const label = $derived(text ? undefined : alt || undefined);
@@ -31,7 +33,13 @@
 {/snippet}
 
 {#if url}
-	<a class="logo" href={url} aria-label={label}>{@render content()}</a>
+	<a
+		class="logo"
+		href={url}
+		aria-label={label}
+		aria-current={isCurrentPage(url) ? 'page' : undefined}
+		onclick={isCurrentPage(url) ? onCurrentPageClick : undefined}>{@render content()}</a
+	>
 {:else}
 	<div class="logo" role={label ? 'img' : undefined} aria-label={label}>{@render content()}</div>
 {/if}

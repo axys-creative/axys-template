@@ -203,7 +203,10 @@ export const mouseTooltipProps = props(
 );
 
 export const videoPlayerProps = props(
-	['src', 'A string, the video file. Self-hosted or CDN files are best. Required.'],
+	[
+		'src',
+		'A string, the video: a Mux playback ID (the Playback ID, not the Asset ID, which also gives the poster), an HLS `.m3u8` URL, a Dropbox share link, or a video file URL. Playback pauses when the video scrolls out of view, unless it autoplays. Required.'
+	],
 	['poster', 'A string, an image shown before the video plays.'],
 	['captions', 'A string, the path to a `.vtt` captions file.'],
 	['captionsLang', 'A string, the captions language. Defaults to `en`.'],
@@ -232,7 +235,7 @@ export const videoPlayerProps = props(
 	],
 	[
 		'sideControls',
-		'An object of round buttons that straddle the video edge and stay in view while it scrolls past: `{ side?: "left" | "right", volume?: boolean, fullscreen?: boolean }`. `volume` is a mute button over a vertical volume slider. `side` defaults to `right`.'
+		'An object of buttons (shaped like the Button component) that straddle the video edge and stay in view while it scrolls past: `{ side?: "left" | "right", volume?: boolean, fullscreen?: boolean }`. `volume` is a mute button over a vertical volume slider. `side` defaults to `right`.'
 	],
 	['pauseIcon', 'A string, the icon on the pause button. Defaults to `pause`.'],
 	['pauseLabel', "A string, the pause button's accessible name. Defaults to `Pause video`."],
@@ -721,6 +724,14 @@ export const scrollProgressProps = props(
 	]
 );
 
+export const sideShadowsProps = props(
+	['width', 'A CSS length, how wide each shadow is. Defaults to `clamp(24px, 6vw, 120px)`.'],
+	[
+		'opacity',
+		'A number from `0` to `1`, how dark the shadows are at the screen edge. Defaults to `0.3`; the light theme halves it.'
+	]
+);
+
 export const toggleSliderProps = props(
 	[
 		'variant',
@@ -792,7 +803,7 @@ export const tabsAttachmentProps = props(
 export const accordionProps = props(
 	[
 		'items',
-		'An array of `{ title, content, defaultOpen }`. `content` is trusted HTML, so it can hold links, and `defaultOpen` starts that item open. Required.'
+		'An array of `{ title, content, defaultOpen }`. `content` takes Rich Text tokens, and `defaultOpen` starts that item open. Required.'
 	],
 	[
 		'icon',
@@ -825,7 +836,7 @@ export const accordionTableProps = props(
 	],
 	[
 		'items',
-		'An array of objects with a field per column `key`, plus `content`, trusted HTML shown when the row is open. A row can also have `images` (an array of `{ src, alt }` shown in a Carousel under the content), its own `slidesPerView`, and a `cta` (Button props) under the carousel. Required.'
+		'An array of objects with a field per column `key`, plus `content`, Rich Text shown when the row is open. A row can also have `images` (an array of `{ src, alt }` shown in a Carousel under the content), its own `slidesPerView`, and a `cta` (Button props) under the carousel. Required.'
 	],
 	[
 		'icon',
@@ -931,6 +942,20 @@ export const cardGnomonProps = props(
 	]
 );
 
+export const richTextProps = props(
+	[
+		'text',
+		'A string. `[words]{.primary}` styles the words, `[words]{.primary .scribble}` combines classes, and `{.br}` is a line break. Anything else, including `<` and `&`, is shown as typed. Required.'
+	],
+	['.italic', 'Italic.'],
+	['.primary', 'The brand accent color.'],
+	['.scribble', 'The Scribble attachment on a random underline, drawn when the page loads.'],
+	['.secondary', 'The secondary color.'],
+	['.stroke', 'An outline with no fill.'],
+	['.strong', 'Bold, as a `<strong>`.'],
+	['class', 'A string, a class for the wrapping span.']
+);
+
 export const postCardProps = props(
 	[
 		'post',
@@ -954,7 +979,7 @@ export const blogArticleHeroProps = props(
 
 export const blogArticleBodyProps = props([
 	'html',
-	'A string of trusted HTML, rendered from the post Markdown by `renderMarkdown`. Required.'
+	'A string of HTML, rendered from the post Markdown by `renderMarkdown`, which escapes raw HTML and supports Rich Text tokens. Required.'
 ]);
 
 export const circleHighlightProps = props(
@@ -1021,6 +1046,10 @@ export const carouselTunnelProps = props(
 		'Optional tuning: `sectionHeight` (the total scroll distance, `220svh`), `slideWidth` (the resting slide width, which sets how much of the next ones peek in, `min(25vw, 720px)`), `slideGap` (`24px`), `slideAspect` (`2 / 1.25`), `scaleDuration` (the share of the scroll spent zooming, `0.6`), `revealDuration` (seconds, `0.6`) and `captionOffset` (`12px`). Anything left out keeps its default, including the smaller slide width on mobile.'
 	],
 	['label', 'A string, the carousel’s accessible name. Defaults to `Featured work`.'],
+	[
+		'static',
+		'A boolean. Skips the scroll-driven zoom and autoplay, so every slide shows and the arrows still work. For previews. Defaults to `false`.'
+	],
 	['class', 'A string of extra classes, such as `full` on a Library page.']
 );
 
@@ -1098,6 +1127,10 @@ export const galleryHorizontalProps = props(
 		'gnomon',
 		'`{ depth, length, radius, angle }`, the Card Gnomon settings every card shares (see Card Gnomon in Components). Defaults to `{ depth: 18, length: 48, radius: 4, angle: 85 }`.'
 	],
+	[
+		'static',
+		'A boolean. Skips the scroll slide and entrance animations. For previews. Defaults to `false`.'
+	],
 	['class', 'A string of extra classes, such as `full` on a Library page.']
 );
 
@@ -1112,7 +1145,7 @@ export const scrollHorizontalProps = props(
 	],
 	[
 		'message',
-		'A string, one long line of large text that slides instead of images. Trusted HTML, so `<span class="stroke">word</span>` outlines a word.'
+		'A string, one long line of large text that slides instead of images. Takes Rich Text tokens, so `[word]{.stroke}` outlines a word.'
 	],
 	[
 		'parallax',
@@ -1147,7 +1180,7 @@ export const tunnelProps = props(
 export const headlineProps = props(
 	[
 		'text',
-		'A string, the statement. It flips in word by word as it scrolls into view. Trusted HTML, so `<em>` and `<strong>` accents work. Required.'
+		'A string, the statement. It flips in word by word as it scrolls into view. Takes Rich Text tokens, such as `[word]{.primary}`. Required.'
 	],
 	['eyebrowText', 'A string shown above the statement.'],
 	['eyebrowIcon', 'An icon name from `static/icons`. Works without `eyebrowText` too.'],

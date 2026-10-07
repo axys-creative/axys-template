@@ -9,7 +9,7 @@
 	};
 
 	export type VideoPlayerProps = {
-		/** The video file. Self-hosted or CDN files are best. */
+		/** The video file, a Mux playback ID or a Dropbox share link. Self-hosted or CDN files are best. */
 		src: string;
 		/** An image shown before the video plays. */
 		poster?: string;
@@ -34,7 +34,7 @@
 		glass?: boolean;
 		/** The big play button resting on the video while it is not playing. */
 		playButton?: boolean;
-		/** Round buttons straddling the video's edge, kept in view while it scrolls past. */
+		/** Buttons straddling the video's edge, kept in view while it scrolls past. */
 		sideControls?: VideoSideControls;
 		class?: string;
 	} & Omit<HTMLVideoAttributes, 'src' | 'poster' | 'title' | 'class' | 'children'>;
@@ -43,6 +43,7 @@
 <script lang="ts">
 	import { cursorField, type CursorFieldOptions } from '$lib/attachments/cursor-field';
 	import { glass } from '$lib/attachments/glass';
+	import { isHls, videoPoster, videoUrl } from '$lib/utils/video-url';
 	import Icon from './icon.svelte';
 
 	const TICK_GAP = 8;
@@ -70,14 +71,54 @@
 		...rest
 	}: VideoPlayerProps = $props();
 
+	const url = $derived(videoUrl(src));
+	const hls = $derived(isHls(url));
+	const posterUrl = $derived(poster ?? videoPoster(src));
+
 	const frosted = $derived(glassProp ?? track === 'glass');
 
 	let video = $state<HTMLVideoElement>();
+
+	// hls.js goes first: Chrome says "maybe" to native HLS but can't play it, so native playback is the fallback.
+	$effect(() => {
+		if (!video || !hls) return;
+		const element = video;
+		let cancelled = false;
+		let destroy: (() => void) | undefined;
+		import('hls.js').then(({ default: Hls }) => {
+			if (cancelled) return;
+			if (!Hls.isSupported()) {
+				element.src = url;
+				return;
+			}
+			const instance = new Hls();
+			instance.loadSource(url);
+			instance.attachMedia(element);
+			destroy = () => instance.destroy();
+		});
+		return () => {
+			cancelled = true;
+			destroy?.();
+		};
+	});
+
 	let paused = $state(true);
 	let ended = $state(false);
 	let volume = $state(1);
 	let muted = $state(false);
 	let player = $state<HTMLElement>();
+
+	$effect(() => {
+		if (!player || !video || rest.autoplay) return;
+		const element = video;
+		const observer = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting || element.paused) return;
+			if (document.fullscreenElement || document.pictureInPictureElement === element) return;
+			element.pause();
+		});
+		observer.observe(player);
+		return () => observer.disconnect();
+	});
 	let fullscreen = $state(false);
 
 	const volumeIcon = $derived(
@@ -194,8 +235,8 @@
 				bind:muted
 				bind:currentTime
 				bind:duration
-				{src}
-				{poster}
+				src={hls ? undefined : url}
+				poster={posterUrl}
 				{controls}
 				{preload}
 				{title}
@@ -377,8 +418,8 @@
 		height: var(--play-size);
 		margin: auto;
 		padding: calc(var(--play-size) * 0.3);
-		border: 0;
-		border-radius: 50%;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-btn);
 		background: var(--play-bg);
 		color: var(--play-color);
 		cursor: pointer;
@@ -387,16 +428,26 @@
 			transition:
 				opacity 0.3s var(--ease),
 				scale 0.3s var(--ease),
+				background var(--duration) var(--ease),
+				color var(--duration) var(--ease),
 				visibility 0.3s;
 		}
 
 		@include mixins.desktop-hover {
 			scale: 1.1;
+			background: transparent;
+			color: var(--color-accent-text);
 		}
 
 		&.frosted {
+			border-color: transparent;
 			background: var(--glass-tint, var(--color-glass));
 			color: var(--color-text);
+
+			@include mixins.desktop-hover {
+				background: var(--glass-tint, var(--color-glass));
+				color: var(--color-text);
+			}
 		}
 
 		&:focus-visible {
@@ -433,12 +484,23 @@
 		width: 40px;
 		height: 40px;
 		padding: 10px;
-		border: 0;
-		border-radius: 50%;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-btn);
 		background: var(--color-accent);
 		color: var(--color-on-accent);
 		font-size: 20px;
 		cursor: pointer;
+
+		@include mixins.mq-motion-allow {
+			transition:
+				background var(--duration) var(--ease),
+				color var(--duration) var(--ease);
+		}
+
+		@include mixins.desktop-hover {
+			background: transparent;
+			color: var(--color-accent-text);
+		}
 
 		&:focus-visible {
 			outline: 2px solid var(--color-accent-text);
@@ -561,6 +623,7 @@
 		top: 0;
 		bottom: 0;
 		width: 44px;
+		padding-block: 24px;
 		z-index: 1;
 		pointer-events: none;
 	}
@@ -599,16 +662,33 @@
 		width: 44px;
 		height: 44px;
 		padding: 0;
-		border: 0;
-		border-radius: 50%;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-btn);
 		background: var(--color-accent);
 		color: var(--color-on-accent);
 		font-size: 22px;
 		cursor: pointer;
 
+		@include mixins.mq-motion-allow {
+			transition:
+				background var(--duration) var(--ease),
+				color var(--duration) var(--ease);
+		}
+
+		@include mixins.desktop-hover {
+			background: transparent;
+			color: var(--color-accent-text);
+		}
+
 		&.frosted {
+			border-color: transparent;
 			background: var(--glass-tint, var(--color-glass));
 			color: var(--color-text);
+
+			@include mixins.desktop-hover {
+				background: var(--glass-tint, var(--color-glass));
+				color: var(--color-text);
+			}
 		}
 
 		&:focus-visible {
@@ -626,6 +706,7 @@
 
 	.volume {
 		--range-width: 96px;
+		--ink: var(--color-on-accent);
 
 		position: absolute;
 		top: 0;
@@ -634,21 +715,21 @@
 		width: 44px;
 		height: 44px;
 		overflow: hidden;
-		border-radius: 22px;
+		border-radius: var(--radius-btn);
 		background: var(--color-accent);
 
 		&.frosted {
+			--ink: var(--color-text);
+
 			background: var(--glass-tint, var(--color-glass));
 			color: var(--color-text);
 		}
 
 		.side-button {
 			flex-shrink: 0;
+			border-color: transparent;
 			background: none;
-		}
-
-		&.frosted .side-button {
-			color: var(--color-text);
+			color: var(--ink);
 		}
 
 		@include mixins.mq-motion-allow {
@@ -685,7 +766,11 @@
 		margin: 0;
 		appearance: none;
 		border-radius: 4px;
-		background: linear-gradient(to right, white var(--value), rgb(255 255 255 / 0.4) var(--value));
+		background: linear-gradient(
+			to right,
+			var(--ink) var(--value),
+			color-mix(in srgb, var(--ink) 35%, transparent) var(--value)
+		);
 		cursor: pointer;
 
 		&::-webkit-slider-thumb {
@@ -694,7 +779,7 @@
 			height: 12px;
 			border: 0;
 			border-radius: 50%;
-			background: white;
+			background: var(--ink);
 		}
 
 		&::-moz-range-thumb {
@@ -702,11 +787,11 @@
 			height: 12px;
 			border: 0;
 			border-radius: 50%;
-			background: white;
+			background: var(--ink);
 		}
 
 		&:focus-visible {
-			outline: 2px solid white;
+			outline: 2px solid var(--ink);
 			outline-offset: 4px;
 		}
 	}

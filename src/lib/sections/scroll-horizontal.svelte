@@ -15,12 +15,15 @@
 		message?: string;
 		/** The images drift a little within their frames as the row slides. Defaults to `true`. */
 		parallax?: boolean;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
 
 <script lang="ts">
 	import { imageProps } from '$lib/utils/image';
+	import RichText from '$lib/components/rich-text.svelte';
 	import SectionCopy from '$lib/components/section-copy.svelte';
 	import { animate } from '$lib/attachments/animate';
 	import { scrollSlide } from '$lib/attachments/scroll-slide';
@@ -29,6 +32,7 @@
 		items = [],
 		message,
 		parallax = true,
+		id,
 		class: className,
 		...copy
 	}: ScrollHorizontalProps = $props();
@@ -36,7 +40,7 @@
 	const hasCopy = $derived(Object.values(copy).some(Boolean));
 </script>
 
-<section class="scroll-horizontal {className ?? ''}" class:message={!!message}>
+<section {id} class="scroll-horizontal {className ?? ''}" class:message={!!message}>
 	<div
 		class="pin"
 		class:with-header={hasCopy}
@@ -55,8 +59,7 @@
 		<div class="container" data-slide-viewport>
 			<div class="slider" data-slide-track {@attach animate({ variant: 'scale', stagger: 0.1 })}>
 				{#if message}
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-					<p class="h2 text">{@html message}</p>
+					<p class="h2 text"><RichText text={message} /></p>
 				{:else}
 					{#each items as item, index (index)}
 						<figure class="figure">

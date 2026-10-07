@@ -20,6 +20,8 @@
 		variant?: 'details' | 'circle';
 		/** `center` stacks the copy in the middle. `split` puts the eyebrow and title on the left and the description on the right. */
 		copyLayout?: 'center' | 'split';
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -34,6 +36,7 @@
 		events,
 		variant = 'details',
 		copyLayout = 'center',
+		id,
 		class: className,
 		...copy
 	}: ScrollTimelineProps = $props();
@@ -112,7 +115,7 @@
 	<SectionCopy {...props} {level} {layout} {align} />
 {/snippet}
 
-<section class="scroll-timeline variant-{variant} {className ?? ''}" class:armed>
+<section {id} class="scroll-timeline variant-{variant} {className ?? ''}" class:armed>
 	{#if !circle && hasCopy}
 		<header class="intro">{@render copyBlock(copy, 2)}</header>
 	{/if}

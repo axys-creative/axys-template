@@ -31,6 +31,8 @@
 		discount?: string;
 		/** The billing that starts selected. */
 		defaultBilling?: 'monthly' | 'quarterly';
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -51,6 +53,7 @@
 		priceToggle = false,
 		discount = '20%',
 		defaultBilling = 'monthly',
+		id,
 		class: className,
 		...copy
 	}: PlanSelectionProps = $props();
@@ -87,7 +90,7 @@
 		typeof feature !== 'string' && !!feature.strong;
 </script>
 
-<section class="plan-selection {className ?? ''}" data-billing={billing}>
+<section {id} class="plan-selection {className ?? ''}" data-billing={billing}>
 	<div class="inner">
 		<SectionCopy level={2} align="center" {...copy} />
 

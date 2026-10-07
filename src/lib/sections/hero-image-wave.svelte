@@ -9,6 +9,8 @@
 		wave?: Omit<ImageWaveProps, 'images' | 'class'>;
 		/** At least the height of the screen: the copy is centered above the wave. Taller content still grows past it. */
 		fullScreen?: boolean;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -22,12 +24,13 @@
 		accent,
 		wave,
 		fullScreen = true,
+		id,
 		class: className,
 		...copy
 	}: HeroImageWaveProps = $props();
 </script>
 
-<section class="hero-image-wave {className ?? ''}" class:full-screen={fullScreen}>
+<section {id} class="hero-image-wave {className ?? ''}" class:full-screen={fullScreen}>
 	<div class="inner">
 		<div class="copy">
 			{#if accent}<span class="accent" aria-hidden="true">{accent}</span>{/if}

@@ -16,4 +16,4 @@
 	});
 </script>
 
-<HeroSimple {...hero} {cta} />
+<HeroSimple id="hero" {...hero} {cta} />

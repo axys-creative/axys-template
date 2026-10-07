@@ -1,6 +1,6 @@
 <script module lang="ts">
 	export type HeadlineProps = {
-		/** The statement, which flips in word by word. Trusted HTML, so `<em>` and `<strong>` accents work. */
+		/** The statement, which flips in word by word. Takes `[words]{.primary}` tokens, see Rich Text. */
 		text: string;
 		eyebrowText?: string;
 		/** Icon name from `static/icons`. Works without `eyebrowText` too. */
@@ -9,11 +9,14 @@
 		quote?: { name: string; role?: string; image?: { src: string; alt?: string } };
 		/** At least the height of the screen, with the statement centered. Taller content still grows past it. */
 		fullScreen?: boolean;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
 
 <script lang="ts">
+	import RichText from '$lib/components/rich-text.svelte';
 	import { imageProps } from '$lib/utils/image';
 	import Eyebrow from '$lib/components/eyebrow.svelte';
 	import { textFlip } from '$lib/attachments/text-flip';
@@ -24,6 +27,7 @@
 		eyebrowIcon,
 		quote,
 		fullScreen = false,
+		id,
 		class: className
 	}: HeadlineProps = $props();
 
@@ -39,12 +43,11 @@
 {#snippet statement()}
 	<!-- A statement, not a section title, so it is a paragraph that looks like a heading. -->
 	<p class="h2 text" {@attach flip}>
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		{#if quoted}“{/if}{@html text}{#if quoted}”{/if}
+		{#if quoted}“{/if}<RichText {text} />{#if quoted}”{/if}
 	</p>
 {/snippet}
 
-<section class="headline {className ?? ''}" class:full-screen={fullScreen}>
+<section {id} class="headline {className ?? ''}" class:full-screen={fullScreen}>
 	<div class="inner">
 		<Eyebrow text={eyebrowText} icon={eyebrowIcon} />
 

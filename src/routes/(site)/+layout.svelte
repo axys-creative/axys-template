@@ -8,6 +8,7 @@
 	import FooterSimple, { type FooterSimpleProps } from '$lib/components/footer-simple.svelte';
 	import PageTransition from '$lib/components/page-transition.svelte';
 	import ScrollProgress from '$lib/components/scroll-progress.svelte';
+	import SideShadows from '$lib/components/side-shadows.svelte';
 	import SmoothScroll from '$lib/components/smooth-scroll.svelte';
 	import HeaderBasic, { type HeaderBasicProps } from '$lib/components/header-basic.svelte';
 	import HeaderAbsolute, { type HeaderAbsoluteProps } from '$lib/components/header-absolute.svelte';
@@ -76,6 +77,7 @@
 	{/if}
 </div>
 
+<SideShadows />
 <ScrollProgress />
 <AlertStack />
 

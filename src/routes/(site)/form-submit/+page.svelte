@@ -3,4 +3,4 @@
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
 </script>
 
-<HeroSimple {...hero} />
+<HeroSimple id="hero" {...hero} />

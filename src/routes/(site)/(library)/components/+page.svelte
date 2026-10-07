@@ -13,6 +13,7 @@
 	import Strap from '$lib/components/strap.svelte';
 	import SolarSystem from '$lib/components/solar-system.svelte';
 	import ScrollProgress from '$lib/components/scroll-progress.svelte';
+	import SideShadows from '$lib/components/side-shadows.svelte';
 	import Form from '$lib/components/form.svelte';
 	import Counter from '$lib/components/counter.svelte';
 	import Carousel from '$lib/components/carousel.svelte';
@@ -23,6 +24,7 @@
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import BackToTop from '$lib/components/back-to-top.svelte';
 	import Button from '$lib/components/button.svelte';
+	import RichText from '$lib/components/rich-text.svelte';
 	import PostCard from '$lib/components/post-card.svelte';
 	import ThemeToggle from '$lib/components/theme-toggle.svelte';
 	import VideoPlayer from '$lib/components/video-player.svelte';
@@ -46,7 +48,9 @@
 		imageWaveProps,
 		mouseCursorProps,
 		postCardProps,
+		richTextProps,
 		scrollProgressProps,
+		sideShadowsProps,
 		solarSystemProps,
 		strapProps,
 		videoOverlayProps,
@@ -56,9 +60,13 @@
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
 	import { navEntry } from '$lib/utils/nav';
 
+	const richTextSample =
+		'Every project tells a [story]{.scribble}, in the [brand color]{.primary}, with [outlined]{.stroke} and [italic]{.italic} words,{.br}[bold]{.strong} ones and [all of them at once]{.primary .italic .scribble}.';
+
 	const nav = navEntry('/components');
 	let videoOpen = $state(false);
 	let progress = $state<'bottom' | 'right' | 'left' | null>(null);
+	let shadows = $state(false);
 
 	const long =
 		'Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima numquam officiis ipsa obcaecati illo molestias aliquam molestiae praesentium provident eos? Excepturi veniam assumenda non corrupti similique aperiam rem enim dolores repellat.';
@@ -584,6 +592,17 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Rich Text"
+		type="Component"
+		description="How an admin styles a few words inside a plain text field without writing HTML. Wrap the words in square brackets and follow them with the classes in curly braces. Section Copy titles and descriptions, the Headline, the Scroll Horizontal message and the accordions all use it, and blog posts take the same tokens in their Markdown, where raw HTML is shown as text. Everything is escaped except the tokens, so nothing an admin types can break the page. Classes that are not on the list are ignored and the words stay."
+		props={richTextProps}
+	>
+		<p class="h3">
+			<RichText text={richTextSample} />
+		</p>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Scroll Progress"
 		type="Component"
 		description="A small bar that fills as the page scrolls, down the right edge by default. It fades back after a moment without scrolling and returns on hover, and clicking it can jump the page to that point. It is decorative for screen readers, since the page's own scrollbar and keyboard already do the job. Mount it once in a layout. The buttons below show it on this page."
@@ -610,6 +629,23 @@
 			/>
 		</div>
 		{#if progress}<ScrollProgress placement={progress} hideScrollbar={false} />{/if}
+	</LibrarySection>
+
+	<LibrarySection
+		title="Side Shadows"
+		type="Component"
+		description="Soft dark gradients down both edges of the screen, fixed over the page, so content fades in from the sides. They ignore the pointer and are hidden from screen readers. Mount it once in a layout for every page, or in one page for that page only. The button below shows it on this page."
+		props={sideShadowsProps}
+	>
+		<div class="row">
+			<Button
+				text="Side shadows"
+				type="outline"
+				expanded={shadows}
+				onclick={() => (shadows = !shadows)}
+			/>
+		</div>
+		{#if shadows}<SideShadows />{/if}
 	</LibrarySection>
 
 	<LibrarySection

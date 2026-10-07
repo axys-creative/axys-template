@@ -24,6 +24,8 @@
 		size?: 'full' | 'half';
 		/** Which side the panels sit on. The copy sits on the other side, pinned beside them. */
 		placement?: 'left' | 'center' | 'right';
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -40,6 +42,7 @@
 		nav = false,
 		size = 'full',
 		placement = 'center',
+		id,
 		class: className,
 		...copy
 	}: ScrollStackProps = $props();
@@ -134,7 +137,7 @@
 	{/if}
 {/snippet}
 
-<section class="scroll-stack {size} {placement} {className ?? ''}" class:armed class:beside>
+<section {id} class="scroll-stack {size} {placement} {className ?? ''}" class:armed class:beside>
 	<div class="inner">
 		{@render text(false)}
 

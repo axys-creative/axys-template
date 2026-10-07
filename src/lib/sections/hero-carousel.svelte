@@ -17,6 +17,8 @@
 		autoplay?: number;
 		/** At least the height of the screen, with the copy at the bottom. Taller content still grows past it. */
 		fullScreen?: boolean;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 		class?: string;
 	};
 </script>
@@ -31,6 +33,7 @@
 		float = false,
 		autoplay = 0,
 		fullScreen = true,
+		id,
 		class: className,
 		...copy
 	}: HeroCarouselProps = $props();
@@ -54,6 +57,7 @@
 </script>
 
 <section
+	{id}
 	class="hero-carousel {className ?? ''}"
 	class:float
 	class:full-screen={fullScreen}

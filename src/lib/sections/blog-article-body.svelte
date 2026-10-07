@@ -1,15 +1,17 @@
 <script module lang="ts">
 	export type BlogArticleBodyProps = {
-		/** Trusted HTML rendered from the post's Markdown. */
+		/** HTML rendered from the post's Markdown by `renderMarkdown`, which escapes raw HTML. */
 		html: string;
+		/** The section's anchor, so a link or the CMS preview can point to `#id`. */
+		id?: string;
 	};
 </script>
 
 <script lang="ts">
-	let { html }: BlogArticleBodyProps = $props();
+	let { html, id }: BlogArticleBodyProps = $props();
 </script>
 
-<section class="blog-article-body">
+<section {id} class="blog-article-body">
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	<article>{@html html}</article>
 </section>

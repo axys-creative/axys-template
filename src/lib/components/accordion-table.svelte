@@ -52,6 +52,7 @@
 	import { createDisclosure, startingOpen } from '$lib/utils/disclosure.svelte';
 	import Carousel from './carousel.svelte';
 	import Icon from './icon.svelte';
+	import RichText from './rich-text.svelte';
 
 	let {
 		columns,
@@ -137,8 +138,7 @@
 						{/if}
 					{/each}
 					<div class="body">
-						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-						<div>{@html item.content}</div>
+						<div><RichText text={item.content} /></div>
 						{#if item.images?.length}
 							<Carousel
 								label="Images"
