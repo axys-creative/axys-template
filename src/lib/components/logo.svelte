@@ -64,31 +64,13 @@
 		max-width: 100%;
 	}
 
-	// The dark image shows by default; the light one takes over in the light theme.
+	// The theme tokens decide which file shows, so a logo follows the surface it sits on, not only the page.
 	.light {
-		display: none;
+		display: var(--display-light, none);
 	}
 
-	:global(:root[data-theme='light']) {
-		.light {
-			display: block;
-		}
-
-		.dark {
-			display: none;
-		}
-	}
-
-	@media (prefers-color-scheme: light) {
-		:global(:root:not([data-theme])) {
-			.light {
-				display: block;
-			}
-
-			.dark {
-				display: none;
-			}
-		}
+	.dark {
+		display: var(--display-dark, block);
 	}
 
 	img:not(.themed),

@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 .visually-hidden {
 	position: absolute;
@@ -38,4 +39,22 @@
 	> .full {
 		grid-column: full;
 	}
+}
+
+// A surface with its own theme, whatever the page theme is. Put it on a section or any wrapper: the tokens inside
+// follow it, so the background, text, borders and buttons all flip together. `theme-invert` is always the opposite
+// of the page theme.
+.theme-dark {
+	@include variables.theme(dark);
+	background: var(--color-bg);
+}
+
+.theme-light {
+	@include variables.theme(light);
+	background: var(--color-bg);
+}
+
+.theme-invert {
+	@include variables.theme(invert);
+	background: var(--color-bg);
 }

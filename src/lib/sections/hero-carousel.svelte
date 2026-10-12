@@ -1,14 +1,14 @@
 <script module lang="ts">
 	export type HeroCarouselSlide = Pick<
 		SectionCopyProps,
-		'title' | 'description' | 'eyebrowText' | 'eyebrowIcon' | 'cta'
+		'title' | 'description' | 'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'cta'
 	> & {
 		image: { src: string; alt: string };
 	};
 
 	export type HeroCarouselProps = Omit<
 		SectionCopyProps,
-		'title' | 'description' | 'eyebrowText' | 'eyebrowIcon' | 'cta'
+		'title' | 'description' | 'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'cta'
 	> & {
 		slides: HeroCarouselSlide[];
 		/** Insets the hero from the screen edges with rounded corners, like the floating header and footer. */

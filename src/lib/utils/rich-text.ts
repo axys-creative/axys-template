@@ -3,6 +3,9 @@ export const richTextClasses = [
 	'italic',
 	'primary',
 	'scribble',
+	'scribble-circle',
+	'scribble-circle-tight',
+	'scribble-circle-wide',
 	'secondary',
 	'stroke',
 	'strong'
@@ -26,7 +29,8 @@ export function richTextToken(inner: string, names: string) {
 			(name) => name === 'italic' || name === 'primary' || name === 'secondary' || name === 'stroke'
 		)
 		.map((name) => `rich-text--${name}`);
-	const behaviors = used.has('scribble') ? ' data-rich-text="scribble"' : '';
+	const drawn = [...used].find((name) => name.startsWith('scribble'));
+	const behaviors = drawn ? ` data-rich-text="${drawn}"` : '';
 	const tag = used.has('strong') ? 'strong' : 'span';
 	const attributes = `${classes.length ? ` class="${classes.join(' ')}"` : ''}${behaviors}`;
 

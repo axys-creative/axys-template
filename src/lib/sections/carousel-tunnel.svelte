@@ -26,7 +26,7 @@
 
 	export type CarouselTunnelProps = Pick<
 		SectionCopyProps,
-		'eyebrowText' | 'eyebrowIcon' | 'title'
+		'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'title'
 	> & {
 		description?: string;
 		slides: CarouselTunnelSlide[];
@@ -65,6 +65,7 @@
 		slides,
 		eyebrowText,
 		eyebrowIcon,
+		eyebrowDot,
 		title,
 		description,
 		autoplay,
@@ -347,7 +348,15 @@
 	<div class="pin" bind:this={pin}>
 		{#if eyebrowText || eyebrowIcon || title || description}
 			<div class="content" bind:this={content}>
-				<SectionCopy level={2} align="center" {eyebrowText} {eyebrowIcon} {title} {description} />
+				<SectionCopy
+					level={2}
+					align="center"
+					{eyebrowText}
+					{eyebrowIcon}
+					{eyebrowDot}
+					{title}
+					{description}
+				/>
 			</div>
 		{/if}
 

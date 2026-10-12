@@ -47,8 +47,7 @@
 >
 	{#if text}<span class="text">{text}</span>{/if}
 	<span
-		class="icon {symbol} {shape}"
-		aria-hidden="true"
+		class="magnet"
 		{@attach magnet({
 			x: 1,
 			y: 1,
@@ -57,11 +56,13 @@
 			returnEase: 'cubic-bezier(0, 1.64, 0.63, 1.92)'
 		})}
 	>
-		{#if symbol === 'stairs'}
-			<span class="lines">{@render lines()}</span>
-		{:else}
-			{@render lines()}
-		{/if}
+		<span class="icon {symbol} {shape}" aria-hidden="true">
+			{#if symbol === 'stairs'}
+				<span class="lines">{@render lines()}</span>
+			{:else}
+				{@render lines()}
+			{/if}
+		</span>
 	</span>
 </button>
 
@@ -97,6 +98,10 @@
 		&:active .icon {
 			scale: 0.98;
 		}
+	}
+
+	.magnet {
+		display: flex;
 	}
 
 	.text {

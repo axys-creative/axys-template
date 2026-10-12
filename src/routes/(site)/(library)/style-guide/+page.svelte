@@ -1,6 +1,8 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
+	import { bgFollow } from '$lib/attachments/bg-follow';
 	import { bgSlide } from '$lib/attachments/bg-slide';
+	import { buttonJump } from '$lib/attachments/button-jump';
 	import { cursorHide } from '$lib/attachments/cursor-hide';
 	import { glitchHover } from '$lib/attachments/glitch-hover';
 	import { magnet } from '$lib/attachments/magnet';
@@ -38,6 +40,7 @@
 		siteNavButtonProps,
 		socialLinksProps,
 		tagProps,
+		themeSurfaceTokens,
 		toggleSliderProps,
 		typographyTokens
 	} from '$lib/library/component-props';
@@ -46,6 +49,12 @@
 	import { navEntry } from '$lib/utils/nav';
 
 	const nav = navEntry('/style-guide');
+
+	const surfaces = [
+		{ name: 'theme-invert', label: 'theme-invert (opposite of the page)' },
+		{ name: 'theme-light', label: 'theme-light' },
+		{ name: 'theme-dark', label: 'theme-dark' }
+	];
 
 	const colors = [
 		'bg',
@@ -160,6 +169,41 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Theme Surfaces"
+		type="Tokens"
+		description="Add one class to a section or any wrapper and everything inside follows its own theme: the background, text, borders and buttons all flip together. Use `theme-invert` for a band that is always the opposite of the page, so it is light while you work in dark and dark when a visitor switches to light."
+		props={themeSurfaceTokens}
+		propsLabel="props"
+	>
+		<div class="surfaces full">
+			{#each surfaces as surface (surface.name)}
+				<div class="surface page-grid {surface.name}">
+					<p class="h4">{surface.label}</p>
+					<p>Text, muted text and borders come from the same tokens.</p>
+					<div class="row">
+						<Button text="Solid" />
+						<Button text="Outline" type="outline" />
+						<Tag text="Tag" type="outline" />
+					</div>
+					<div class="card">A raised surface</div>
+				</div>
+			{/each}
+		</div>
+		<pre class="usage"><code
+				>&lt;section class="theme-invert"&gt;…&lt;/section&gt;
+
+.promo &#123;
+	@use 'base/variables';
+	@include variables.light-tokens;
+	background: var(--color-bg);
+&#125;</code
+			></pre>
+		<p>
+			Canvas backgrounds that read <code>data-theme</code> follow the page theme, not the surface.
+		</p>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Typography"
 		type="Tokens"
 		description="Headings take their styles from the element, or from a `.h1` to `.h6` class on any element, so size and heading level can differ."
@@ -238,6 +282,24 @@
 				{@attach cursorHide()}
 			/>
 		</div>
+		<div class="row">
+			<Button text="Jump" {@attach buttonJump()} />
+			<Button text="Jump outline" type="outline" {@attach buttonJump({ scale: 1.2 })} />
+			<Button text="Follow solid" {@attach bgFollow()} />
+			<Button text="Follow outline" type="outline" {@attach bgFollow()} />
+		</div>
+		<ul class="classic-list">
+			<li>
+				<code>buttonJump({'{ scale, duration }'})</code> pops the button up and back once when the
+				mouse enters or the keyboard focuses it. <code>scale</code> is the peak size as a multiple
+				(default <code>1.1</code>), <code>duration</code> is milliseconds (default
+				<code>300</code>).
+			</li>
+			<li>
+				<code>bgFollow()</code> fills the button with color from the pointer outward on hover and
+				back in to where it leaves. Set <code>--bg-follow-color</code> to change the color.
+			</li>
+		</ul>
 	</LibrarySection>
 
 	<LibrarySection
@@ -258,6 +320,8 @@
 		<div class="row">
 			<Eyebrow text="Text only" />
 			<Eyebrow text="With icon" icon="check" />
+			<Eyebrow text="Available for freelance" dot="pulse" />
+			<Eyebrow text="Available for freelance" dot="sonar" />
 		</div>
 	</LibrarySection>
 
@@ -614,6 +678,37 @@
 	.style-guide {
 		row-gap: 128px;
 		padding-block: var(--body-padding);
+	}
+
+	.surfaces {
+		display: grid;
+	}
+
+	.surface {
+		row-gap: 16px;
+		padding-block: 48px;
+
+		p {
+			color: var(--color-text);
+		}
+	}
+
+	.card {
+		padding: 16px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+		background: var(--color-surface);
+	}
+
+	.usage {
+		max-width: 100%;
+		margin: 0;
+		overflow-x: auto;
+		padding: 16px;
+		border-radius: var(--radius);
+		background: var(--color-surface);
+		font-family: var(--font-mono);
+		font-size: 14px;
 	}
 
 	.fields {

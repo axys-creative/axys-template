@@ -3,6 +3,8 @@
 	import {
 		blogArticleBodyProps,
 		blogArticleHeroProps,
+		carouselSpotlightProps,
+		carouselTestimonialsProps,
 		carouselTunnelProps,
 		circleHighlightProps,
 		galleryHorizontalProps,
@@ -20,6 +22,9 @@
 	} from '$lib/library/component-props';
 	import LibrarySection from '$lib/library/library-section.svelte';
 	import CircleHighlight from '$lib/sections/circle-highlight.svelte';
+	import carouselSpotlight from '$lib/content/page_sections/carousel-spotlight.json';
+	import CarouselSpotlight from '$lib/sections/carousel-spotlight.svelte';
+	import CarouselTestimonials from '$lib/sections/carousel-testimonials.svelte';
 	import CarouselTunnel from '$lib/sections/carousel-tunnel.svelte';
 	import GalleryHorizontal from '$lib/sections/gallery-horizontal.svelte';
 	import Headline from '$lib/sections/headline.svelte';
@@ -340,6 +345,72 @@
 	/>
 
 	<LibrarySection
+		title="Carousel Spotlight"
+		type="Section"
+		description="Section copy above a row of large slides. The active slide is centered at three quarters of the screen, with the slides before and after it cut off by the edges of the screen at partial opacity. The title and description float in a blurred glass panel over the picture, and its offset from the corner is one variable. Dots below show the position, with the active one stretched into a pill. It drags with the mouse, finger or a trackpad swipe, and the arrow keys move between slides."
+		props={carouselSpotlightProps}
+	>
+		<CarouselSpotlight
+			id="carousel-spotlight"
+			class="full"
+			{...carouselSpotlight}
+			cta={{
+				primary: carouselSpotlight.cta.primary,
+				secondary: carouselSpotlight.cta.secondary.text
+					? carouselSpotlight.cta.secondary
+					: undefined
+			}}
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Carousel Testimonials"
+		type="Section"
+		description="Section copy with the previous and next arrows on the right, and a row of testimonial cards below. The first card lines up with the copy and the row runs on past the right edge of the screen. It scrolls natively, so touch and trackpad work, the cards snap into place, and the row is focusable for the arrow keys. The arrows hide when every card already fits."
+		props={carouselTestimonialsProps}
+	>
+		<CarouselTestimonials
+			class="full"
+			eyebrowText="Testimonials"
+			title="Trusted by customers nationwide"
+			testimonials={[
+				{
+					quote: 'They took a vague idea and turned it into a site we are proud to send people to.',
+					name: 'Ada Lovelace',
+					role: 'Founder, Northline',
+					image: { src: '/images/img-sample-1.jpg', alt: '' }
+				},
+				{
+					quote:
+						'The whole process was calm and clear. We always knew what was next, and the launch was the quietest we have had.',
+					name: 'Grace Hopper',
+					role: 'Operations, Aperture',
+					image: { src: '/images/img-sample-2.jpg', alt: '' }
+				},
+				{
+					quote: 'Fast, careful and a pleasure to work with.',
+					name: 'Linus Torvalds',
+					role: 'Director, Glasswave',
+					image: { src: '/images/img-sample-3.jpg', alt: '' }
+				},
+				{
+					quote:
+						'Our traffic moved up within the first month, and the team can finally edit pages without calling anyone.',
+					name: 'Margaret Hamilton',
+					role: 'Marketing, Meridian',
+					image: { src: '/images/img-sample-4.jpg', alt: '' }
+				},
+				{
+					quote: 'Exactly what we asked for, and a few things we did not know to ask for.',
+					name: 'Alan Turing',
+					role: 'Owner, Fernwood',
+					image: { src: '/images/img-sample-5.jpg', alt: '' }
+				}
+			]}
+		/>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Carousel Tunnel"
 		type="Section"
 		description="Scroll to zoom out of a full-screen image into a carousel with the next slides peeking in. Nothing is cropped on the way down. Once the zoom ends the copy, captions and arrows fade in and the carousel starts to autoplay. It loops forever, can be dragged, and holds while hovered or focused. With reduced motion it is a plain carousel that does not move on its own."
@@ -359,7 +430,7 @@
 	<LibrarySection
 		title="Circle Highlight"
 		type="Section"
-		description="A pinned, scroll-driven donut chart. The ring lights one slice at a time, always clockwise, with that slice's caption beside it, and ends on a finish where every slice is lit. The captions can sit around the ring or in its hole, and a logo in the hole shows until the section pins. With reduced motion, or without JavaScript, every slice and caption just shows."
+		description="A pinned, scroll-driven donut chart. The ring lights one slice at a time, always clockwise, with that slice's caption beside it, and ends on a finish where every slice is lit. The captions can sit around the ring or in its hole, and a logo in the hole stays put. Once the section is pinned the slices are tab stops: focusing, clicking or tapping one scrolls to its step. With reduced motion, or without JavaScript, every slice and caption just shows."
 		props={circleHighlightProps}
 	>
 		<CircleHighlight

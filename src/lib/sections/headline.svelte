@@ -5,6 +5,7 @@
 		eyebrowText?: string;
 		/** Icon name from `static/icons`. Works without `eyebrowText` too. */
 		eyebrowIcon?: string;
+		eyebrowDot?: boolean | 'pulse' | 'sonar';
 		/** With a `name` the headline is wrapped in quotes and credited beneath. */
 		quote?: { name: string; role?: string; image?: { src: string; alt?: string } };
 		/** At least the height of the screen, with the statement centered. Taller content still grows past it. */
@@ -25,6 +26,7 @@
 		text,
 		eyebrowText,
 		eyebrowIcon,
+		eyebrowDot = false,
 		quote,
 		fullScreen = false,
 		id,
@@ -49,7 +51,7 @@
 
 <section {id} class="headline {className ?? ''}" class:full-screen={fullScreen}>
 	<div class="inner">
-		<Eyebrow text={eyebrowText} icon={eyebrowIcon} />
+		<Eyebrow text={eyebrowText} icon={eyebrowIcon} dot={eyebrowDot} />
 
 		{#if quoted && quote}
 			<figure class="quote">

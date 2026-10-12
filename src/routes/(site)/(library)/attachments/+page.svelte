@@ -4,6 +4,8 @@
 	import CtaGroup from '$lib/components/cta-group.svelte';
 	import Icon from '$lib/components/icon.svelte';
 	import LibrarySection from '$lib/library/library-section.svelte';
+	import Logo from '$lib/components/logo.svelte';
+	import logo from '$lib/content/global/logo.json';
 	import MouseCursor from '$lib/components/mouse-cursor.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
 	import { navEntry } from '$lib/utils/nav';
@@ -22,6 +24,7 @@
 	import { gradientBorder } from '$lib/attachments/gradient-border';
 	import { gridFade } from '$lib/attachments/grid-fade';
 	import { magnet } from '$lib/attachments/magnet';
+	import { paperGrain } from '$lib/attachments/paper-grain';
 	import { parallax } from '$lib/attachments/parallax';
 	import { bgSlide } from '$lib/attachments/bg-slide';
 	import { typingCycle } from '$lib/attachments/typing-cycle';
@@ -36,6 +39,7 @@
 	import { textRoll } from '$lib/attachments/text-roll';
 	import { textReveal } from '$lib/attachments/text-reveal';
 	import { textScale } from '$lib/attachments/text-scale';
+	import { themeFollow } from '$lib/attachments/theme-follow';
 	import { tilt } from '$lib/attachments/tilt';
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 
@@ -895,6 +899,53 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Paper Grain"
+		type="Attachment"
+		description="Lays a faint construction-paper texture over an element's background: fine fibers, a few flecks. It is SVG noise used as a mask, so there are no image files, and it sits under the content."
+		props={[
+			{
+				name: 'variant',
+				description:
+					"`'fibers' | 'flecks' | 'pulp'`. Tiny wisps like the fibers in paper stock; long lines with a few specks; lines crossed over a soft mottle. Defaults to `fibers`."
+			},
+			{ name: 'opacity', description: 'A number from 0 to 1. Defaults to `0.1`.' },
+			{
+				name: 'color',
+				description: 'Any CSS color. Defaults to the text color, so it follows the theme.'
+			},
+			{
+				name: 'size',
+				description: 'A number, pixels before the noise tile repeats. Defaults to `480`.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<div class="paper-boxes">
+			<div
+				class="paper-box"
+				style:background="#fdfbfa"
+				{@attach paperGrain({ variant: 'fibers', color: '#c0708a', opacity: 0.4 })}
+			>
+				Fibers
+			</div>
+			<div
+				class="paper-box"
+				style:background="#c9d8c5"
+				{@attach paperGrain({ variant: 'flecks', color: '#3a2a1a', opacity: 0.14 })}
+			>
+				Flecks
+			</div>
+			<div
+				class="paper-box"
+				style:background="#f2c9c0"
+				{@attach paperGrain({ variant: 'pulp', color: '#3a2a1a', opacity: 0.14 })}
+			>
+				Pulp
+			</div>
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Parallax"
 		type="Attachment"
 		description="Shifts an element as it scrolls through the viewport. Off with reduced motion."
@@ -960,7 +1011,7 @@
 	<LibrarySection
 		title="Scribble"
 		type="Attachment"
-		description="Draws a hand-drawn scribble on an element, like a line made with a dry brush: an `underline` under it, or a `circle` drawn around it. Shown from the start by default, on a word, a button or a whole paragraph, or drawn in on hover and focus with `hover`, or when it scrolls into view with `scroll`. The underline follows a cubic Bézier from the left edge to the right at mid-height, thickest in the middle and tapering to a point at both ends, with rough, chipped edges and dry streaks inside, different for every element unless you give it a `seed`. Pick a preset, or paste a curve from the same curve tool the Marquee Curve uses, to get a dip and a rise of your own. On a Button it replaces the underline. The Header Basic menu uses it, with `random`, on its links."
+		description="Draws a hand-drawn scribble on an element, like a line made with a dry brush: an `underline` under it, or a `circle` drawn around it. Shown from the start by default, on a word, a button or a whole paragraph, or drawn in on hover and focus with `hover`, or when it scrolls into view with `scroll`. The underline follows a cubic Bézier from the left edge to the right at mid-height, a blunt start that thickens quickly and tapers into a ragged, broken tail, with rough, chipped edges and optional dry streaks inside, different for every element unless you give it a `seed`. Pick a preset, or paste a curve from the same curve tool the Marquee Curve uses, to get a dip and a rise of your own. On a Button it replaces the underline. The Header Basic menu uses it, with `random`, on its links."
 		props={[
 			{
 				name: 'type',
@@ -971,6 +1022,11 @@
 				name: 'padding',
 				description:
 					'A number, how far the circle sits out from the element, in em. Defaults to `0.4`.'
+			},
+			{
+				name: 'scale',
+				description:
+					'A number that multiplies `padding` for a circle: `1.2` draws the loop farther out, `0.8` closer in. Defaults to `1`.'
 			},
 			{
 				name: 'curve',
@@ -1025,7 +1081,7 @@
 			{
 				name: 'streaks',
 				description:
-					'A number, how many thin dry streaks are left bare inside the line, like bristles that ran out of paint. `0` is solid. Defaults to `3`.'
+					'A number, how many thin dry streaks are left bare inside the line, like bristles that ran out of paint. `0` is solid. Defaults to `0`.'
 			},
 			{
 				name: 'seed',
@@ -1401,6 +1457,43 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Theme Follow"
+		type="Attachment"
+		description="For anything fixed or sticky: a header, a scroll-to-top button, a toast. While the page scrolls it takes the theme of the surface behind its center, so dark text turns light over a dark section and back again. Mark sections with a surface class; sections added later are picked up. The element gets a `data-theme-follow` attribute, which sets the theme tokens only (no background), so a transparent element stays transparent. Attach it to the element that is actually positioned. Scroll the page past the demo below to watch the pill change."
+		props={[
+			{ name: 'theme-dark', description: 'A surface that is always dark.' },
+			{ name: 'theme-light', description: 'A surface that is always light.' },
+			{
+				name: 'theme-invert',
+				description:
+					'A surface that is the opposite of the page theme, so it flips with the toggle.'
+			},
+			{ name: 'no class', description: 'The element keeps the page theme there.' }
+		]}
+		propsLabel="options"
+	>
+		<div class="follow-stage">
+			<div class="follow-bands">
+				<div class="follow-band theme-dark">theme-dark</div>
+				<div class="follow-band theme-light">theme-light</div>
+				<div class="follow-band theme-invert">theme-invert</div>
+				<div class="follow-band">No surface class</div>
+			</div>
+			<div class="follow-sticky">
+				<div class="follow-bar" {@attach themeFollow()}>
+					<Logo {...logo} url="/" />
+					<Button text="Link" type="text" url="/" />
+					<Button text="Button" size="sm" class="follow-button" />
+				</div>
+			</div>
+		</div>
+		<pre class="follow-usage"><code
+				>&lt;div {'{'}@attach themeFollow()&#125;&gt;…&lt;/div&gt;
+&lt;section class="theme-light"&gt;…&lt;/section&gt;</code
+			></pre>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Tilt"
 		type="Attachment"
 		description="A subtle 3D effect for mouse users: the element tilts toward the pointer. A local version of Vanilla Tilt with no library. It is off with reduced motion and ignores touch."
@@ -1665,6 +1758,62 @@
 	.attachments {
 		row-gap: 128px;
 		padding-block: var(--body-padding);
+	}
+
+	// `overflow: clip` (not `hidden`) keeps the stage from becoming a scroll container, which would stop the sticking.
+	// The pill pins at mid-screen and stops when its box reaches the bottom of the stage.
+	.follow-stage {
+		position: relative;
+		width: 100%;
+		height: 480px;
+		overflow: clip;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.follow-bands {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-rows: repeat(4, 1fr);
+	}
+
+	.follow-band {
+		display: grid;
+		align-items: center;
+		justify-items: end;
+		padding-inline: 24px;
+	}
+
+	.follow-sticky {
+		position: sticky;
+		top: 50%;
+		z-index: 1;
+	}
+
+	.follow-bar {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		width: 75%;
+		padding: 12px 16px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+
+		:global(.follow-button) {
+			margin-inline-start: auto;
+		}
+	}
+
+	.follow-usage {
+		max-width: 100%;
+		margin: 0;
+		overflow-x: auto;
+		padding: 16px;
+		border-radius: var(--radius);
+		background: var(--color-surface);
+		font-family: var(--font-mono);
+		font-size: 14px;
 	}
 
 	.tilt-card-group {
@@ -1974,6 +2123,22 @@
 
 	.glass-sample--round {
 		border-radius: 50%;
+	}
+
+	.paper-boxes {
+		display: flex;
+		width: 100%;
+		flex-wrap: wrap;
+		gap: 24px;
+	}
+
+	.paper-box {
+		display: grid;
+		place-items: center;
+		width: max(180px, 30%);
+		aspect-ratio: 4 / 3;
+		border-radius: var(--radius);
+		color: #1a1a1a;
 	}
 
 	.magnet-boxes {

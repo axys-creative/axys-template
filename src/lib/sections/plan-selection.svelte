@@ -22,7 +22,7 @@
 
 	export type PlanSelectionProps = Pick<
 		SectionCopyProps,
-		'eyebrowText' | 'eyebrowIcon' | 'title' | 'description'
+		'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'title' | 'description'
 	> & {
 		plans: Plan[];
 		/** Shows the Monthly / Quarterly switch. Plans then need their quarterly fields. */

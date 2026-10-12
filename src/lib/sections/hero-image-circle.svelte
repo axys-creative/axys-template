@@ -217,12 +217,31 @@
 		@include mixins.min-lg {
 			.inner {
 				justify-content: flex-start;
+				// Flush with the header logo, which sits at the content edge with no inner padding.
+				width: min(var(--content-width), 100% - var(--body-padding) * 2);
+				max-width: none;
+				padding-inline: 0;
 			}
 
 			.first {
 				right: 0;
 				left: auto;
 				translate: calc(50% + var(--offset)) -50%;
+			}
+		}
+	}
+
+	// Stacked, left-aligned copy centers like the default hero's.
+	.left .inner > :global(.section-copy) {
+		@include mixins.max-lg {
+			align-items: center;
+			margin-inline: auto;
+			text-align: center;
+			text-wrap: balance;
+
+			:global(.heading),
+			:global(.body) {
+				align-items: center;
 			}
 		}
 	}

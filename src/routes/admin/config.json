@@ -115,6 +115,19 @@
 							"hint": "An SVG icon; it takes the eyebrow color."
 						},
 						{
+							"name": "eyebrowDot",
+							"label": "Eyebrow status dot",
+							"widget": "select",
+							"options": [
+								{ "label": "None", "value": "none" },
+								{ "label": "Pulse", "value": "pulse" },
+								{ "label": "Sonar", "value": "sonar" }
+							],
+							"default": "none",
+							"required": false,
+							"hint": "A green dot before the eyebrow, such as for \"available for freelance\"."
+						},
+						{
 							"name": "title",
 							"label": "Title",
 							"widget": "string",
@@ -357,6 +370,196 @@
 							"options": ["start", "center"],
 							"default": "center",
 							"required": false
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "page_sections",
+			"label": "Page - Sections",
+			"files": [
+				{
+					"name": "carousel_spotlight",
+					"label": "Carousel Spotlight",
+					"file": "src/lib/content/page_sections/carousel-spotlight.json",
+					"preview_path": "sections#carousel-spotlight",
+					"fields": [
+						{
+							"name": "eyebrowText",
+							"label": "Eyebrow text",
+							"widget": "string",
+							"required": false
+						},
+						{
+							"name": "eyebrowIcon",
+							"label": "Eyebrow icon",
+							"widget": "image",
+							"required": false,
+							"hint": "An SVG icon; it takes the eyebrow color."
+						},
+						{
+							"name": "eyebrowDot",
+							"label": "Eyebrow status dot",
+							"widget": "select",
+							"options": [
+								{ "label": "None", "value": "none" },
+								{ "label": "Pulse", "value": "pulse" },
+								{ "label": "Sonar", "value": "sonar" }
+							],
+							"default": "none",
+							"required": false,
+							"hint": "A green dot before the eyebrow, such as for \"available for freelance\"."
+						},
+						{
+							"name": "title",
+							"label": "Title",
+							"widget": "string",
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
+						},
+						{
+							"name": "description",
+							"label": "Description",
+							"widget": "text",
+							"required": false,
+							"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
+						},
+						{
+							"name": "cta",
+							"label": "Call to action",
+							"widget": "object",
+							"fields": [
+								{
+									"name": "primary",
+									"label": "Primary button",
+									"widget": "object",
+									"required": false,
+									"fields": [
+										{
+											"name": "text",
+											"label": "Text",
+											"widget": "string",
+											"required": false
+										},
+										{
+											"name": "textDescription",
+											"label": "Accessible description",
+											"widget": "string",
+											"required": false,
+											"hint": "Optional aria-label for screen readers"
+										},
+										{
+											"name": "url",
+											"label": "URL",
+											"widget": "string",
+											"required": false
+										},
+										{
+											"name": "newTab",
+											"label": "Open in new tab",
+											"widget": "boolean",
+											"default": false,
+											"required": false
+										},
+										{
+											"name": "iconEnd",
+											"label": "Icon after text",
+											"widget": "string",
+											"required": false,
+											"hint": "Icon file name without .svg (e.g. chevron-right). See /style-guide for examples."
+										}
+									]
+								},
+								{
+									"name": "secondary",
+									"label": "Secondary button",
+									"widget": "object",
+									"required": false,
+									"fields": [
+										{
+											"name": "text",
+											"label": "Text",
+											"widget": "string",
+											"required": false
+										},
+										{
+											"name": "textDescription",
+											"label": "Accessible description",
+											"widget": "string",
+											"required": false,
+											"hint": "Optional aria-label for screen readers"
+										},
+										{
+											"name": "url",
+											"label": "URL",
+											"widget": "string",
+											"required": false
+										},
+										{
+											"name": "newTab",
+											"label": "Open in new tab",
+											"widget": "boolean",
+											"default": false,
+											"required": false
+										},
+										{
+											"name": "iconEnd",
+											"label": "Icon after text",
+											"widget": "string",
+											"required": false,
+											"hint": "Icon file name without .svg (e.g. chevron-right). See /style-guide for examples."
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "pauseOnHover",
+							"label": "Pause on hover",
+							"widget": "boolean",
+							"default": false,
+							"required": false,
+							"hint": "Holds the autoplay while the mouse is over the carousel. It always holds while a slide has keyboard focus."
+						},
+						{
+							"name": "slides",
+							"label": "Slides",
+							"widget": "list",
+							"min": 2,
+							"summary": "{{fields.title}}",
+							"fields": [
+								{
+									"name": "title",
+									"label": "Title",
+									"widget": "string"
+								},
+								{
+									"name": "description",
+									"label": "Description",
+									"widget": "text",
+									"required": false,
+									"hint": "Style words with [words]{.class}. Syntax and class list: axyscreative.com/tokens"
+								},
+								{
+									"name": "image",
+									"label": "Image",
+									"widget": "object",
+									"fields": [
+										{
+											"name": "src",
+											"label": "Image",
+											"widget": "image"
+										},
+										{
+											"name": "alt",
+											"label": "Alt text",
+											"widget": "string",
+											"required": false,
+											"hint": "Leave empty if the picture is decorative."
+										}
+									]
+								}
+							]
 						}
 					]
 				}

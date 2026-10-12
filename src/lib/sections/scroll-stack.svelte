@@ -14,7 +14,7 @@
 
 	export type ScrollStackProps = Pick<
 		SectionCopyProps,
-		'eyebrowText' | 'eyebrowIcon' | 'title' | 'description' | 'cta'
+		'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'title' | 'description' | 'cta'
 	> & {
 		/** Two or more panels that stack as the page scrolls. */
 		panels: ScrollStackPanel[];

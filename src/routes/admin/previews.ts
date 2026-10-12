@@ -1,5 +1,6 @@
 import type { Component } from 'svelte';
 import globalCss from '../../styles/styles.scss?inline';
+import CarouselSpotlight from '$lib/sections/carousel-spotlight.svelte';
 import HeroSimple from '$lib/sections/hero-simple.svelte';
 import { mountPreview, type PreviewHost } from './preview-host.svelte';
 
@@ -20,6 +21,18 @@ type H = (tag: string, props?: Record<string, unknown>) => unknown;
 
 // Keyed by the file's `name` in config.json; `props` mirrors what the real page passes.
 const previews: Record<string, Preview> = {
+	carousel_spotlight: {
+		component: CarouselSpotlight as unknown as Section,
+		props: (data) => {
+			const cta = (data.cta ?? {}) as { primary?: unknown; secondary?: { text?: string } };
+			return {
+				...data,
+				cta: { ...cta, secondary: cta.secondary?.text ? cta.secondary : undefined },
+				slides: data.slides ?? [],
+				autoplay: false
+			};
+		}
+	},
 	hero_simple: {
 		component: HeroSimple as unknown as Section,
 		props: (data) => {

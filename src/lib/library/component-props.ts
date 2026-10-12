@@ -46,7 +46,11 @@ export const ctaGroupProps = props(
 export const eyebrowProps = props(
 	['text', 'A string. The small label above a title.'],
 	['icon', 'An icon name from `static/icons`, shown before the text.'],
-	['direction', '`row | column`. How the icon and text sit together. Defaults to `row`.']
+	['direction', '`row | column`. How the icon and text sit together. Defaults to `row`.'],
+	[
+		'dot',
+		'`false | true | pulse | sonar`. A green status dot before the text, for something like "available for freelance". `pulse` (and `true`) softly fades in and out; `sonar` sends two rings outward like a signal. Uses `--color-success`. Defaults to `false`.'
+	]
 );
 
 export const iconProps = props(
@@ -122,6 +126,10 @@ export const sectionCopyProps = props(
 	['eyebrowText', 'A string for the eyebrow.'],
 	['eyebrowIcon', 'An icon name for the eyebrow.'],
 	['eyebrowDirection', '`row | column`. Defaults to `row`.'],
+	[
+		'eyebrowDot',
+		'`false | true | pulse | sonar`. A green status dot before the eyebrow. Defaults to `false`.'
+	],
 	['title', 'A string.'],
 	[
 		'level',
@@ -920,7 +928,11 @@ export const cardGnomonProps = props(
 	],
 	[
 		'length',
-		'A number, 0-100. How far every cutout runs along its edge, as a % of the card side. Defaults to `32`.'
+		'A number, 0-100, or `auto`. How far every cutout runs along its edge, as a % of the card side. `auto` measures the cutout text and fits the notch to the longest one (up to 90), so a caption never needs a number change. Defaults to `32`.'
+	],
+	[
+		'lengthPadding',
+		'A number in px, used only with `length="auto"`. Added to the measured text width, for the room beside the text and the slant of the notch wall. Defaults to `28`.'
 	],
 	[
 		'radius',
@@ -949,7 +961,16 @@ export const richTextProps = props(
 	],
 	['.italic', 'Italic.'],
 	['.primary', 'The brand accent color.'],
-	['.scribble', 'The Scribble attachment on a random underline, drawn when the page loads.'],
+	[
+		'.scribble',
+		'A thin hand-drawn zigzag underline, drawn in each time it scrolls into view (see Scribble under Attachments).'
+	],
+	[
+		'.scribble-circle',
+		'A thin hand-drawn loop around the words, drawn in on scroll (see Scribble under Attachments).'
+	],
+	['.scribble-circle-tight', 'The same loop drawn closer to the words (scale 0.8).'],
+	['.scribble-circle-wide', 'The same loop drawn farther from the words (scale 1.2).'],
 	['.secondary', 'The secondary color.'],
 	['.stroke', 'An outline with no fill.'],
 	['.strong', 'Bold, as a `<strong>`.'],
@@ -1002,16 +1023,93 @@ export const circleHighlightProps = props(
 	['gap', 'A number, the space between slices, in the same units. Defaults to `0`.'],
 	[
 		'captionPlacement',
-		'`outside | inside`. `outside` places a caption around the ring for every slice. `inside` shows only the active one, in the hole. Defaults to `outside`.'
+		'`outside | inside | cards`. `outside` places a caption around the ring for every slice. `inside` shows only the active one, in the hole. `cards` is for a ring with no copy beside it (with copy it falls back to `outside`): from `lg` up each caption is a glass card out to the side, the left or right of the ring by its slice, with a Royal Light line drawn from the card to the middle of its slice and a dot that scales in at the end; below `lg` the cards stack under the ring, the newest in front and up to four deep, and stay on screen after the last step. Defaults to `outside`.'
+	],
+	[
+		'nudge',
+		'A number, how far a slice moves straight out from the center of the ring while it is highlighted or hovered with a mouse, in the ring’s own 0–100 units (about 5px on a full-size ring at the default). `0` turns it off. Defaults to `1.6`.'
 	],
 	[
 		'orientation',
-		'`default | tilted`. `default` centers the first slice at 12 o’clock. `tilted` puts a division there instead. Defaults to `default`.'
+		'`default | tilted | tilted-left`. `default` centers the first slice at 12 o’clock. `tilted` puts a division there instead, with the first slice on its right (top right of four). `tilted-left` puts the first slice on its left (top left of four). Defaults to `default`.'
 	],
 	[
 		'image',
-		'An image in the hole, shown until the section pins. It takes Logo props (`src`, `srcLight`, `srcDark`, `alt`), so it can change with the theme.'
+		'An image in the hole. It takes Logo props (`src`, `srcLight`, `srcDark`, `alt`), so it can change with the theme.'
 	],
+	[
+		'imageScale',
+		'A number that scales the image in the hole, with `1` its normal size. Defaults to `1`.'
+	],
+	['id', 'The section’s anchor, so a link or the CMS preview can point to `#id`.'],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const carouselAccordionProps = props(
+	[
+		'items',
+		'An array of `{ title, description, image }`, two or more. One is open at a time, and each opens its own picture beside the list (`image` is `{ src, alt }`). Required.'
+	],
+	[
+		'interval',
+		'A number, how long each item stays open in milliseconds. The border under the open item fills over that time, and then the next one opens. Defaults to `6000`.'
+	],
+	[
+		'autoplay',
+		'A boolean. Moves on by itself when the interval ends, looping back to the first. It stops while the pointer or keyboard focus is in the list, while the section is off screen, and with reduced motion. Defaults to `true`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const carouselSpotlightProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description, cta',
+		'The section copy, centered above the carousel, from Section Copy (see the Style Guide).'
+	],
+	[
+		'slides',
+		'An array of `{ title, description, image }`, two or more. `image` is `{ src, alt }`. The title and description sit in a blurred glass panel over the picture. Required.'
+	],
+	['label', 'A string, the accessible name of the carousel. Defaults to `Featured`.'],
+	[
+		'loop',
+		'A boolean. An endless loop, so the last slide sits to the left of the first. Without it the carousel starts and stops at its ends. Defaults to `true`.'
+	],
+	[
+		'autoplay',
+		'A boolean. Moves on by itself. It waits while focus is inside the carousel, while it is off screen and with reduced motion, and a touch or key press holds it for one interval. Defaults to `true`.'
+	],
+	[
+		'pauseOnHover',
+		'A boolean. Holds autoplay while the mouse is over the carousel. Focus inside it always holds it. Defaults to `false`.'
+	],
+	['interval', 'A number, the milliseconds between slides when it plays. Defaults to `2400`.'],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the content centered. Defaults to `false`.'
+	],
+	['id', 'A string, the section’s anchor.'],
+	[
+		'class',
+		'A string of extra classes, such as `full` on a Library page. The look is set with CSS variables on the section: `--slide-width`, `--slide-gap`, `--slide-radius`, `--slide-aspect`, `--inactive-opacity`, `--panel-offset`, `--panel-radius` and `--panel-width`.'
+	]
+);
+
+export const carouselTestimonialsProps = props(
+	[
+		'eyebrowText, eyebrowIcon, title, description, cta',
+		'The section copy, from Section Copy (see the Style Guide). The previous and next arrows sit on the right of the same row.'
+	],
+	[
+		'testimonials',
+		'An array of `{ quote, name, role, image }`. `quote` takes the rich text tokens, `role` is shown under the name and `image` is `{ src, alt }`, a small portrait. Required.'
+	],
+	['label', 'A string, the accessible name of the row of cards. Defaults to `Testimonials`.'],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen, with the content centered. Defaults to `false`.'
+	],
+	['id', 'A string, the section’s anchor.'],
 	['class', 'A string of extra classes, such as `full` on a Library page.']
 );
 
@@ -1346,6 +1444,19 @@ export const colorTokens = props(
 	['--color-tertiary', 'A tertiary brand color.'],
 	['--color-error', 'Error messages.'],
 	['--color-glass', 'The translucent tint behind glass surfaces such as the header.']
+);
+
+export const themeSurfaceTokens = props(
+	['.theme-dark', 'Dark colors inside this element, on any page theme.'],
+	['.theme-light', 'Light colors inside this element, on any page theme.'],
+	[
+		'.theme-invert',
+		'The opposite of the page theme: light on a dark page, dark on a light one. Flips with the theme toggle.'
+	],
+	[
+		'dark-tokens, light-tokens',
+		'SCSS mixins in `base/variables` that set every themed token. Use them to build a surface of your own.'
+	]
 );
 
 export const typographyTokens = props(

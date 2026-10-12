@@ -12,7 +12,7 @@
 
 	export type ScrollTimelineProps = Pick<
 		SectionCopyProps,
-		'eyebrowText' | 'eyebrowIcon' | 'title' | 'description' | 'cta'
+		'eyebrowText' | 'eyebrowIcon' | 'eyebrowDot' | 'title' | 'description' | 'cta'
 	> & {
 		/** Two or more, in order. */
 		events: ScrollTimelineEvent[];

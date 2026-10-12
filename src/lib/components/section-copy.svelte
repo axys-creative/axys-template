@@ -7,6 +7,8 @@
 		/** Icon name from `static/icons`. */
 		eyebrowIcon?: string;
 		eyebrowDirection?: 'row' | 'column';
+		/** A status dot before the eyebrow. `true` is `pulse`. */
+		eyebrowDot?: boolean | 'pulse' | 'sonar';
 		title?: string;
 		/** Heading level of the title. A page's hero is 1, other sections are 2. */
 		level?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -36,6 +38,7 @@
 		eyebrowText,
 		eyebrowIcon,
 		eyebrowDirection = 'row',
+		eyebrowDot = false,
 		title,
 		level = 2,
 		titleStyle,
@@ -61,7 +64,12 @@
 		{#if hasEyebrow || hasTitle}
 			<div class="heading">
 				{#if hasEyebrow}
-					<Eyebrow text={eyebrowText} icon={eyebrowIcon} direction={eyebrowDirection} />
+					<Eyebrow
+						text={eyebrowText}
+						icon={eyebrowIcon}
+						direction={eyebrowDirection}
+						dot={eyebrowDot}
+					/>
 				{/if}
 				{#if hasTitle}
 					<svelte:element this={`h${level}`} class={titleStyle}
