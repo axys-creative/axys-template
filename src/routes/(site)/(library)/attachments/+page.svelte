@@ -29,14 +29,13 @@
 	import { bgSlide } from '$lib/attachments/bg-slide';
 	import { typingCycle } from '$lib/attachments/typing-cycle';
 	import { typingScroll } from '$lib/attachments/typing-scroll';
-	import { underline } from '$lib/attachments/underline';
 	import { push } from '$lib/attachments/push';
 	import { scribble } from '$lib/attachments/scribble';
 	import { textCurve } from '$lib/attachments/text-curve';
 	import { textFade } from '$lib/attachments/text-fade';
 	import { textFill } from '$lib/attachments/text-fill';
 	import { textFlip } from '$lib/attachments/text-flip';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import { textReveal } from '$lib/attachments/text-reveal';
 	import { textScale } from '$lib/attachments/text-scale';
 	import { themeFollow } from '$lib/attachments/theme-follow';
@@ -901,12 +900,12 @@
 	<LibrarySection
 		title="Paper Grain"
 		type="Attachment"
-		description="Lays a faint construction-paper texture over an element's background: fine fibers, a few flecks. It is SVG noise used as a mask, so there are no image files, and it sits under the content."
+		description="Lays a faint construction-paper texture over an element's background: long fibers, tiny flecks. It is SVG noise used as a mask, so there are no image files, and it sits under the content."
 		props={[
 			{
 				name: 'variant',
 				description:
-					"`'fibers' | 'flecks' | 'pulp'`. Tiny wisps like the fibers in paper stock; long lines with a few specks; lines crossed over a soft mottle. Defaults to `fibers`."
+					"`'fibers' | 'flecks' | 'pulp'`. Long lines like the fibers in paper stock, with a few specks; tiny scattered flecks; lines crossed over a soft mottle. Defaults to `fibers`."
 			},
 			{ name: 'opacity', description: 'A number from 0 to 1. Defaults to `0.1`.' },
 			{
@@ -948,7 +947,7 @@
 	<LibrarySection
 		title="Parallax"
 		type="Attachment"
-		description="Shifts an element as it scrolls through the viewport. Off with reduced motion."
+		description="Shifts an element as it scrolls through the viewport. Off with reduced motion. Swap `from` and `to` to move against the scroll, like the rocket, which drifts up as the page scrolls down."
 		props={[
 			{
 				name: 'from',
@@ -968,6 +967,23 @@
 				height="1080"
 				loading="lazy"
 				{@attach parallax({ from: -10, to: 10 })}
+			/>
+		</div>
+		<div class="parallax-icon">
+			<Icon
+				name="rocket"
+				style="--icon-size: 32px; rotate: -45deg"
+				{@attach parallax({ from: 100, to: -100 })}
+			/>
+			<Icon
+				name="rocket"
+				style="--icon-size: 96px; rotate: -45deg"
+				{@attach parallax({ from: 250, to: -250 })}
+			/>
+			<Icon
+				name="rocket"
+				style="--icon-size: 52px; rotate: -45deg"
+				{@attach parallax({ from: 180, to: -180 })}
 			/>
 		</div>
 	</LibrarySection>
@@ -1005,6 +1021,105 @@
 				<img src="/images/img-sample-1.jpg" alt="" width="1920" height="1080" loading="lazy" />
 			</figure>
 			<Button text="Hover Me" {@attach push()} />
+		</div>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Roll"
+		type="Attachment"
+		description="For links, buttons and icons. On hover or keyboard focus the content rolls out one side and a copy takes its place from the other, like a slot machine. It can roll letter by letter, word by word, or all at once, so it also works on a social icon. Plain CSS and a little script, no GSAP. Screen readers get the original content. Off with reduced motion. Do not combine it with a glitch attachment on the same text."
+		props={[
+			{
+				name: 'split',
+				description:
+					'`chars | words | whole`. What rolls: each letter, each word, or everything in the target at once, which works on icons and any markup. Defaults to `chars`.'
+			},
+			{
+				name: 'from',
+				description:
+					'`start | end | center | edges | random`. Where the roll begins, for `chars` and `words`: `center` rolls outward and `edges` rolls inward. `random` picks a new order on every hover. Defaults to `start`.'
+			},
+			{
+				name: 'direction',
+				description:
+					'`up | down | left | right`. The way the content leaves; the copy arrives from the opposite side. Each letter or word clips its own copy, so a sideways roll stays inside its place. Defaults to `up`.'
+			},
+			{
+				name: 'rewind',
+				description:
+					'A boolean. By default the roll plays backward when the pointer leaves. With `false` it never rolls back: every time the pointer or keyboard focus arrives it rolls on to the next copy, always the same way. Defaults to `true`.'
+			},
+			{
+				name: 'stagger',
+				description: 'A number, seconds between each piece starting. Defaults to `0.02`.'
+			},
+			{ name: 'duration', description: 'A number, seconds each piece takes. Defaults to `0.6`.' },
+			{
+				name: 'target',
+				description:
+					'A selector or element that holds the content. Defaults to a `.label` (as in Button), else the element itself.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<div class="row">
+			<Button text="Outline roll" type="outline" iconEnd="chevron-right" {@attach roll()} />
+			<Button text="Underline roll" type="underline" {@attach roll({ stagger: 0.04 })} />
+			<Button text="Slow roll" {@attach roll({ duration: 1.2 })} />
+		</div>
+		<div class="row">
+			<Button text="From the center" {@attach roll({ from: 'center', stagger: 0.05 })} />
+			<Button text="From the edges" {@attach roll({ from: 'edges', stagger: 0.05 })} />
+			<Button text="From the end" type="outline" {@attach roll({ from: 'end' })} />
+			<Button text="At random" type="outline" {@attach roll({ from: 'random', stagger: 0.05 })} />
+			<Button text="Rolls down" type="outline" {@attach roll({ direction: 'down' })} />
+			<Button text="Rolls left" {@attach roll({ direction: 'left', stagger: 0.03 })} />
+			<Button text="Rolls right" {@attach roll({ direction: 'right', stagger: 0.03 })} />
+			<Button
+				text="Words, sideways"
+				type="outline"
+				{@attach roll({ split: 'words', direction: 'left', stagger: 0.12 })}
+			/>
+			<Button
+				text="Whole, sideways"
+				type="outline"
+				{@attach roll({ split: 'whole', direction: 'right' })}
+			/>
+		</div>
+		<div class="row">
+			<Button text="No rewind" {@attach roll({ rewind: false })} />
+			<Button
+				text="Random every time"
+				type="outline"
+				{@attach roll({ from: 'random', rewind: false, stagger: 0.05 })}
+			/>
+			<Button
+				text="No rewind, sideways"
+				type="outline"
+				{@attach roll({ rewind: false, direction: 'left', stagger: 0.03 })}
+			/>
+			<Button
+				text="No rewind, whole"
+				type="outline"
+				{@attach roll({ rewind: false, split: 'whole', direction: 'down' })}
+			/>
+			<Button text="Word by word" {@attach roll({ split: 'words', stagger: 0.12 })} />
+			<Button text="All at once" type="outline" {@attach roll({ split: 'whole' })} />
+		</div>
+		<div class="row">
+			{#each ['social-x', 'social-instagram', 'social-linkedin'] as name (name)}
+				<a href="/" style="font-size: 28px" aria-label={name} {@attach roll({ split: 'whole' })}>
+					<Icon {name} />
+				</a>
+			{/each}
+			<a
+				href="/"
+				style="font-size: 28px"
+				aria-label="social-youtube"
+				{@attach roll({ split: 'whole', direction: 'down' })}
+			>
+				<Icon name="social-youtube" />
+			</a>
 		</div>
 	</LibrarySection>
 
@@ -1360,6 +1475,36 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Text Intro"
+		type="Attachment"
+		description="Plays once when the element mounts, not on scroll. The text reveals piece by piece at the right edge of its section (the nearest `section`), then the whole element travels left to where it really sits. Meant for a hero heading: pass it to Section Copy's `titleAttach`. Demoed on the Intros page. Uses GSAP and SplitText. Off with reduced motion."
+		props={[
+			typeProp('words | chars', 'words'),
+			durationProp('0.6'),
+			staggerProp('0.08'),
+			easeProp('power3.out'),
+			{
+				name: 'travel',
+				description: 'A number, seconds the text takes to travel to its place. Defaults to `1.2`.'
+			},
+			{
+				name: 'travelEase',
+				description: 'A GSAP ease for the travel. Defaults to `power3.inOut`.'
+			},
+			{
+				name: 'hold',
+				description: 'A number, seconds to wait before the travel starts. Defaults to `0.15`.'
+			},
+			{
+				name: 'delay',
+				description:
+					'A number, seconds to wait before anything starts, e.g. for a loader to lift. Defaults to `0`.'
+			}
+		]}
+		propsLabel="options"
+	/>
+
+	<LibrarySection
 		title="Text Reveal"
 		type="Attachment"
 		titleAttachment={textReveal({ type: 'chars', duration: 0.32, ease: 'back.out(2.5)' })}
@@ -1373,6 +1518,10 @@
 			durationProp('0.2'),
 			staggerProp('0.05'),
 			easeProp('linear'),
+			{
+				name: 'delay',
+				description: 'A number, seconds to wait after the trigger fires. Defaults to `0`.'
+			},
 			...scrollProps({ start: 'top 98%', end: 'bottom 2%' })
 		]}
 		propsLabel="options"
@@ -1398,31 +1547,6 @@
 			<p {@attach textReveal({ from: 'top', scrub: true, end: 'bottom 60%' })}>
 				This reveals from the top instead of the bottom.
 			</p>
-		</div>
-	</LibrarySection>
-
-	<LibrarySection
-		title="Text Roll"
-		type="Attachment"
-		description="Each letter rolls up and out on hover or keyboard focus, replaced by a copy rising from below, one after another. Plain CSS and a little script, no GSAP. Screen readers get the original text. Off with reduced motion. Do not combine it with a glitch attachment on the same text."
-		props={[
-			{
-				name: 'stagger',
-				description: 'A number, seconds between each letter starting. Defaults to `0.02`.'
-			},
-			{ name: 'duration', description: 'A number, seconds each letter takes. Defaults to `0.6`.' },
-			{
-				name: 'target',
-				description:
-					'A selector or element that holds the text. Defaults to a `.label` (as in Button), else the element itself.'
-			}
-		]}
-		propsLabel="options"
-	>
-		<div class="row">
-			<Button text="Outline roll" type="outline" iconEnd="chevron-right" {@attach textRoll()} />
-			<Button text="Underline roll" type="underline" {@attach textRoll({ stagger: 0.04 })} />
-			<Button text="Slow roll" {@attach textRoll({ duration: 1.2 })} />
 		</div>
 	</LibrarySection>
 
@@ -1704,17 +1828,6 @@
 		<p {@attach typingScroll({ speed: 25, once: true, cursor: 'underscore', delay: 300 })}>
 			Faster, only the first time, with an underscore cursor and a short delay.
 		</p>
-	</LibrarySection>
-
-	<LibrarySection
-		title="Underline"
-		type="Attachment"
-		description="Draws a line under a button's label that slides away on hover, the same effect as the underline Button type, for mixing into other types. It uses the label's text color and takes no options."
-	>
-		<div class="row">
-			<Button text="Solid underline" {@attach underline()} />
-			<Button text="Outline underline" type="outline" {@attach underline()} />
-		</div>
 	</LibrarySection>
 
 	<LibrarySection
@@ -2206,6 +2319,15 @@
 		overflow: hidden;
 		border-radius: var(--radius);
 		background: var(--color-surface);
+	}
+
+	.parallax-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 64px;
+		width: 100%;
+		padding-block: 64px;
 	}
 
 	.parallax-image {

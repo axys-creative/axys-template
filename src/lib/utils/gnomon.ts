@@ -7,6 +7,9 @@ export type GnomonCutout = {
 	text?: string;
 };
 
+/** 0-1: how far the notch's wall leans, from a square step (0) to a single diagonal (1). */
+export const gnomonTilt = (angle: number) => (90 - Math.min(90, Math.max(45, angle))) / 45;
+
 export type GnomonOptions = {
 	cutouts: GnomonCutout[];
 	depth: number;
@@ -56,7 +59,7 @@ export function gnomonShape({ cutouts, depth, length, radius, angle }: GnomonOpt
 	length *= scale;
 	const half = length / 2;
 
-	const tilt = (90 - Math.min(90, Math.max(45, angle))) / 45;
+	const tilt = gnomonTilt(angle);
 	const sideDepth = (depth / 2) * tilt;
 	const sideLength = half * tilt;
 
@@ -144,19 +147,23 @@ export function gnomonShape({ cutouts, depth, length, radius, angle }: GnomonOpt
 			.join('') + 'Z';
 
 	// Each notch's text sits in the cut-away rectangle: pinned to both edges at a corner, to one
-	// edge (and centered along the other) on a side.
+	// edge (and centered along the other) on a side. Padding on the slanted wall(s) starts where the
+	// notch is narrowest, so the text clears the slash at the deep end.
 	const labels = cutouts
 		.filter((cutout) => cutout.text)
 		.map(({ from, text }) => {
+			const pad = (side: string, amount: number) =>
+				`padding-${side}: calc(var(--label-inset, 14px) + ${num(amount)}%);`;
 			let style: string;
 			if (from === 'top' || from === 'bottom') {
-				style = `${from}: 0; left: 50%; transform: translateX(-50%); width: ${length}%; height: ${depth}%;`;
+				style = `${from}: 0; left: 50%; transform: translateX(-50%); width: ${length}%; height: ${depth}%; ${pad('left', sideLength)} ${pad('right', sideLength)}`;
 			} else if (from === 'left' || from === 'right') {
 				style = `${from}: 0; top: 50%; transform: translateY(-50%); width: ${depth}%; height: ${length}%;`;
 			} else {
 				const x = from.endsWith('left') ? 'left' : 'right';
 				const y = from.startsWith('top') ? 'top' : 'bottom';
-				style = `${x}: 0; ${y}: 0; width: ${length}%; height: ${depth}%;`;
+				const wall = x === 'left' ? 'right' : 'left';
+				style = `${x}: 0; ${y}: 0; width: ${length}%; height: ${depth}%; ${pad(wall, length * tilt)}`;
 			}
 			return { from, text: text!, style };
 		});

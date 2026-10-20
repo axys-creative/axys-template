@@ -13,7 +13,7 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
 	import { glass as glassEffect } from '$lib/attachments/glass';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import Button, { type ButtonProps } from './button.svelte';
 	import Logo from './logo.svelte';
@@ -125,7 +125,7 @@
 			{#if ctas.length}
 				<div class="bar-ctas">
 					{#each ctas as cta (`${cta.url}|${cta.text}`)}
-						<Button {...cta} {@attach textRoll()} />
+						<Button {...cta} {@attach roll()} />
 					{/each}
 				</div>
 			{/if}
@@ -154,7 +154,7 @@
 					{#if ctas.length}
 						<div class="ctas">
 							{#each ctas as cta (`${cta.url}|${cta.text}`)}
-								<Button {...cta} {@attach textRoll()} />
+								<Button {...cta} {@attach roll()} />
 							{/each}
 						</div>
 					{/if}
@@ -164,7 +164,7 @@
 					{#if footerLinks.length}
 						<ul class="footer-links">
 							{#each footerLinks as link (`${link.url}|${link.text}`)}
-								<li><Button {...link} type="underline" size="sm" {@attach textRoll()} /></li>
+								<li><Button {...link} type="underline" size="sm" {@attach roll()} /></li>
 							{/each}
 						</ul>
 					{/if}

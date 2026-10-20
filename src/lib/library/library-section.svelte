@@ -11,7 +11,7 @@
 
 	export type LibrarySectionProps = {
 		title: string;
-		/** What it is: Attachment, Component, Combo, Section or Tokens. Shown as "[ Title - Type ]". */
+		/** What it is: Attachment, Component, Combo, Hero, Section, Transition or Tokens. Shown as "[ Title - Type ]". */
 		type?: string;
 		/** A sub-block (h3) inside a section: plain title, no brackets. */
 		level?: 2 | 3;

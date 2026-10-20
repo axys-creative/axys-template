@@ -10,6 +10,7 @@
 		galleryHorizontalProps,
 		headlineProps,
 		heroImageCircleProps,
+		heroImageDiagonalProps,
 		heroCarouselProps,
 		heroImageWaveProps,
 		heroSimpleProps,
@@ -30,6 +31,7 @@
 	import Headline from '$lib/sections/headline.svelte';
 	import HeroCarousel from '$lib/sections/hero-carousel.svelte';
 	import HeroImageCircle from '$lib/sections/hero-image-circle.svelte';
+	import HeroImageDiagonal from '$lib/sections/hero-image-diagonal.svelte';
 	import HeroImageWave from '$lib/sections/hero-image-wave.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
 	import PlanSelection from '$lib/sections/plan-selection.svelte';
@@ -65,7 +67,7 @@
 		{ title: 'Design', description: 'Exploring directions and refining the chosen one.' },
 		{ title: 'Build', description: 'Engineering the approved design into a real product.' }
 	];
-	const accentGnomon = { length: 64, depth: 12 };
+	const accentGnomon = { maxLength: 64, depth: 12 };
 	const galleryGroups = [
 		{
 			images: [
@@ -538,6 +540,23 @@
 			{cta}
 			{images}
 			direction="left"
+		/>
+	</LibrarySection>
+
+	<LibrarySection
+		title="Hero Image Diagonal"
+		type="Section"
+		description="A hero with the title top left, the description and buttons bottom right, and five pictures stepping down a diagonal from the top right to the bottom left behind them, with the middle one largest and on top."
+		props={heroImageDiagonalProps}
+	>
+		<HeroImageDiagonal
+			class="full"
+			eyebrowText="Hero Variant"
+			title="Hero Image Diagonal"
+			description="A large title and a call to action in opposite corners, with a line of pictures stepping between them."
+			{cta}
+			images={images.slice(0, 5)}
+			ratio="3 / 2"
 		/>
 	</LibrarySection>
 

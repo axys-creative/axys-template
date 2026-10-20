@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import site from '$lib/content/meta/site.json';
 	import { notchedBoxPath, roundedBoxPath } from '$lib/utils/gnomon';
 	import Button from './button.svelte';
@@ -124,7 +124,7 @@
 				{#if title}
 					<svelte:element this={`h${level}`} class="title h3">{title}</svelte:element>
 				{/if}
-				{#if cta}<Button {...cta} {@attach textRoll()} />{/if}
+				{#if cta}<Button {...cta} {@attach roll()} />{/if}
 			</div>
 
 			{#if linksets.length}

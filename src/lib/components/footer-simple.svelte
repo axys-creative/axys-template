@@ -27,7 +27,7 @@
 
 <script lang="ts">
 	import { glass as glassEffect } from '$lib/attachments/glass';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import site from '$lib/content/meta/site.json';
 	import BackToTop from './back-to-top.svelte';
 	import Logo from './logo.svelte';
@@ -90,7 +90,7 @@
 		{#if includeBottom}
 			<div class="bottom">
 				<div class="bottom-start">
-					{#if returnToTop}<BackToTop {...returnToTop} {@attach textRoll()} />{/if}
+					{#if returnToTop}<BackToTop {...returnToTop} {@attach roll()} />{/if}
 				</div>
 				<p class="copyright">{copyrightText}</p>
 				<div class="bottom-end">

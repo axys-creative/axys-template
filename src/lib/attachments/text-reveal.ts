@@ -12,6 +12,8 @@ export type TextRevealOptions = TextScrollOptions & {
 	stagger?: number;
 	/** A GSAP ease, e.g. `back.out(2)`. */
 	ease?: string;
+	/** Seconds to wait after the trigger fires before the first piece starts. */
+	delay?: number;
 };
 
 /** Slides text up out of a clipped line, piece by piece, as it scrolls into view. */
@@ -21,6 +23,7 @@ export function textReveal({
 	duration = 0.2,
 	stagger = 0.05,
 	ease = 'linear',
+	delay = 0,
 	...scroll
 }: TextRevealOptions = {}): Attachment<HTMLElement> {
 	return (el) => {
@@ -32,7 +35,7 @@ export function textReveal({
 			scroll,
 			({ gsap, targets, scrollTrigger }) =>
 				gsap
-					.timeline({ scrollTrigger })
+					.timeline({ scrollTrigger, delay })
 					.fromTo(
 						targets,
 						{ y: from === 'top' ? '-100%' : '100%' },

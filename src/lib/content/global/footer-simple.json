@@ -52,6 +52,11 @@
 					"newTab": false
 				},
 				{
+					"text": "Intros",
+					"url": "/intros",
+					"newTab": false
+				},
+				{
 					"text": "Sections",
 					"url": "/sections",
 					"newTab": false

@@ -132,6 +132,14 @@ export const sectionCopyProps = props(
 	],
 	['title', 'A string.'],
 	[
+		'titleAttach',
+		'An attachment for the title heading, e.g. `textIntro()` for a heading that plays on load.'
+	],
+	[
+		'descriptionAttach',
+		"An attachment for the description, e.g. `textReveal({ from: 'top' })` for a description that reveals later."
+	],
+	[
 		'level',
 		'`1 | 2 | 3 | 4 | 5 | 6`. The heading level of the title. A page hero is `1`, other sections `2`. Defaults to `2`.'
 	],
@@ -159,7 +167,7 @@ export const sectionCopyProps = props(
 export const siteNavButtonProps = props(
 	[
 		'symbol',
-		'`burger | oreo | stairs | chocolate | kebab`. Two lines, two lines with rounded outer corners that twirl into the X, three stepped lines (short, long, short) that form the X, nine dots or three vertical dots. Defaults to `burger`.'
+		'`burger | oreo | stairs | chocolate | kebab`. Two lines, two lines with rounded outer corners that twirl into the X, three stepped lines (short, long, short) that form the X, nine dots, or three vertical dots that turn into an X of five. Defaults to `burger`.'
 	],
 	['shape', '`square | round`. Defaults to `square`.'],
 	['type', '`icon | button`. `button` puts the symbol in a bordered box. Defaults to `icon`.'],
@@ -484,7 +492,7 @@ export const imageColumnsProps = props(
 	['markers', 'A boolean. Shows GSAP start and end markers for debugging. Defaults to `false`.'],
 	[
 		'gnomon',
-		'An object `{ depth, length, radius, angle, borderWidth, cutouts }`. When set, every image is drawn as a Card Gnomon with these settings, and a `caption` fills the first notch.'
+		'An object `{ depth, maxLength, radius, angle, borderWidth, cutouts }`. When set, every image is drawn as a Card Gnomon with these settings, and a `caption` fills the first notch.'
 	],
 	['class', 'A string of extra classes.']
 );
@@ -622,7 +630,7 @@ export const imageShuffleProps = props(
 	],
 	[
 		'type',
-		'`roll | fade`. `roll` slides the new image up from below as the old one leaves upward, like Text Roll; `fade` crossfades. Defaults to `roll`.'
+		'`roll | fade`. `roll` slides the new image up from below as the old one leaves upward, like the Roll attachment; `fade` crossfades. Defaults to `roll`.'
 	],
 	[
 		'interval',
@@ -712,6 +720,34 @@ export const solarSystemProps = props(
 		'A string of extra classes. The component is square and sized by its container, and its tags scale with it.'
 	]
 );
+
+export const loaderProps = props(
+	[
+		'minDuration',
+		'A number of milliseconds, the fastest the count can run, so a quick connection still plays the animation through. Defaults to `900`.'
+	],
+	[
+		'maxDuration',
+		'A number of milliseconds after which it finishes even if the page is still loading. Defaults to `8000`.'
+	],
+	[
+		'track',
+		"A function `(update) => stop` that calls `update(progress)` with a number from `0` to `1` and returns a function that stops it. Defaults to watching the page's fonts and the pictures at the top of it; pass your own to wait on something else, such as a video."
+	],
+	[
+		'contained',
+		'A boolean. Keeps the loader inside its parent and leaves the page alone (no scroll lock, and `loading.done` is untouched). For previews; leave it off on a site.'
+	],
+	['onfinish', 'A function that runs when the loader has gone.'],
+	['class', 'A string of extra classes, e.g. a `theme-*` surface.']
+);
+
+export const loaderGridProps = loaderProps;
+
+export const loaderLogoProps = [
+	{ name: 'logo', description: 'An object of Logo props, the logo that fills in. Required.' },
+	...loaderProps
+];
 
 export const scrollProgressProps = props(
 	[
@@ -866,7 +902,10 @@ export const accordionTableProps = props(
 );
 
 export const counterProps = props(
-	['digit', 'A number to count to. Required.'],
+	[
+		'digit',
+		'A number to count to. Required. If it changes after the count has played, the number counts on to the new one.'
+	],
 	['comma', 'A boolean. Separate thousands with commas. Defaults to `false`.'],
 	['prefix', 'A string before the number, such as `$`.'],
 	['suffix', 'A string after the number, such as `M`.'],
@@ -924,15 +963,15 @@ export const cardGnomonProps = props(
 	],
 	[
 		'depth',
-		'A number, 0-100. How far every cutout reaches into the card, as a % of its side. Shared by all cutouts. If two cutouts would overlap on an edge, `depth` and `length` shrink together so they never collide. Defaults to `12`.'
+		'A number, 0-100. The least every cutout reaches into the card, as a % of its side. Shared by all cutouts. It has no maximum: when the text wraps at `maxLength`, the cutout cuts deeper to hold it. If two cutouts would overlap on an edge, depth and length shrink together so they never collide. Defaults to `12`.'
 	],
 	[
-		'length',
-		'A number, 0-100, or `auto`. How far every cutout runs along its edge, as a % of the card side. `auto` measures the cutout text and fits the notch to the longest one (up to 90), so a caption never needs a number change. Defaults to `32`.'
+		'maxLength',
+		'A number, 0-100. The most every cutout runs along its edge, as a % of the card side. The cutout always fits its longest text, and past this the text wraps and the cutout deepens instead. Without text it is 32. Defaults to `90`.'
 	],
 	[
 		'lengthPadding',
-		'A number in px, used only with `length="auto"`. Added to the measured text width, for the room beside the text and the slant of the notch wall. Defaults to `28`.'
+		'A number in px, added to the measured text width, for the room beside the text. With a tilted `angle`, the room is counted from the narrow, deep end, so the text clears the slant. Defaults to `28`.'
 	],
 	[
 		'radius',
@@ -959,6 +998,7 @@ export const richTextProps = props(
 		'text',
 		'A string. `[words]{.primary}` styles the words, `[words]{.primary .scribble}` combines classes, and `{.br}` is a line break. Anything else, including `<` and `&`, is shown as typed. Required.'
 	],
+	['.h1', 'The size and style of a Heading 1. `.h2` to `.h6` match their headings.'],
 	['.italic', 'Italic.'],
 	['.primary', 'The brand accent color.'],
 	[
@@ -1223,7 +1263,7 @@ export const galleryHorizontalProps = props(
 	['accent', 'A string, handwritten text before the first group.'],
 	[
 		'gnomon',
-		'`{ depth, length, radius, angle }`, the Card Gnomon settings every card shares (see Card Gnomon in Components). Defaults to `{ depth: 18, length: 48, radius: 4, angle: 85 }`.'
+		'`{ depth, maxLength, radius, angle }`, the Card Gnomon settings every card shares (see Card Gnomon in Components). Defaults to `{ depth: 18, maxLength: 48, radius: 4, angle: 85 }`.'
 	],
 	[
 		'static',
@@ -1390,6 +1430,91 @@ export const heroImageCircleProps = props(
 	[
 		'circle',
 		'Image Circle props for both circles: `itemWidth`, `gap` and `duration`. The section sets `direction`, `bloom` and `clip` itself.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const heroImageDiagonalProps = props(
+	[
+		'...SectionCopy props',
+		'Takes every prop of Section Copy (see the Style Guide): `eyebrowText`, `eyebrowIcon`, `title`, `description`, `cta` and the rest. The eyebrow and title sit top left, the description and buttons bottom right (held to 320px wide), and up to five pictures stepping down a diagonal behind them, largest and on top in the middle. `level` defaults to `1`.'
+	],
+	[
+		'images',
+		'An array of `{ src, alt }`, at most five (more are ignored), placed in order along a diagonal from the top right down to the bottom left. The middle one sits on top and each step outward sits one layer lower. Required.'
+	],
+	[
+		'spread',
+		'A number from `0` to `1`. How much of the diagonal the pictures cover: `1` runs corner to corner, lower pulls them toward the middle so they overlap. Defaults to `0.7`.'
+	],
+	[
+		'imageWidth',
+		'A number, how wide the picture in the middle of the diagonal is as a percent of the content width. It is never narrower than 88px (before tapering). Defaults to `20`.'
+	],
+	[
+		'taper',
+		'A number from `0` to `1`. How much smaller the pictures at the two ends are than the middle one, shrinking evenly with distance from the center. `0` keeps them all the same size. Defaults to `0.45`.'
+	],
+	['ratio', 'A string, width over height of each picture, e.g. `4 / 5`. Defaults to `4 / 5`.'],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen. Taller content still grows past it. Defaults to `true`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const heroLoadMarqueeSlideProps = props(
+	[
+		'...SectionCopy props',
+		'Takes `eyebrowText`, `eyebrowIcon`, `description`, `cta` and the rest of Section Copy (see the Style Guide). The eyebrow (if set) sits above the words; the description and buttons sit to the right of the first word, and under it below `md`. From `md` up the second and third rows are indented 96px and 192px. `title` is not used; the heading comes from `words`.'
+	],
+	[
+		'words',
+		"A tuple of three: a string, an array of strings, a string, top to bottom, e.g. `['A better way to', ['live', 'think', 'feel'], 'starts here']`. The array is the marquee: its first word is revealed in place, then it starts looping and the rest fade in. Together they make the page heading. Required."
+	],
+	[
+		'size',
+		'A string, any CSS length for the font size of the words. Defaults to `clamp(72px, 15vw, 180px)`.'
+	],
+	[
+		'divider',
+		"A string, the mark between the looping words (and after the last, before it starts over), so the line does not read as a sentence. It is muted and fades in with the words. Any text works, e.g. `'·'`, `'/'` or `'✦'`; an empty string shows none. Defaults to `'·'`."
+	],
+	[
+		'speed',
+		'A number, pixels per second the middle line slides once its first word has revealed. Defaults to `120`.'
+	],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen. Taller content still grows past it. Defaults to `true`.'
+	],
+	[
+		'static',
+		'A boolean. Skips the reveal and the slide, for the CMS preview. Defaults to `false`.'
+	],
+	['class', 'A string of extra classes, such as `full` on a Library page.']
+);
+
+export const heroLoadSlideProps = props(
+	[
+		'...SectionCopy props',
+		'Takes `eyebrowText`, `eyebrowIcon`, `description`, `cta` and the rest of Section Copy (see the Style Guide). The eyebrow (if set) sits above the words; the description and buttons sit to the right of the first word, and under it below `md`. From `md` up the second and third rows start indented 96px and 192px and slide left to line up with the first once they have revealed. `title` is not used; the heading comes from `words`.'
+	],
+	[
+		'words',
+		'An array of exactly three strings, top to bottom. Together they make the page heading. Required.'
+	],
+	[
+		'size',
+		'A string, any CSS length for the font size of the words. Defaults to `clamp(72px, 15vw, 180px)`.'
+	],
+	[
+		'fullScreen',
+		'A boolean. At least the height of the screen. Taller content still grows past it. Defaults to `true`.'
+	],
+	[
+		'static',
+		'A boolean. Skips the reveal and the slide, for the CMS preview. Defaults to `false`.'
 	],
 	['class', 'A string of extra classes, such as `full` on a Library page.']
 );

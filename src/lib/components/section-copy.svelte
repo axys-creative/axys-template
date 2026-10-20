@@ -1,5 +1,6 @@
 <script module lang="ts">
 	import type { ComponentProps, Snippet } from 'svelte';
+	import type { Attachment } from 'svelte/attachments';
 	import type CtaGroup from './cta-group.svelte';
 
 	export type SectionCopyProps = {
@@ -10,12 +11,16 @@
 		/** A status dot before the eyebrow. `true` is `pulse`. */
 		eyebrowDot?: boolean | 'pulse' | 'sonar';
 		title?: string;
+		/** An attachment for the title heading, e.g. `textIntro()`. */
+		titleAttach?: Attachment<HTMLElement>;
 		/** Heading level of the title. A page's hero is 1, other sections are 2. */
 		level?: 1 | 2 | 3 | 4 | 5 | 6;
 		/** Looks like another heading size without changing the level. */
 		titleStyle?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 		/** Plain text, or a snippet for rich content such as links. */
 		description?: string | Snippet;
+		/** An attachment for the description, e.g. `textReveal({ from: 'top' })`. */
+		descriptionAttach?: Attachment<HTMLElement>;
 		cta?: ComponentProps<typeof CtaGroup>;
 		/** `column` stacks everything; `row` puts the description beside the eyebrow and title. */
 		layout?: 'column' | 'row';
@@ -40,9 +45,11 @@
 		eyebrowDirection = 'row',
 		eyebrowDot = false,
 		title,
+		titleAttach,
 		level = 2,
 		titleStyle,
 		description,
+		descriptionAttach,
 		cta,
 		layout = 'column',
 		align = 'start',
@@ -72,7 +79,7 @@
 					/>
 				{/if}
 				{#if hasTitle}
-					<svelte:element this={`h${level}`} class={titleStyle}
+					<svelte:element this={`h${level}`} class={titleStyle} {@attach titleAttach}
 						><RichText text={title ?? ''} /></svelte:element
 					>
 				{/if}
@@ -83,9 +90,9 @@
 			<div class="body">
 				{#if hasDescription}
 					{#if typeof description === 'string'}
-						<p class="description"><RichText text={description} /></p>
+						<p class="description" {@attach descriptionAttach}><RichText text={description} /></p>
 					{:else if description}
-						<div class="description">{@render description()}</div>
+						<div class="description" {@attach descriptionAttach}>{@render description()}</div>
 					{/if}
 				{/if}
 				{#if hasCta && cta}

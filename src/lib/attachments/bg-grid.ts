@@ -28,8 +28,10 @@ export type BgGridOptions = {
 	ambient?: number;
 	/** Covers the whole screen and follows it, instead of covering this element. Meant for `<body>`. */
 	fixed?: boolean;
-	/** Holds the whole grid on while this element is mostly on screen, and fades it out after. */
-	show?: boolean | { enter?: BgGridAnimation; exit?: BgGridAnimation; stagger?: number };
+	/** Holds the whole grid on while this element (or the `trigger` selector inside it) is mostly on screen, and fades it out after. */
+	show?:
+		| boolean
+		| { enter?: BgGridAnimation; exit?: BgGridAnimation; stagger?: number; trigger?: string };
 	/** A selector for elements inside that stop the pointer from lighting squares while it is over them. */
 	disableOn?: string;
 	/** A selector for elements inside that hide the grid completely while the pointer is over them. */
@@ -309,6 +311,18 @@ export function bgGrid({
 		const exit = sweep.exit ?? 'stack-top';
 		const stagger = sweep.stagger ?? 50;
 
+		const toggle = (mostly: boolean) => {
+			if (mostly && !frozen) {
+				frozen = true;
+				revealAll(enter, stagger);
+			} else if (!mostly && frozen) {
+				frozen = false;
+				fadeAll(exit, stagger);
+			}
+		};
+
+		const trigger = sweep.trigger ? host.querySelector(sweep.trigger) : null;
+
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				const seen = entry.isIntersecting;
@@ -316,19 +330,17 @@ export function bgGrid({
 					visible = seen;
 					if (seen) wake();
 				}
-				if (!show) return;
-				const mostly = entry.intersectionRatio >= 0.5;
-				if (mostly && !frozen) {
-					frozen = true;
-					revealAll(enter, stagger);
-				} else if (!mostly && frozen) {
-					frozen = false;
-					fadeAll(exit, stagger);
-				}
+				if (show && !trigger) toggle(entry.intersectionRatio >= 0.5);
 			},
 			{ threshold: [0, 0.5] }
 		);
 		observer.observe(host);
+
+		const triggerObserver = new IntersectionObserver(
+			([entry]) => toggle(entry.intersectionRatio >= 0.5),
+			{ threshold: [0, 0.5] }
+		);
+		if (show && trigger) triggerObserver.observe(trigger);
 
 		const resizer = new ResizeObserver(resize);
 		if (fixed) addEventListener('resize', resize, { passive: true });
@@ -349,6 +361,7 @@ export function bgGrid({
 			cancelAnimationFrame(frame);
 			clearInterval(timer);
 			observer.disconnect();
+			triggerObserver.disconnect();
 			resizer.disconnect();
 			removeEventListener('pointermove', onMove);
 			removeEventListener('resize', resize);

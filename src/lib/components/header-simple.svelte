@@ -15,7 +15,7 @@
 
 <script lang="ts">
 	import { glass as glassEffect } from '$lib/attachments/glass';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import Button from './button.svelte';
 	import Logo from './logo.svelte';
@@ -94,7 +94,7 @@
 		{#if ctas.length}
 			<div class="ctas">
 				{#each ctas as cta (`${cta.url}|${cta.text}`)}
-					<Button {...cta} {@attach textRoll()} />
+					<Button {...cta} {@attach roll()} />
 				{/each}
 			</div>
 		{/if}

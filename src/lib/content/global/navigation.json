@@ -51,6 +51,12 @@
 					"iconStart": "orbit"
 				},
 				{
+					"text": "Intros",
+					"url": "/intros",
+					"newTab": false,
+					"iconStart": "play"
+				},
+				{
 					"text": "Sections",
 					"url": "/sections",
 					"newTab": false,

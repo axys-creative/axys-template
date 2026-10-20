@@ -2,7 +2,7 @@
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
 	export type SiteNavButtonProps = {
-		/** `burger` is two lines, `oreo` is two lines with the outer corners rounded that twirl into the X, `stairs` is three stepped lines (short, long, short) that form the X, `chocolate` is nine dots, `kebab` is three vertical dots. */
+		/** `burger` is two lines, `oreo` is two lines with the outer corners rounded that twirl into the X, `stairs` is three stepped lines (short, long, short) that form the X, `chocolate` is nine dots, `kebab` is three vertical dots that turn into an X of five dots. */
 		symbol?: 'burger' | 'oreo' | 'stairs' | 'chocolate' | 'kebab';
 		shape?: 'square' | 'round';
 		/** `button` puts the symbol in a bordered box. */
@@ -28,7 +28,7 @@
 		...rest
 	}: SiteNavButtonProps = $props();
 
-	const strokes = $derived({ burger: 2, oreo: 2, stairs: 3, chocolate: 9, kebab: 3 }[symbol]);
+	const strokes = $derived({ burger: 2, oreo: 2, stairs: 3, chocolate: 9, kebab: 5 }[symbol]);
 </script>
 
 {#snippet lines()}
@@ -164,6 +164,12 @@
 		position: relative;
 		width: 24px;
 
+		@include mixins.mq-motion-allow {
+			transition:
+				0.24s ease,
+				rotate 0.5s var(--ease);
+		}
+
 		.stroke {
 			position: absolute;
 			top: 50%;
@@ -182,6 +188,17 @@
 
 		.stroke-3 {
 			translate: -50% calc(-50% + 8px);
+		}
+
+		// The side dots wait at the center, hidden, and appear when it turns into the X.
+		.stroke-4 {
+			translate: calc(-50% - 8px) -50%;
+			scale: 0;
+		}
+
+		.stroke-5 {
+			translate: calc(-50% + 8px) -50%;
+			scale: 0;
 		}
 	}
 
@@ -355,6 +372,15 @@
 
 			.stroke-2 {
 				rotate: -225deg;
+			}
+		}
+
+		.kebab {
+			rotate: 45deg;
+
+			.stroke-4,
+			.stroke-5 {
+				scale: 1;
 			}
 		}
 

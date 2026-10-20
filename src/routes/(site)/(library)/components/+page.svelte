@@ -280,7 +280,6 @@
 		<CardGnomon
 			cutouts={[{ from: 'bottom-right', text: 'Keep angle near 90' }]}
 			depth={12}
-			length={48}
 			angle={80}
 			radius={4}
 		>
@@ -290,19 +289,20 @@
 		<CardGnomon
 			cutouts={[{ from: 'bottom', text: 'View more' }]}
 			depth={10}
-			length={32}
 			angle={75}
 			radius={2}
 			img={{ src: '/images/img-sample-1.jpg', alt: 'Sample card image' }}
 		/>
-		<h3 class="plain">Two notches on opposite corners</h3>
+		<h3 class="plain">
+			Two notches with a <code>maxLength</code> of 28: longer text wraps and cuts deeper
+		</h3>
 		<CardGnomon
 			cutouts={[
 				{ from: 'top-right', text: 'Sample 01' },
-				{ from: 'bottom-left', text: 'Sample 02' }
+				{ from: 'bottom-left', text: 'A longer caption wraps into the depth' }
 			]}
 			depth={10}
-			length={32}
+			maxLength={28}
 			angle={80}
 			radius={2}
 			img={{ src: '/images/img-sample-1.jpg', alt: 'Sample card image' }}
@@ -484,7 +484,7 @@
 			columns={[2, 3, 2, 3]}
 			columnsMd={[4, 3, 4]}
 			columnsSm={[4, 5]}
-			gnomon={{ depth: 12, length: 36, radius: 4, angle: 80 }}
+			gnomon={{ depth: 12, maxLength: 36, radius: 4, angle: 80 }}
 		/>
 	</LibrarySection>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Attachment } from 'svelte/attachments';
 	import { glass } from '$lib/attachments/glass';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import Button, { type ButtonProps } from './button.svelte';
 
 	type Props = {
@@ -89,7 +89,7 @@
 		expanded={open}
 		controls={id}
 		onclick={toggle}
-		{@attach textRoll()}
+		{@attach roll()}
 		{@attach triggerAttach}
 	/>
 
@@ -102,7 +102,7 @@
 	>
 		<ul class="list">
 			{#each links as link (`${link.url}|${link.text}`)}
-				<li><Button {...link} type={link.type ?? 'text'} {@attach textRoll()} /></li>
+				<li><Button {...link} type={link.type ?? 'text'} {@attach roll()} /></li>
 			{/each}
 		</ul>
 	</div>

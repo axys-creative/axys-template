@@ -466,13 +466,6 @@
 
 		align-self: flex-start;
 
-		button {
-			border: 0;
-			background: none;
-			color: inherit;
-			font: inherit;
-		}
-
 		button:global([data-active]) {
 			color: var(--color-text);
 		}

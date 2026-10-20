@@ -2,7 +2,7 @@
 	import type { CardGnomonProps } from '$lib/components/card-gnomon.svelte';
 	import type { SectionCopyProps } from '$lib/components/section-copy.svelte';
 
-	export type GalleryGnomon = Pick<CardGnomonProps, 'depth' | 'length' | 'radius' | 'angle'>;
+	export type GalleryGnomon = Pick<CardGnomonProps, 'depth' | 'maxLength' | 'radius' | 'angle'>;
 
 	export type GalleryImage = {
 		src: string;
@@ -43,7 +43,7 @@
 	let {
 		groups,
 		accent,
-		gnomon = { depth: 18, length: 48, radius: 4, angle: 85 },
+		gnomon = { depth: 18, maxLength: 48, radius: 4, angle: 85 },
 		id,
 		static: still = false,
 		class: className,

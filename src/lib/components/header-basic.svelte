@@ -18,7 +18,7 @@
 
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import Button from './button.svelte';
 	import Logo from './logo.svelte';
@@ -86,7 +86,7 @@ link or button anywhere else on the page stays clickable, even right under it. -
 		{#if ctas.length}
 			<div class="ctas">
 				{#each ctas as cta (`${cta.url}|${cta.text}`)}
-					<Button {...cta} {@attach textRoll()} />
+					<Button {...cta} {@attach roll()} />
 				{/each}
 			</div>
 		{/if}

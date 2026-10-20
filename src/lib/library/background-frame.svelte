@@ -9,9 +9,11 @@
 		effect: Attachment<HTMLElement>;
 		/** Text for the button, which carries the class `demo-button` so an effect can be told about it. */
 		button?: string;
+		/** Scrolls inside the frame through three sections, with the effect on the second only. */
+		scroll?: boolean;
 	};
 
-	let { effect, button = 'A button on the page' }: Props = $props();
+	let { effect, button = 'A button on the page', scroll = false }: Props = $props();
 </script>
 
 <div class="frame">
@@ -20,16 +22,43 @@
 		<span class="path">/mock-section</span>
 	</div>
 
-	<div class="stage" {@attach effect}>
-		<SectionCopy
-			level={3}
-			align="center"
-			eyebrowText="A mock section"
-			title="Content sits in front"
-			description="Move the mouse over this frame. The effect is drawn behind everything in the section."
-		/>
-		<div class="demo-button"><Button text={button} type="outline" /></div>
-	</div>
+	{#if scroll}
+		<div class="site" {@attach effect}>
+			<div class="scroller" data-lenis-prevent>
+				<section class="stage">
+					<SectionCopy level={3} align="center" eyebrowText="Section one" title="Scroll down" />
+				</section>
+				<section class="stage demo-trigger">
+					<SectionCopy
+						level={3}
+						align="center"
+						eyebrowText="Section two"
+						title="The effect is on here"
+						description="It turns on while this section is in view and off again when it leaves."
+					/>
+				</section>
+				<section class="stage">
+					<SectionCopy
+						level={3}
+						align="center"
+						eyebrowText="Section three"
+						title="No effect here"
+					/>
+				</section>
+			</div>
+		</div>
+	{:else}
+		<div class="stage" {@attach effect}>
+			<SectionCopy
+				level={3}
+				align="center"
+				eyebrowText="A mock section"
+				title="Content sits in front"
+				description="Move the mouse over this frame. The effect is drawn behind everything in the section."
+			/>
+			<div class="demo-button"><Button text={button} type="outline" /></div>
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -69,6 +98,15 @@
 
 	.path {
 		color: var(--color-text-muted);
+	}
+
+	.site {
+		height: 360px;
+	}
+
+	.scroller {
+		height: 100%;
+		overflow-y: auto;
 	}
 
 	.stage {

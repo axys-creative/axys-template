@@ -36,12 +36,12 @@
 	{#each tabs as tab, index (index)}
 		<div class="panel" role="tabpanel" hidden={index !== defaultTab}>
 			{#if tab.image}<img
-					{...imageProps(tab.image.src, { sizes: '(min-width: 1024px) 560px, 100vw' })}
+					{...imageProps(tab.image.src, { sizes: '180px' })}
 					alt={tab.image.alt ?? ''}
 					loading="lazy"
 				/>{/if}
 			<div class="text">
-				<h4>{tab.title}</h4>
+				<h2>{tab.title}</h2>
 				<p>{tab.description}</p>
 			</div>
 		</div>
@@ -108,12 +108,13 @@
 	}
 
 	.panel {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		gap: 24px;
-		align-items: center;
+		align-items: flex-start;
 
 		@include mixins.min-md {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			flex-direction: row;
 		}
 
 		&[hidden] {
@@ -122,6 +123,8 @@
 
 		img {
 			width: 100%;
+			max-width: 180px;
+			flex: none;
 			aspect-ratio: 4 / 3;
 			border-radius: var(--radius);
 			object-fit: cover;

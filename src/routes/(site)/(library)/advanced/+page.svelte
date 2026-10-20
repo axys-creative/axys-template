@@ -180,11 +180,12 @@
 		<LibrarySection
 			level={3}
 			title="Shown while in view"
-			description="`show` with `ripple-out` in and out, `cellSize: 32`. The whole grid ripples in from the center when the frame is on screen and out again as it leaves."
+			description="`show` with `ripple-out` in and out, `cellSize: 32`. The whole grid ripples in from the center when the second section scrolls into view and out again as it leaves. The grid covers the whole mock site, and `trigger: '.demo-trigger'` picks the section that turns it on."
 		>
 			<BackgroundFrame
+				scroll
 				effect={bgGrid({
-					show: { enter: 'ripple-out', exit: 'ripple-out', stagger: 50 },
+					show: { enter: 'ripple-out', exit: 'ripple-out', stagger: 50, trigger: '.demo-trigger' },
 					cellSize: 32,
 					color: 'var(--color-accent)'
 				})}

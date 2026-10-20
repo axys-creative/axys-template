@@ -7,7 +7,7 @@
 	import { glitchHover } from '$lib/attachments/glitch-hover';
 	import { magnet } from '$lib/attachments/magnet';
 	import { toggleSlider } from '$lib/attachments/toggle-slider';
-	import { textRoll } from '$lib/attachments/text-roll';
+	import { roll } from '$lib/attachments/roll';
 	import { underline } from '$lib/attachments/underline';
 	import Button from '$lib/components/button.svelte';
 	import CtaGroup from '$lib/components/cta-group.svelte';
@@ -265,7 +265,7 @@
 				url="/"
 				type="outline"
 				iconEnd="chevron-right"
-				{@attach textRoll()}
+				{@attach roll()}
 			/>
 			<Button
 				text="Icon end circle"
@@ -288,7 +288,17 @@
 			<Button text="Follow solid" {@attach bgFollow()} />
 			<Button text="Follow outline" type="outline" {@attach bgFollow()} />
 		</div>
+		<div class="row">
+			<Button text="Solid underline" {@attach underline()} />
+			<Button text="Outline underline" type="outline" {@attach underline()} />
+			<Button text="Text underline" type="text" {@attach underline()} />
+		</div>
 		<ul class="classic-list">
+			<li>
+				<code>underline()</code> draws a line under the label that slides away on hover, the same effect
+				as the underline Button type, for mixing into other types. It uses the label's text color and
+				takes no options.
+			</li>
 			<li>
 				<code>buttonJump({'{ scale, duration }'})</code> pops the button up and back once when the
 				mouse enters or the keyboard focuses it. <code>scale</code> is the peak size as a multiple
@@ -625,7 +635,9 @@
 		description="A slider that glides behind the selected one of a row of options: tabs, links, buttons or radio labels. The attachment adds the slider itself and follows whichever option is selected, by `aria-selected`, `aria-current`, a checked radio or a click. The Theme Toggle and the Tabs combo use it, so it mixes with other concepts. With `trigger: 'hover'` the slider also follows the pointer and returns when it leaves."
 		props={toggleSliderProps}
 	>
-		<h3 class="plain">Solid, moves on click</h3>
+		<h3 class="plain">
+			Solid, moves on click <Tag text="Tab key" type="outline" class="key-hint" />
+		</h3>
 		<div class="row">
 			<div {@attach toggleSlider()}>
 				{#each ['Monthly', 'Quarterly', 'Yearly'] as option (option)}
@@ -635,7 +647,9 @@
 				{/each}
 			</div>
 		</div>
-		<h3 class="plain">Underline, with links</h3>
+		<h3 class="plain">
+			Underline, with links <Tag text="Tab key" type="outline" class="key-hint" />
+		</h3>
 		<div class="row">
 			<nav aria-label="Sample sections" {@attach toggleSlider({ variant: 'underline' })}>
 				<a href="#overview" aria-current="true">Overview</a>
@@ -643,7 +657,9 @@
 				<a href="#pricing">Pricing</a>
 			</nav>
 		</div>
-		<h3 class="plain">Solid, following the pointer</h3>
+		<h3 class="plain">
+			Solid, following the pointer <Tag text="Tab key" type="outline" class="key-hint" />
+		</h3>
 		<div class="row">
 			<div {@attach toggleSlider({ trigger: 'hover' })}>
 				{#each ['grid', 'list', 'map'] as option (option)}
@@ -653,7 +669,9 @@
 				{/each}
 			</div>
 		</div>
-		<h3 class="plain">Radio labels</h3>
+		<h3 class="plain">
+			Radio labels <Tag text="Arrow keys" type="outline" class="key-hint" />
+		</h3>
 		<div class="row">
 			<fieldset class="slider-radios" {@attach toggleSlider({ options: 'label' })}>
 				<legend class="visually-hidden">Size</legend>
@@ -761,6 +779,11 @@
 
 	.plain {
 		margin: 16px 0 0;
+	}
+
+	.plain :global(.key-hint) {
+		margin-left: 12px;
+		vertical-align: middle;
 	}
 
 	.row {

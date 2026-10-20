@@ -5,11 +5,11 @@
 	export type CardGnomonProps = {
 		/** One entry per notch. Defaults to a single, unlabeled `top-right`. */
 		cutouts?: GnomonCutout[];
-		/** 0-100. How far every cutout reaches into the card, as a % of its side. */
+		/** 0-100. The least every cutout reaches into the card, as a % of its side. It grows when the text wraps. */
 		depth?: number;
-		/** 0-100, or `auto` to fit the cutout to its text. How far every cutout runs along its edge, as a % of the card's side. */
-		length?: number | 'auto';
-		/** In px, with `length="auto"`: added to the measured text width, for the room beside the text and the notch's slant. */
+		/** 0-100. The most every cutout runs along its edge, as a % of the card's side. Longer text wraps and deepens the cutout. */
+		maxLength?: number;
+		/** In px, added to the measured text width, for the room beside the text and the notch's slant. */
 		lengthPadding?: number;
 		/** 0-50. The corner curve as a % of the card's side, for every corner. */
 		radius?: number;
@@ -26,12 +26,12 @@
 
 <script lang="ts">
 	import { imageProps } from '$lib/utils/image';
-	import { gnomonShape } from '$lib/utils/gnomon';
+	import { gnomonShape, gnomonTilt } from '$lib/utils/gnomon';
 
 	let {
 		cutouts = [{ from: 'top-right' }],
 		depth = 12,
-		length = 32,
+		maxLength = 90,
 		lengthPadding = 28,
 		radius = 8,
 		angle = 90,
@@ -43,21 +43,28 @@
 
 	const id = $props.id();
 
-	const MAX_AUTO_LENGTH = 90;
+	const NO_TEXT_LENGTH = 32;
+	const LABEL_PADDING = 8;
+	const WIDTH_SLACK = 2;
 	let cardWidth = $state(0);
 	let textWidths = $state<number[]>([]);
+	let textHeights = $state<number[]>([]);
 	const longest = $derived(Math.max(0, ...textWidths.filter(Boolean)));
+	const open = $derived(Math.max(0.2, 1 - gnomonTilt(angle)));
 	const fitted = $derived(
-		length !== 'auto'
-			? length
-			: cardWidth && longest
-				? Math.min(MAX_AUTO_LENGTH, ((longest + lengthPadding) / cardWidth) * 100)
-				: 32
+		cardWidth && longest
+			? Math.min(maxLength, ((longest + WIDTH_SLACK + lengthPadding) / (cardWidth * open)) * 100)
+			: NO_TEXT_LENGTH
+	);
+	const wrapWidth = $derived(Math.max(0, (fitted / 100) * cardWidth * open - lengthPadding));
+	const tallest = $derived(Math.max(0, ...textHeights.filter(Boolean)));
+	const fittedDepth = $derived(
+		cardWidth && tallest ? Math.max(depth, ((tallest + LABEL_PADDING) / cardWidth) * 100) : depth
 	);
 	const shape = $derived(
 		gnomonShape({
 			cutouts: cutouts.length ? cutouts : [{ from: 'top-right' }],
-			depth,
+			depth: fittedDepth,
 			length: fitted,
 			radius,
 			angle
@@ -67,7 +74,7 @@
 
 <div
 	class="card-gnomon {className ?? ''}"
-	style="--border-width: {borderWidth}px"
+	style="--border-width: {borderWidth}px; --label-inset: {lengthPadding / 2}px"
 	bind:clientWidth={cardWidth}
 >
 	<svg class="stroke" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -88,15 +95,19 @@
 		{#if children}<div class="body">{@render children()}</div>{/if}
 	</div>
 
-	{#if length === 'auto'}
-		{#each cutouts as cutout, index (index)}
-			{#if cutout.text}
-				<span class="label measure" aria-hidden="true" bind:clientWidth={textWidths[index]}
-					>{cutout.text}</span
-				>
-			{/if}
-		{/each}
-	{/if}
+	{#each cutouts as cutout, index (index)}
+		{#if cutout.text}
+			<span class="label measure" aria-hidden="true" bind:clientWidth={textWidths[index]}
+				>{cutout.text}</span
+			>
+			<span
+				class="label measure wrap"
+				aria-hidden="true"
+				style="width: {wrapWidth}px"
+				bind:clientHeight={textHeights[index]}>{cutout.text}</span
+			>
+		{/if}
+	{/each}
 
 	{#each shape.labels as label (label.from)}
 		<span class="label" style={label.style}>{label.text}</span>
@@ -171,7 +182,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 4px;
+		padding: 4px var(--label-inset, 14px);
 		font-size: 14px;
 		line-height: 1.2;
 		text-align: center;
@@ -186,5 +197,9 @@
 		padding: 0;
 		white-space: nowrap;
 		visibility: hidden;
+
+		&.wrap {
+			white-space: normal;
+		}
 	}
 </style>

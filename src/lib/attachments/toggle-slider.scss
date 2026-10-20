@@ -41,6 +41,11 @@
 	opacity: 1;
 }
 
+// The global button reset (specificity 0,0,1) would otherwise zero the padding above.
+.toggle-slider > button:not(.toggle-slider__slider) {
+	padding: 6px 12px;
+}
+
 // Pressing any option shrinks it a little, as if it were pushed in.
 :where(.toggle-slider > :not(.toggle-slider__slider, legend):active) {
 	scale: var(--toggle-scale-down);

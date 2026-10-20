@@ -21,11 +21,11 @@
 	}
 
 	&--fibers::before {
-		mask-image: noise('0.45', 4, 3, 30, -22.5), noise('0.3', 12, 3, 30, -23);
+		mask-image: noise('0.9', 3, 1, 45, -33.2), noise('0.03 0.8', 9, 2, 30, -21.6);
 	}
 
 	&--flecks::before {
-		mask-image: noise('0.9', 3, 1, 45, -33.2), noise('0.03 0.8', 9, 2, 30, -21.6);
+		mask-image: noise('0.45', 4, 3, 30, -22.5), noise('0.3', 12, 3, 30, -23);
 	}
 
 	&--pulp::before {
