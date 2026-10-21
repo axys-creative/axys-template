@@ -1,5 +1,6 @@
 <!-- LIBRARY: DELETE ME. Documentation page; remove with the rest of the library (see CLAUDE.md). -->
 <script lang="ts">
+	import { watchScroll } from '$lib/attachments/watch-scroll';
 	import { mouseTooltip } from '$lib/attachments/mouse-tooltip';
 	import { alerts } from '$lib/utils/alerts.svelte';
 	import Icon from '$lib/components/icon.svelte';
@@ -30,7 +31,7 @@
 	const announce = () =>
 		alerts.show({
 			type: 'info',
-			title: slow ? 'Slow connection on' : 'Slow connection off',
+			title: slow ? 'Mimicking a slow connection' : 'Back to a default connection',
 			message: slow
 				? 'The loader demos now fake a 5 second load. Press play to see it.'
 				: 'The loader demos are back to a 1.5 second load.',
@@ -48,12 +49,12 @@
 
 <div class="intros page-grid">
 	<!-- LIBRARY: DELETE ME. Picks how long the fake load in the loader demos takes. -->
-	<div class="speed" onchange={announce}>
-		<FormChoice type="switch" name="slow" label="Slow connection" bind:checked={slow} />
+	<div class="speed" onchange={announce} {@attach watchScroll({ idle: 1200 })}>
+		<FormChoice type="switch" name="slow" label="Mimic slow connection" bind:checked={slow} />
 		<button
 			type="button"
 			class="info"
-			aria-label="About the slow connection switch"
+			aria-label="About the mimic slow connection switch"
 			{@attach mouseTooltip({
 				message:
 					'Fakes a slow connection in the loader demos, so the loader holds on its progress for longer. Replay a demo to see it.'
@@ -169,6 +170,8 @@
 </div>
 
 <style lang="scss">
+	@use 'base/mixins';
+
 	/* LIBRARY: DELETE ME */
 	.speed {
 		display: flex;
@@ -182,6 +185,15 @@
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius);
 		background: var(--color-surface);
+
+		// Resting, it tucks off the left edge and leaves the info icon showing.
+		&:global([data-scroll-idle]):not(:hover, :focus-within) {
+			translate: calc(-100% - var(--body-padding) + 52px) 0;
+		}
+
+		@include mixins.mq-motion-allow {
+			transition: translate 0.5s var(--ease);
+		}
 	}
 
 	.info {
