@@ -84,28 +84,39 @@ export function roll({
 			target.replaceChildren(wrapper);
 		} else {
 			const text = target.textContent ?? '';
-			const tokens = split === 'words' ? text.split(/(\s+)/) : [...text];
-			const pieces = split === 'words' ? tokens.filter((token) => token.trim()) : tokens;
-			const delays = order(pieces.length, from);
+			const parts = text.split(/(\s+)/);
+			const count =
+				split === 'words'
+					? parts.filter((part) => part.trim()).length
+					: [...text.replace(/\s+/g, '')].length;
+			const delays = order(count, from);
 
 			wrapper = document.createElement('span');
 			wrapper.className = 'roll__chars';
 			wrapper.setAttribute('aria-hidden', 'true');
 			let piece = 0;
-			for (const token of tokens) {
+			const cellFor = (token: string) => {
 				const span = document.createElement('span');
 				span.textContent = token;
-				if (split === 'chars' || token.trim()) {
-					span.className = 'roll__char';
-					span.dataset.char = token;
-					span.style.setProperty('--roll-index', String(delays[piece++] ?? 0));
-					const cell = document.createElement('span');
-					cell.className = 'roll__cell';
-					cell.append(span);
-					wrapper.append(cell);
+				span.className = 'roll__char';
+				span.dataset.char = token;
+				span.style.setProperty('--roll-index', String(delays[piece++] ?? 0));
+				const cell = document.createElement('span');
+				cell.className = 'roll__cell';
+				cell.append(span);
+				return cell;
+			};
+			for (const part of parts) {
+				if (!part) continue;
+				if (!part.trim()) {
+					wrapper.append(' ');
+				} else if (split === 'words') {
+					wrapper.append(cellFor(part));
 				} else {
-					span.className = 'roll__space';
-					wrapper.append(span);
+					const word = document.createElement('span');
+					word.className = 'roll__word';
+					word.append(...[...part].map(cellFor));
+					wrapper.append(word);
 				}
 			}
 

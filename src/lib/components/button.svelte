@@ -115,6 +115,8 @@
 	.button {
 		display: inline-flex;
 		flex-shrink: 0;
+		max-width: 250px;
+		text-align: center;
 		align-items: center;
 		justify-content: center;
 		gap: var(--btn-gap);

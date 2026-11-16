@@ -1,7 +1,7 @@
 {
 	"siteName": "axys template",
 	"url": "https://axys-template.netlify.app",
-	"headerTemplate": "links",
+	"headerTemplate": "simple",
 	"footerTemplate": "simple",
 	"author": "Sample Author",
 	"contactEmail": "info@sample.com",

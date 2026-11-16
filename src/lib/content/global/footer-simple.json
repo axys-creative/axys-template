@@ -1,5 +1,5 @@
 {
-	"float": false,
+	"float": true,
 	"blur": false,
 	"glass": false,
 	"includeTop": true,

@@ -1,0 +1,9 @@
+.text-flies {
+	position: relative;
+	-webkit-text-fill-color: transparent;
+}
+
+.text-flies__canvas {
+	position: absolute;
+	pointer-events: none;
+}

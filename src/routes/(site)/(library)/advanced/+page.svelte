@@ -3,8 +3,10 @@
 	import { bgDust } from '$lib/attachments/bg-dust';
 	import { bgGrid } from '$lib/attachments/bg-grid';
 	import { bgWaves } from '$lib/attachments/bg-waves';
+	import { cursorFluid } from '$lib/attachments/cursor-fluid';
 	import { dotsFill } from '$lib/attachments/dots-fill';
 	import { gridFlowImg } from '$lib/attachments/grid-flow-img';
+	import { textFlies } from '$lib/attachments/text-flies';
 	import BackgroundFrame from '$lib/library/background-frame.svelte';
 	import LibrarySection from '$lib/library/library-section.svelte';
 	import HeroSimple from '$lib/sections/hero-simple.svelte';
@@ -273,6 +275,79 @@
 	</LibrarySection>
 
 	<LibrarySection
+		title="Cursor Fluid"
+		type="Attachment"
+		description="A faint, liquid ribbon that follows the mouse. The pointer stirs a small fluid simulation on the GPU and leaves a thin trail that bends along and fades quickly. By default the light splits into colored fringes, like glass; `mode: 'ink'` makes it a soft tint of one color instead. It sits behind the element's content, so it shows on the open background around text and images. In `ink` mode it follows the site's theme for its color. It only runs while the pointer is moving over an element on screen. It does nothing when motion is reduced or without a mouse. Put it on a section, or on `<body>` with `fixed` for the whole site, where sections should have no background of their own."
+		props={[
+			{
+				name: 'fixed',
+				description:
+					'A boolean. Covers the whole screen and follows it, instead of covering the element. Meant for `<body>`. Defaults to `false`.'
+			},
+			{
+				name: 'color',
+				description:
+					'Any CSS color for the fluid, including `var(--color-accent)`. Defaults to the accent color.'
+			},
+			{
+				name: 'opacity',
+				description:
+					'A number from 0 to 1, how solid the fluid is where it is thickest. Defaults to `0.5`.'
+			},
+			{
+				name: 'size',
+				description:
+					"A number, the size of the splash under the pointer as a fraction of the screen's shorter side. Defaults to `0.03`."
+			},
+			{
+				name: 'force',
+				description: 'A number, how hard the pointer pushes the fluid along. Defaults to `2000`.'
+			},
+			{
+				name: 'swirl',
+				description:
+					'A number, how strongly the fluid curls into eddies. `0` leaves it smooth. Defaults to `4`.'
+			},
+			{
+				name: 'fade',
+				description:
+					'A number from 0 to 1, how much color is left after one second. Lower disappears sooner. Defaults to `0.03`.'
+			},
+			{
+				name: 'drag',
+				description:
+					'A number from 0 to 1, how much speed is left after one second. Lower stops sooner. Defaults to `0.05`.'
+			}
+		]}
+		propsLabel="options"
+	>
+		<LibrarySection
+			level={3}
+			title="Defaults"
+			description="Move the mouse across the frame, and over the empty space around the text."
+		>
+			<BackgroundFrame effect={cursorFluid()} />
+		</LibrarySection>
+		<LibrarySection
+			level={3}
+			title="Ink"
+			description="`mode: 'ink'` in the accent color, with a larger `size`, more `swirl` and a slower `fade`, so it billows like ink in water."
+		>
+			<BackgroundFrame
+				effect={cursorFluid({
+					mode: 'ink',
+					opacity: 0.3,
+					size: 0.06,
+					force: 6000,
+					swirl: 20,
+					fade: 0.06,
+					drag: 0.1
+				})}
+			/>
+		</LibrarySection>
+	</LibrarySection>
+
+	<LibrarySection
 		title="Dots Fill"
 		type="Attachment"
 		description="Goes on an `<svg>`, or on an `<img>`. On an `<svg>` it turns the fill of every shape inside into a grid of dots that the pointer pushes around: a dot is drawn wherever a grid point lands inside a shape, and the shapes are hidden until the attachment is removed. Use `rect`, `circle`, `ellipse`, `path` and `polygon` without a `transform`. An `<img>` keeps its shapes out of reach, so it is drawn to a canvas instead and every grid point on a solid pixel gets a dot. That works for an SVG file and for any picture with transparency, such as a PNG or WebP cut-out, as long as it comes from your own site or allows cross-origin reads. On an `<img>` the sizes are in px and the dots are redone when it resizes. The dots only move while it is on screen, and stay still when motion is reduced."
@@ -288,7 +363,7 @@
 			{
 				name: 'restore',
 				description:
-					"A number from 0 to 1, how quickly the pointer's speed fades once it stops. Higher stops the push sooner. Defaults to `0.15`."
+					"A number from 0 to 1, how quickly the pointer's speed fades once it stops. Higher stops the push sooner. Defaults to `0.04`."
 			},
 			{
 				name: 'sensitivity',
@@ -461,6 +536,59 @@
 			/>
 		</div>
 	</LibrarySection>
+	<LibrarySection
+		title="Text Flies"
+		type="Attachment"
+		description="Turns text into a swarm of tiny dots that drift inside the letters, a port of the Flies material from Blotter.js. The text is drawn on a canvas over the element and shown on the GPU, and the real text stays in place, invisible but selectable and readable by screen readers. It takes the element's color, font, size and line breaks. It only runs while the element is on screen, redraws when the size, fonts or theme change, and does nothing when motion is reduced. Each element uses one WebGL context, so keep it to a few headings per page."
+		props={[
+			{
+				name: 'cell',
+				description:
+					'A number, the size of the cell each fly roams in, as a fraction of the font size. Smaller means more, finer dots. Defaults to `0.025`.'
+			},
+			{
+				name: 'radius',
+				description:
+					'A number from 0 to 1, how big each dot is within its cell. Defaults to `0.75`.'
+			},
+			{
+				name: 'grow',
+				description:
+					'A number, how far the dots may roam past the edges of the letters, in cells. Without it the words look narrower than the real text, since a dot needs its whole cell inside a letter. `0` keeps them inside. Defaults to `0.5`.'
+			},
+			{
+				name: 'speed',
+				description: 'A number, how fast the dots drift. Defaults to `1`.'
+			},
+			{
+				name: 'dodge',
+				description:
+					'A boolean. Dots near the mouse scatter away from it, leaving a hole that follows the pointer. Defaults to `false`.'
+			},
+			{
+				name: 'dodgeSpread',
+				description:
+					"A number, how far the scatter reaches, as a fraction of the element's height. Defaults to `0.25`."
+			}
+		]}
+		propsLabel="options"
+	>
+		<LibrarySection level={3} title="Defaults">
+			<h2 class="flies" {@attach textFlies()}>The flies</h2>
+		</LibrarySection>
+		<LibrarySection
+			level={3}
+			title="Dodge"
+			description="`dodge` with finer dots (`cell`). Move the mouse over the text."
+		>
+			<h2
+				class="flies"
+				{@attach textFlies({ dodge: true, cell: 0.005, radius: 0.5, dodgeSpread: 0.4 })}
+			>
+				Scatter
+			</h2>
+		</LibrarySection>
+	</LibrarySection>
 </div>
 
 <style lang="scss">
@@ -514,6 +642,13 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 24px;
+	}
+
+	.flies {
+		font-size: min(18vw, 200px);
+		font-weight: 800;
+		line-height: 1;
+		text-align: center;
 	}
 
 	.tall {
